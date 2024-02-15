@@ -5,11 +5,11 @@ This is the project of ecommerce web application created by group C7.
 
 # npm commands
 At the root directory (csci3100-project)
-- npm install_client
-- npm install_server
+- npm run install_client
+- npm run install_server
 - npm install
-- npm start_client
-- npm start_server
+- npm run start_client
+- npm run start_server
 - npm start
 
 # Package
