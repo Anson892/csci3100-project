@@ -22,7 +22,7 @@ module.exports = (sequelize, Sequelize) => {
     },
     discount: {
       type: Sequelize.DECIMAL(10, 2),
-      defaultValue: 0,
+      defaultValue: 1,
     },
     stock: {
       type: Sequelize.INTEGER,
