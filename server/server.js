@@ -8,6 +8,7 @@ db.sequelize.sync({ force: true })
   .then(() => {
     console.log("[LOG] database connected successfully.");
 
+    require("./src/routes/user.routes")(app);
     // starting the server
     const PORT = process.env.PORT || 8080;
     app.listen(PORT, () => {
