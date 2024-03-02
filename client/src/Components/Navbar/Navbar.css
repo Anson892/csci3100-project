@@ -1,0 +1,66 @@
+.navbar {
+    width: 100%;
+    height: 60px;
+    background-color: #F6F6E9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    z-index: 2;
+    
+}
+
+.nav-logo {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    top: 8px;
+    left: 10px;
+}
+
+.nav-logo img{
+    width: 40px;
+    height: 40px;
+}
+
+.navbar .search-bar-container{
+    width: fit-content;
+    height: fit-content;
+}
+
+.nav-right {
+    width: fit-content;
+    height: 30px;
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    display: flex;
+    gap: 18px;
+
+}
+
+.nav-right img {
+    width: 35px;
+    height: 35px;
+    position: relative;
+    bottom: 3px;
+}
+
+.nav-right button{
+    width: 120px;
+    height: 30px;
+    position: relative;
+    border: 1px solid black;
+    border-radius: 20px;
+    background: none;
+    cursor: pointer;
+}
+
+.nav-right p {
+    font-size: 20px;
+    position: relative;
+    bottom: 4px;
+    left: 5px;
+    width: 100px;
+    text-align: center;
+}
