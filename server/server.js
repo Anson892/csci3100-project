@@ -11,7 +11,7 @@ db.sequelize.sync()//{ force: true }
   .then(() => {
     console.log("[LOG] database connected successfully.");
 
-    //router
+    // router
     require("./src/routes/user.routes")(app);
     require("./src/routes/product.routes")(app);
     require("./src/routes/order.routes")(app);
@@ -27,6 +27,6 @@ db.sequelize.sync()//{ force: true }
     });
   })
   .catch(err => {
-    console.error("[ERROR] database connection failed.\n" + err);
+    console.error("[ERROR] server connection failed.\n" + err);
   })
 
