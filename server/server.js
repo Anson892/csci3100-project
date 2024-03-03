@@ -14,6 +14,7 @@ db.sequelize.sync()//{ force: true }
     //router
     require("./src/routes/user.routes")(app);
     require("./src/routes/product.routes")(app);
+    require("./src/routes/order.routes")(app);
 
     app.all('/', (req,res) => {
       res.status(200).send("hello world");
