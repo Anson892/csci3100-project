@@ -1,0 +1,11 @@
+POST http://localhost:8080/api/posts/create
+Content-Type: application/json
+
+{
+    "name": "PC4",
+    "category": "try",
+    "description": "This is for delete and update testing data.",
+    "price": 30,
+    "discount": 1,
+    "stock": 10
+}

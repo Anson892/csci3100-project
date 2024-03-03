@@ -2,7 +2,6 @@
   "name": "csci3100-project",
   "version": "1.0.0",
   "description": "Ecommerce singel page webb app by group C7",
-
   "scripts": {
     "start_client": "cd client && npm start",
     "start_server": "cd server && npm start",
@@ -11,7 +10,7 @@
     "install_server": "cd server && npm install",
     "install": "npm run install_client && npm run install_server"
   },
-
   "author": "",
-  "license": ""
+  "license": "ISC",
+  "main": "index.js"
 }
