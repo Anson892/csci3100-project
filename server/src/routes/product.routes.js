@@ -9,6 +9,6 @@ module.exports = app => {
     router.get('/name/:productname', controller.findbyname)
     router.post('/update', controller.update);
     router.get('/delete/:productID', controller.delete);//delete not work so use get first
-    router.delete('/deleteall', controller.deleteAll);
+    //router.delete('/deleteall', controller.deleteAll);
     app.use('/api/product', router);
 }

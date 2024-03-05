@@ -16,10 +16,7 @@ db.sequelize.sync()//{ force: true }
     require("./src/routes/product.routes")(app);
     require("./src/routes/order.routes")(app);
     require("./src/routes/cart.routes")(app);
-
-    app.all('/', (req,res) => {
-      res.status(200).send("hello world");
-    })
+    require("./src/routes/Auth.routes")(app);
 
     // starting the server
     const PORT = process.env.PORT || 8080;

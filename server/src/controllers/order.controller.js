@@ -81,9 +81,9 @@ controller.delete = async (req, res) => {
         })
     }).catch((err) => res.status(500).send(err))
 };
-
+/*
 controller.deleteAll = async (req, res) => {
 
-};
+};*/
 
 module.exports = controller;
