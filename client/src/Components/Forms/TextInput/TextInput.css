@@ -1,0 +1,31 @@
+.text-input {
+    background: none;
+}
+
+.text-input label {
+    font-size: 16px;
+    display: block;
+}
+
+.text-input-container {
+    border: 1px solid black;
+    border-radius: 20px;
+    width: 300px;
+    height: 40px;
+}
+
+.text-input input {
+    font-size: 16px;
+    display: block;
+    outline: none;
+    border: none;
+    background: none;
+    position: relative;
+    top: 4px;
+    left: 15px;
+    width: 265px;
+}
+
+
+
+
