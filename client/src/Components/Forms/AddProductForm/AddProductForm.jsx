@@ -3,7 +3,7 @@ import './AddProductForm.css'
 import { useState } from 'react'
 import { TextInput } from '../TextInput/TextInput'
 import { TextAreaInput } from '../TextAreaInput/TextAreaInput'
-import { SubmitButton } from '../SumbitButton/SubmitButton'
+import { SubmitButton } from '../SubmitButton/SubmitButton'
 
 
 export const AddProductForm = () => {
