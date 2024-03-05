@@ -20,7 +20,6 @@ export const SearchBar = () => {
     const handelOnKeyDown = (e) => {
         if (e.key == 'Enter') {
             handleSearch();
-            console.log('1');
         }
     }
 
