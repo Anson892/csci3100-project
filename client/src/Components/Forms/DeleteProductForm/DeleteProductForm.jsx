@@ -2,7 +2,7 @@ import React from 'react'
 import './DeleteProductForm.css'
 import { useState } from 'react'
 import { TextInput } from '../TextInput/TextInput'
-import { SubmitButton } from '../SumbitButton/SubmitButton'
+import { SubmitButton } from '../SubmitButton/SubmitButton'
 
 
 export const DeleteProductForm = () => {
