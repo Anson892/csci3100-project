@@ -16,3 +16,4 @@ At the root directory (csci3100-project)
 - react
 - react-router-dom
 - framer-motion
+- --save react-infinite-scroll-component

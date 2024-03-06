@@ -1,0 +1,70 @@
+.TopicContainer{
+    position: absolute;
+    width: 794px;
+    height: 143px;
+    left: 0px;
+    top: 108px;
+    display: flex;
+}
+
+.Topic{
+    font-family: 'Literata';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 96px;
+    line-height: 143px;
+    display: flex;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+}
+
+.ResultContainer{
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: start;
+    align-content: center;
+    padding: 105px;
+    gap: 350px;
+    overflow: hidden;
+
+    position: absolute;
+    width: 1595px;
+    height: 670px;
+    left: calc(50% - 1595px/2 - 0.5px);
+    top: 244px;
+}
+
+.ResultContainer::-webkit-scrollbar {
+    display: none;
+}
+
+.ProductCardContainer1{
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    
+    align-items: flex-start;
+
+    position: absolute;
+    width: 306px;
+    height: 311px;
+    gap: 420px;
+
+    order: 1;
+    flex-grow: 1;
+}
+
+.ProductTag{
+    position: relative;
+    width: 58px;
+    height: 15px;
+    left: 248px;
+    top: 0px;
+    background: #9bc78b;
+    display: flex;
+
+    
+}
