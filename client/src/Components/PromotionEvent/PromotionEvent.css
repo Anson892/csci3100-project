@@ -1,0 +1,129 @@
+.promotion-event {
+    position: relative;
+    background-color: #302D29;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    gap: 200px;
+
+    .title {
+        height: 100%;
+        width: 110px;
+        display: flex;
+        align-items: center;
+
+        .reactangle {
+            width: 110px;
+            height: 500px;
+            background-color: #9A9480;
+            overflow: visible;
+        
+            h1 {
+                font-size: 100px;
+                color: white;
+                writing-mode: vertical-rl;
+                line-height: 80px;
+                position: relative;
+                top: 60px;
+                left: 5px;
+            }
+        }
+    
+    }
+
+    .banner {
+        position: relative;
+        width: 1000px;
+        height: 600px;
+
+        .horizontal-line-1 {
+            width: 1000px;
+            height: 4px;
+            background-color: white;
+            position: absolute;
+            top: 0px;
+            left: 0px;
+        }
+
+        .horizontal-line-2 {
+            width: 1000px;
+            height: 4px;
+            background-color: white;
+            position: absolute;
+            top: 448px;
+            left: 0px;
+        }
+
+        .horizontal-line-3 {
+            width: 750px;
+            height: 4px;
+            background-color: white;
+            position: absolute;
+            top: 522px;
+            filter: blur(3px) brightness(0.7);
+        }
+
+        .horizontal-line-4 {
+            width: 750px;
+            height: 4px;
+            background-color: white;
+            position: absolute;
+            bottom: 0px;
+            left: 0px;
+            filter: blur(3px) brightness(0.7);
+        }
+
+        ._01 {
+            height: 150px;
+            position: absolute;
+            top: 151px;
+            left: 0px;
+        }
+
+        ._02 {
+            height: 60px;
+            position: absolute;
+            top: 457px;
+            left: 600px;
+            color: #7F7F7F;
+            filter: blur(3px) brightness(0.7);
+        }
+
+        ._03 {
+            height: 60px;
+            position: absolute;
+            top: 531px;
+            left: 600px;
+            filter: blur(3px) brightness(0.7);
+        }
+
+        .banner-01 {
+            height: 374px;
+            width: 700px;
+            position: absolute;
+            top: 39px;
+            right: 0px;
+        }
+
+        .banner-02 {
+            height: 0px;
+            width: 700px;
+            position: absolute;
+            top: 487px;
+            right: 0px;
+        }
+
+        .banner-03 {
+            height: 0px;
+            width: 700px;
+            position: absolute;
+            top: 561px;
+            right: 0px;
+        }
+
+        
+    }
+    
+}
