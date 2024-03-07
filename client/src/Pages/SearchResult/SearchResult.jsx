@@ -18,12 +18,6 @@ const SortOrder = () => {
     <></>
 }
 
-const style = {
-    border : "1px solid green",
-    margin:12,
-    padding: 8,
-}
-
 export const SearchResult = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
