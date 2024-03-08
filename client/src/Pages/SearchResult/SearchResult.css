@@ -52,3 +52,36 @@
 
     
 }
+
+.SortByContainer{
+    position: absolute;
+    width: 201px;
+    height: 300px;
+    left: 1446px;
+    top: 183px;
+
+    background-color: #9bc78b;
+}
+
+.SortedByText{
+    /* sorted by */
+
+    position: absolute;
+    width: 235px;
+    height: 17px;
+    left: 1305px;
+    top: 191px;
+
+    font-family: 'Literata';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 36px;
+    display: flex;
+    align-items: center;
+    letter-spacing: 0.05em;
+
+    color: #000000;
+
+
+}

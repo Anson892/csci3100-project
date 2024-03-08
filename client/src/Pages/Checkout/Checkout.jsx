@@ -36,7 +36,9 @@ export const Checkout = () => {
           <TextInput type="text" onChange={(e)=>{setCVC(e.target.value)}}>CVC/CVV</TextInput>
           <TextInput type="text" onChange={(e)=>{setPostalCode(e.target.value)}}>Postal Code</TextInput>
           <Link to ={'/'}>
-            <SubmitButton onClick={handleSubmit}>PLACE ORDER</SubmitButton>
+            <SubmitButton onClick={handleSubmit}>
+              <p className='PlaceOrderText'>PLACE ORDER</p>
+            </SubmitButton>
           </Link>
       </div>
     </div>

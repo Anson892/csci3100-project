@@ -5,6 +5,7 @@ import { ProductCard } from '../../Components/ProductCard/ProductCard';
 import { useSearchParams  } from 'react-router-dom';
 import { TopButton } from '../../Components/TopButton/TopButton'
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { DropDownMenu } from '../../Components/Forms/DropDownMenu/DropDownMenu';
 
 const  Topic = () => {
     return(
@@ -15,7 +16,16 @@ const  Topic = () => {
 }
 
 const SortOrder = () => {
-    <></>
+    const [Test, setTest]=useState();
+
+    return(
+        <div>
+            <p className='SortedByText'>Sorted By</p>
+            <div className='SortByContainer'>
+                <DropDownMenu items={["Highest Rating", "test1", "test2", "test3"]} initial={0} setFucn={setTest}/>
+            </div>
+        </div>
+    )
 }
 
 export const SearchResult = () => {
@@ -37,6 +47,7 @@ export const SearchResult = () => {
         <div >
         <Navbar/>
         <Topic/>
+        <SortOrder/>
             <InfiniteScroll 
                 className='ResultContainer' 
                 dataLength={dataSource.length} 
