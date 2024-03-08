@@ -6,12 +6,12 @@ module.exports = (sequelize, Sequelize) => {
         autoIncrement: true,
       }, 
       status: {
-        type: Sequelize.ENUM("pending", "processing", "completed", "cancelled"),
+        type: Sequelize.ENUM("pending", "processing", "in delievery", "completed", "cancelled"),
         allowNull: false,
         defaultValue: "pending",
       },
       paymentMethod: {
-        type: Sequelize.JSON,
+        type: Sequelize.STRING,
         allowNull: false,
       },
     });
