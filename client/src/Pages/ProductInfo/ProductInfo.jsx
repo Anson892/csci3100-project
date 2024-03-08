@@ -11,6 +11,7 @@ import star_empty from '../../Assets/Icons/star_empty.svg'
 import small_star_filled from '../../Assets/Icons/small_star_filled.svg'
 import small_star_empty from '../../Assets/Icons/small_star_empty.svg'
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { Link } from 'react-router-dom';
 
 
 const Recommendation = () => {
@@ -205,9 +206,11 @@ const InfoContainer = () => {
                     <p className='ProductAmountText'>{count}</p>
             </div>
             <div>
+                <Link to ={'/shopping-cart'}>
                     <button onClick={AddToCart} className='AddToCartButton' >
                         <p> Add To Cart </p>
                     </button>
+                </Link>
             </div>
         </div>
     )
