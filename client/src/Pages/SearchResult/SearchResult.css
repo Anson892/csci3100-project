@@ -35,6 +35,7 @@
     height: 670px;
     left: calc(50% - 1595px/2 - 0.5px);
     top: 244px;
+    pointer-events: none;
 }
 
 .ResultContainer::-webkit-scrollbar {
@@ -56,11 +57,9 @@
 .SortByContainer{
     position: absolute;
     width: 201px;
-    height: 300px;
+    height: 16  0px;
     left: 1446px;
     top: 183px;
-
-    background-color: #9bc78b;
 }
 
 .SortedByText{
