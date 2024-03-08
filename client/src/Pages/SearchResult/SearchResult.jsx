@@ -46,9 +46,7 @@ export const SearchResult = () => {
             >
                 {dataSource.map((item,index)=>{
                     return (
-                        <div>
                         <div><ProductCard/></div>
-                        </div>
                     )
                 })}
             </InfiniteScroll>

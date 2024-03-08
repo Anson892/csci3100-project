@@ -41,22 +41,6 @@
     display: none;
 }
 
-.ProductCardContainer1{
-    position: relative;
-    display: flex;
-    flex-direction: row;
-    
-    align-items: flex-start;
-
-    position: absolute;
-    width: 306px;
-    height: 311px;
-    gap: 420px;
-
-    order: 1;
-    flex-grow: 1;
-}
-
 .ProductTag{
     position: relative;
     width: 58px;

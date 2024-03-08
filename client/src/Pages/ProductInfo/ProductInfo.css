@@ -156,6 +156,7 @@ background-color: #72880400;
     text-align: center;
 
 }
+
 .ProductTag p{
 position: relative;
 width: 82px;
@@ -176,9 +177,7 @@ color: #000000;
 }
 
 .InfoContainer{
-
 display: flex;
-
 width: 451px;
 height: 688px;
 flex: none;
@@ -425,7 +424,7 @@ color: #FFFFFF;
     text-align: center;
     display: flex;
 
-    background-color: #9A9480;
+    background-color: transparent;
     border: 1px transparent;
     border-radius: 10%;
 }
@@ -457,7 +456,7 @@ color: #FFFFFF;
     text-align: center;
     display: flex;
 
-    background-color: #9A9480;
+    background-color:transparent;
     border: 1px transparent;
     border-radius: 10%;
 }
@@ -485,3 +484,293 @@ color: #000000;
 
 
 }
+
+.CommentContainer {
+
+    box-sizing: border-box;
+    flex-direction: column;
+    align-items: center;
+    padding: 19px 49px;
+    gap: 10px;
+
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 772px;
+    height: 607px;
+
+    display: flex;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+    background-color: rgba(0, 255, 255, 0);
+}
+
+.StarText {
+    position: absolute;
+    width: 85px;
+    height: 95px;
+    left: 93px;
+    top: 27px;
+
+    font-family: 'Literata';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 64px;
+    line-height: 95px;
+    /* identical to box height */
+    display: flex;
+    align-items: center;
+    text-align: center;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+
+    color: #000000;
+}
+
+.StarContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 2px;
+
+    position: absolute;
+    width: 235px;
+    height: 45px;
+    left: 196px;
+    top: 61px;
+}
+
+.CommentSummaryContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+    gap: 8px;
+
+    position: absolute;
+    width: 291px;
+    height: 152px;
+    left: 93px;
+    top: 128px;
+}
+
+.CommentProgressBarContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    gap: 17px;
+
+    width: 291px;
+    height: 24px;
+
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+}
+
+.CommentProgressBarFirstText {
+    width: 51px;
+    height: 24px;
+
+    position: relative;
+    left: 0px;
+    top: 6px;
+    
+
+    font-family: 'Literata';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    /* identical to box height */
+    display: flex;
+    align-items: center;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+
+    color: #000000;
+
+
+    /* Inside auto layout */
+    flex: none;
+    order: 0;
+    flex-grow: 0;
+
+}
+
+.CommentProgressBarSecondText{
+    width: 7px;
+    height: 24px;
+
+    font-family: 'Literata';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+    /* identical to box height */
+    display: flex;
+    align-items: center;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    color: #000000;
+    /* Inside auto layout */
+    flex: none;
+    order: 2;
+    flex-grow: 0;
+
+    position: relative;
+    right: 0px;
+    top: 6px;
+
+}
+
+.CommentProgressBarMax {
+    box-sizing: border-box;
+
+    width: 195px;
+    height: 15px;
+
+    border: 1px solid #000000;
+    border-radius: 13px;
+
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+}
+
+.CommentProgressBar{
+position: relative;
+height: 14px;
+left: 0px;
+top: 0px;
+
+background: #000000;
+border-radius: 13px;
+}
+
+.CommentListContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    align-content: center;
+
+    padding: 0px;
+    gap: 200px;
+
+    position: absolute;
+    width: 600px;
+    height: 279px;
+    left: 93px;
+    top: 326px;
+    background-color: #9bc78b00;
+}
+
+.CommentListContainer::-webkit-scrollbar {
+    display: none;
+}
+
+.CommentNumber {
+    position: absolute;
+    width: 300px;
+    height: 24px;
+    left: 93px;
+    top: 291px;
+
+    font-family: 'Literata';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+    /* identical to box height */
+    display: flex;
+    align-items: center;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+
+    color: #000000;
+}
+
+.Comment {
+/* comment */
+    position: absolute;
+    left: 0%;
+    
+    width: 600px;
+    height: auto;
+
+    border-bottom: 1px solid black;
+    border-top: 1px solid black;
+    background-color: #d7af2b00;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px;
+
+}
+
+.SmallCommentStarContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 2px;
+    gap: 0px;
+
+    position: absolute;
+    width: 135px;
+    height: 25px;
+    left: 0px;
+    top: 4px;
+}
+
+.SmallCommentText {
+    position: absolute;
+    left: 0px;
+    top: 34px;
+
+    font-family: 'Literata';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+
+    color: #000000;
+    background-color: #bad04a00;
+
+    display: flex;
+    flex:1;
+
+}
+
+.SmallCommentUserId {
+    position: absolute;
+    width: 101px;
+    height: 24px;
+
+    right: 0px;
+    top: 0px;
+
+    font-family: 'Literata';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 24px;
+    /* identical to box height */
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+
+    color: #7F7F7F;
+
+
+}
+
