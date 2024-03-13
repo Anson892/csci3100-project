@@ -1,6 +1,7 @@
 const db = require("../models");
 const User = db.User;
 const Op = db.Sequelize.Op;
+const bcrypt = require('bcrypt');
 const controller = {};
 const { generateToken } = require('../middlewares/authJWT');
 
@@ -13,7 +14,7 @@ controller.login = async (req, res) => {
         res.status(400).send({message: "Enter your email and password."});
         return;
     }
-    await User.findAll({
+    await User.findOne({
         where:{
              username: username,
              password: password
@@ -22,7 +23,8 @@ controller.login = async (req, res) => {
     .then( data => {
         if(data.length == 1){
             const user = data[0];
-            if(user.password != password){
+            const verifiedPassword = bcrypt.compareSync(password, user.password);
+            if(!verifiedPassword){
                 res.status(401).send({message: 'Password invalid!'});
             }else{
                 // generate access token with cart data?.
@@ -68,5 +70,48 @@ controller.logout = async (req, res) => {
         res.status(500).send({message: "Internal server error."});
     }
 }
+
+// Register
+controller.register = (req, res) => {
+    // Validate request
+    if (!req.body.username || !req.body.password) {
+      res.status(400).send({
+        message: "username/password cannot be empty!",
+      });
+      return;
+    }
+    // Find existing username
+    User.findOne({ where: { username: req.body.username } })
+      .then((data) => {
+        if (data == null) {
+          // Create a User
+          const user = {
+            username: req.body.username,
+            password: req.body.password,
+            userType: req.body.userType ? req.body.userType : "customer",
+          };
+          // Save new User in the database
+          User.create(user)
+            .then((data) => {
+              res.send(data);
+            })
+            .catch((err) => {
+              res.status(500).send({
+                message:
+                  err.message || "Some error occurred while creating the User.",
+              });
+            });
+        } else {
+          res.status(400).send({ message: "username already in use!" });
+        }
+      })
+      .catch((err) => {
+        res.status(500).send({
+          message:
+            err.message ||
+            "Some error occurred while checking the existend of user.",
+        });
+      });
+  };
 
 module.exports = controller;

@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt');
+
 module.exports = (sequelize, Sequelize) => {
   const User = sequelize.define("user", {
     id: {
@@ -10,7 +12,12 @@ module.exports = (sequelize, Sequelize) => {
       unique: true,
       allowNull: false
     },
-    password: Sequelize.STRING,
+    password: {
+      type: Sequelize.STRING,
+      set(value){
+        this.setDataValue('password', bcrypt.hashSync(value, 10));
+      }
+    },
     userType: {
       type: Sequelize.ENUM("admin", "customer"),
       defaultValue: "customer"
