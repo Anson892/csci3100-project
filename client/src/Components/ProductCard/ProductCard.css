@@ -14,17 +14,19 @@
 }
 
 .ProductInfoContainer {
-box-sizing: border-box;
-width: 306px;
-height: 51px;
+    position: relative;
+    box-sizing: border-box;
+    width: 306px;
+    height: 51px;
 
-border-top: 4px solid #000000;
+    border-top: 0.3vh solid #000000;
+    margin-top: 5px;
 
-/* Inside auto layout */
-flex: none;
-order: 1;
-flex-grow: 0;
-text-decoration: none;
+    /* Inside auto layout */
+    flex: none;
+    order: 1;
+    flex-grow: 0;
+    text-decoration: none;
 }
 
 .ProductNameCard {
@@ -51,7 +53,7 @@ position: absolute;
 width: 45px;
 height: 36px;
 left: 0px;
-bottom: -9px;
+top: 16px;
 
 font-family: 'Literata';
 font-style: normal;
@@ -69,11 +71,11 @@ color: #000000;
 }
 
 .ProductTagCard{
-    position: relative;
+    position: absolute;
     width: 58px;
     height: 15px;
     left: 248px;
-    top: 0px;
+    top: 8px;
     background: #9EB496;
     display: flex;
 }
