@@ -14,7 +14,7 @@
     
     .new-text u {
         font-size: 12vw;
-        font-weight: bold;    
+        font-weight: bold;   
     }
     
     .collection-text {
@@ -39,9 +39,10 @@
     .collection-description {
         position: absolute;
         bottom: 10%;
-        left: 30%;
+        right: 50%;
         width: 20%;
-        height: fit-content;        
+        height: 20%; 
+        object-fit: fill;       
     }
     
     
@@ -53,12 +54,12 @@
         left: 7%;
     }
     
-    img {
+    .image {
         position: absolute;
-        bottom: 0px;
+        top: 25vh;
         left: 53%;
         width: 32%;
-        height: 75%;
+        height: 75vh;
         object-fit: cover;
     }
 }
