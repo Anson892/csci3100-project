@@ -9,7 +9,7 @@ export const Navbar = () => {
 
     return (
         <div className="navbar">
-            <Link to={'/'}>
+            <Link to={'/'} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
                 <div className="nav-logo">
                     <img src={logo} alt="" />
                 </div>
@@ -18,10 +18,10 @@ export const Navbar = () => {
                 <SearchBar/>
             </div>
             <div className="nav-right">
-                <Link to={'/shopping-cart'}>
+                <Link to={'/shopping-cart'} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
                     <img src={shopping_cart_icon} alt="" />
                 </Link>
-                <Link to={'/login'}>
+                <Link to={'/login'} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
                     <button>
                         <p>Login</p>
                     </button>

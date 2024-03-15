@@ -12,7 +12,7 @@ import { Link } from 'react-router-dom';
 export const ProductCard = () => {
     return(
         <div className='ProductCardContainer'>
-            <Link to={'/product/:1'}>
+            <Link to={'/product/:1'} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
                 <div>
                 <img src={ProductIcon} alt=""/>
                 </div>

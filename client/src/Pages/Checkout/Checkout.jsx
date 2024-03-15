@@ -19,7 +19,7 @@ export const Checkout = () => {
 
   return (
     <div>
-      <Link to ={'/shopping-cart'}>
+      <Link to ={'/shopping-cart'} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
         <p className='CancelOrderText'>《Cancel Order</p>
       </Link>
       <div className='DeliveryContainer'>
@@ -35,7 +35,7 @@ export const Checkout = () => {
           <TextInput type="text" onChange={(e)=>{setExpireDate(e.target.value)}}>Expiration Date (MM/YYY)</TextInput>
           <TextInput type="text" onChange={(e)=>{setCVC(e.target.value)}}>CVC/CVV</TextInput>
           <TextInput type="text" onChange={(e)=>{setPostalCode(e.target.value)}}>Postal Code</TextInput>
-          <Link to ={'/'}>
+          <Link to ={'/'} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
             <SubmitButton onClick={handleSubmit}>
               <p className='PlaceOrderText'>PLACE ORDER</p>
             </SubmitButton>
