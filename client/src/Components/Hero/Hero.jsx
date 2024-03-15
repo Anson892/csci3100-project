@@ -1,7 +1,8 @@
 import React from 'react'
 import './Hero.css'
 import hero_section_iamge from '../../Assets/Images/hero_section_image.png'
-
+import learn_more from '../../Assets/UI/learn_more.svg'
+import collection_description from '../../Assets/UI/new_collection_description.svg'
 export const Hero = () => {
     return (
     <div className="hero">
@@ -13,15 +14,8 @@ export const Hero = () => {
             COLLECTION
         </div>
         <div className="vertical-line"/>
-        <div className="collection-description">
-            <p>Moder and</p>
-            <p>cozy live</p>
-            <p>start from</p>
-            <p>now</p>
-        </div>
-        <div className="learn-more-button">
-            <p>Learn More</p>
-        </div>
+        <img src={ collection_description } alt="" className="collection-description" />
+        <img src={ learn_more } alt="" className="learn-more-button" />
     </div>
     )
 }

@@ -1,80 +1,64 @@
 .hero {
+    position: relative;
     height: 100vh;
     width: 100%;
     background-color: #DADACA;
-}
-
-.hero .new-text {
-    position: absolute;
-    width: fit-content;
-    height: fit-content;
-    top: 3%;
-    left: 6%;
-}
-
-.hero .new-text u {
-    font-size: 180px;
-    font-weight: bold;    
-}
-
-.hero .vertical-line {
-    width: 4px;
-    height: 40%;
-    background-color: black;
-    overflow: hidden;
-    position: absolute;
-    bottom: 0px;
-    left: 51%;
-}
-
-.hero .collection-description {
-    text-align: right;
-    font-size: 36px;
-    position: absolute;
-    bottom: 10%;
-    right: 51%;
-    width: fit-content;
-    height: fit-content;
-    line-height: 35px;
-    letter-spacing: 10px;
-
-}
-
-.hero .collection-text {
-    font-size: 130px;
-    font-weight: bold;
-    width: fit-content;
-    height: fit-content;
-    position: absolute;
-    top: 27%;
-    left: 15%;
-}
-
-.hero .learn-more-button {
-    width: 20vw;
-    height: 20vw;
-    border-radius: 100%;
-    background-color: #9A9480;
-    position: absolute;
-    bottom: 7%;
-    left: 7%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.hero .learn-more-button p {
-    font-size: 64px;
-    color: white;
-    position: relative;
-    left: 20%;
-    line-height: 120%;
-}
-
-.hero img {
-    position: absolute;
-    bottom: 0px;
-    left: 53%;
-    width: 32%;
-    height: 75%;
+    
+    .new-text {
+        position: absolute;
+        width: fit-content;
+        height: fit-content;
+        top: 3%;
+        left: 6%;
+    }
+    
+    .new-text u {
+        font-size: 12vw;
+        font-weight: bold;    
+    }
+    
+    .collection-text {
+        font-size: 8vw;
+        font-weight: bold;
+        width: fit-content;
+        height: fit-content;
+        position: absolute;
+        top: calc(12vw + 7% );
+        left: 15%;
+    }
+    .vertical-line {
+        width: 0.3%;
+        height: 35%;
+        background-color: black;
+        overflow: hidden;
+        position: absolute;
+        bottom: 0px;
+        left: 51%;
+    }
+    
+    .collection-description {
+        position: absolute;
+        bottom: 10%;
+        left: 30%;
+        width: 20%;
+        height: fit-content;        
+    }
+    
+    
+    .learn-more-button {
+        width: 15vw;
+        height: 15vw;
+        position: absolute;
+        bottom: 7%;
+        left: 7%;
+    }
+    
+    img {
+        position: absolute;
+        bottom: 0px;
+        left: 53%;
+        width: 32%;
+        height: 75%;
+        object-fit: cover;
+    }
 }
