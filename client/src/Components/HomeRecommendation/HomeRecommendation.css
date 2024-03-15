@@ -1,0 +1,153 @@
+.product-item-left {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    gap: 5vw;
+
+    img {
+        width: 30vw;
+        height: 25vw;
+        object-fit: cover;
+
+    }
+
+    .product-text {
+        width: 30vw;
+
+        h1 {
+            font-size: 2.5vw;
+            font-weight: bold;
+            text-align: left;
+            margin-top: 8vh;
+        }
+
+        p {
+            font-size: 1.5vw;
+            text-align: justify;
+
+            margin: 0px;
+        }
+    }
+
+    .vertical-line-left {
+        width: 0.1vw;
+        height: 30vw;
+        background-color: black;
+    }
+
+    .vertical-line-right {
+        width: 0.1px;
+        height: 32vw;
+        background-color: black;
+        margin-top: 8vh;
+    }
+}
+
+.product-item-right {
+    position: relative;
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 5vw;
+
+    img {
+        width: 30vw;
+        height: 25vw;
+        object-fit: cover;
+
+    }
+
+    .product-text {
+        width: 30vw;
+
+        h1 {
+            font-size: 2.5vw;
+            font-weight: bold;
+            text-align: left;
+            margin-top: 8vh;
+        }
+
+        p {
+            font-size: 1.5vw;
+            text-align: justify;
+
+            margin: 0px;
+        }
+    }
+
+    .vertical-line-left {
+        width: 0.1vw;
+        height: 30vw;
+        background-color: black;
+    }
+
+    .vertical-line-right {
+        width: 0.1px;
+        height: 32vw;
+        background-color: black;
+        margin-top: 8vh;
+    }
+}
+
+
+.HomeRecommendation {
+    position: relative;
+    background-color: #DADACA;
+
+    .title-container {
+        position: relative;
+        height: 80vh;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0px 0px 0px 0px;
+        
+        .top-scrolling-circles {
+            position: absolute;
+            top: 10%;
+            left: 5%;
+            width: 6%;
+            
+        }
+
+        .bottom-scrolling-circles {
+            position: absolute;
+            bottom: 10%;
+            right: 5%;
+            width: 6%;
+            
+        }
+
+        .recommend_title {
+            height: 80%;
+        }
+    }
+
+    .lower-part-container {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-top: 10vh;
+        overflow: hidden;
+
+        .vertical-line {
+            position: absolute;
+            top: 10vh;
+            width: 0.2vw;
+            height: 100%;
+            background-color: black;
+        }
+
+        .products-container {
+            height: fit-content;
+            width: fit-content;
+            display: flex;
+            flex-direction: column;
+            align-items: center;           
+            padding-bottom: 20vh;
+            padding-top: 10vh;
+            gap: 10vh;
+        }
+    }
+}
