@@ -1,0 +1,12 @@
+.smooth-scroll {
+    overflow: auto;
+}
+
+.scrollbar-thumb {
+    background-color: #676252 !important;
+    z-index: 10 !important;
+}
+
+.scrollbar-track {
+    z-index: 10 !important;
+}
