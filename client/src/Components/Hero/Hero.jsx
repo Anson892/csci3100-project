@@ -40,7 +40,7 @@ export const Hero = () => {
             height: 0
         },
         animate: {
-            height: "75vh",
+            height: "80vh",
             transition: {
                 delay: 2.0,
                 duration: 1.0,
