@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import './Hero.css'
 import hero_section_iamge from '../../Assets/Images/hero_section_image.png'
 import learn_more from '../../Assets/UI/learn_more.svg'
 import collection_description from '../../Assets/UI/new_collection_description.svg'
 import { motion } from 'framer-motion'
-export const Hero = () => {
+export const Hero = ({}) => {
     const newTextAnim = {
         initial: {
             opacity: 0,
@@ -40,7 +40,7 @@ export const Hero = () => {
             height: 0
         },
         animate: {
-            height: "80vh",
+            height: "75vh",
             transition: {
                 delay: 2.0,
                 duration: 1.0,
@@ -91,18 +91,19 @@ export const Hero = () => {
         }
     }
 
+
     return (
-    <div className="hero">
-        <motion.img {...imageAnim} className='image' src={hero_section_iamge} alt="" />
-        <motion.div {...newTextAnim} className="new-text">
-            <u>NEW</u>
-        </motion.div>
-        <motion.div {...collectionTextAnim} className="collection-text">
-            COLLECTION
-        </motion.div>
-        <motion.div {...verticalLineAnim} className="vertical-line"/>
-        <motion.img {...descriptionAnim} src={ collection_description } alt="" className="collection-description" />
-        <motion.img {...learnMoreAnim} src={ learn_more } alt="" className="learn-more-button" />
-    </div>
+        <div className="hero">
+            <motion.img {...imageAnim} className='image' src={hero_section_iamge} alt="" />
+            <motion.div {...newTextAnim} className="new-text">
+                <u>NEW</u>
+            </motion.div>
+            <motion.div {...collectionTextAnim} className="collection-text">
+                COLLECTION
+            </motion.div>
+            <motion.div {...verticalLineAnim} className="vertical-line"/>
+            <motion.img {...descriptionAnim} src={ collection_description } alt="" className="collection-description" />
+            <motion.img {...learnMoreAnim} src={ learn_more } alt="" className="learn-more-button" />
+        </div>
     )
 }

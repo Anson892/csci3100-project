@@ -1,19 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Navbar } from '../../Components/Navbar/Navbar';
 import { Hero } from '../../Components/Hero/Hero';
 import { PromotionEvent } from '../../Components/PromotionEvent/PromotionEvent';
 import { HomeRecommendation } from '../../Components/HomeRecommendation/HomeRecommendation';
-import { SmoothScroll } from '../../Components/Animations/SmoothScroll/SmoothScroll'
+import { ReactLenis } from '@studio-freight/react-lenis'
 
 export const Home = () => {
-  return (
-    <div className='Home'>
-        <Navbar/>
-        <SmoothScroll offset={"60px"}>
-            <Hero/>
-            <PromotionEvent/>
-            <HomeRecommendation/>
-        </SmoothScroll>
-    </div>
-  )
+
+    const options = {
+        lerp: 0.05,
+        inifinite: true,
+    }
+
+    return (
+        <div className='Home' options={options}>
+            <ReactLenis root>
+                <Navbar/>
+                <Hero/>
+                <PromotionEvent/>
+                <HomeRecommendation/>
+            </ReactLenis>
+        </div>
+    )
 }

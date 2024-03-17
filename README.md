@@ -17,4 +17,4 @@ At the root directory (csci3100-project)
 - react-router-dom
 - framer-motion
 - react-infinite-scroll-component
-- smooth-scrollbar
+- @studio-freight/react-lenis
