@@ -1,6 +1,6 @@
 import React from "react";
 import './ProductCard.css';
-import  ProductIcon from '../../Assets/Icons/ProductIcon.jpg'
+import  ProductIcon from '../../Assets/Images/ProductIcon.jpg'
 import { Link } from 'react-router-dom';
 // get icon
 // const product_icon = () => {
