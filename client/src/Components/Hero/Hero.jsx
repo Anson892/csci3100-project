@@ -3,7 +3,8 @@ import './Hero.css'
 import hero_section_iamge from '../../Assets/Images/hero_section_image.png'
 import learn_more from '../../Assets/UI/learn_more.svg'
 import collection_description from '../../Assets/UI/new_collection_description.svg'
-import { motion } from 'framer-motion'
+import { motion, useScroll, useMotionValueEvent, useTransform } from 'framer-motion'
+
 export const Hero = ({}) => {
     const newTextAnim = {
         initial: {
@@ -91,19 +92,35 @@ export const Hero = ({}) => {
         }
     }
 
+    const containerRef = useRef(null);
+    const { scrollYProgress } = useScroll({
+        target: containerRef,
+        offset: ['start start', 'end start']
+    })
+    const newTextOffset = useTransform(useTransform(scrollYProgress, [0, 1], [0, -20]), (v) => `${v}vh`)
+    const collectionTextOffset = useTransform(useTransform(scrollYProgress, [0, 1], [0, -60]), (v) => `${v}vh`)
+    const descriptionOffset = useTransform(useTransform(scrollYProgress, [0, 1], [0, 40]), (v) => `${v}vh`)
+    const learnMoreOffset = useTransform(useTransform(scrollYProgress, [0, 1], [0, 30]), (v) => `${v}vh`)
+    const verticalLineOffset = useTransform(useTransform(scrollYProgress, [0, 1], [35, 0]), (v) => `${v}%`)
+    const imageOffset = useTransform(useTransform(scrollYProgress, [0, 1], [0, 40]), (v) => `${v}vh`)
+
+
+    useMotionValueEvent(scrollYProgress, "change", (latest) => {
+        console.log("Page scroll: ", latest)
+      })
 
     return (
-        <div className="hero">
-            <motion.img {...imageAnim} className='image' src={hero_section_iamge} alt="" />
-            <motion.div {...newTextAnim} className="new-text">
+        <div className="hero" ref={containerRef}>
+            <motion.img {...imageAnim} style={{y: imageOffset}} className='image' src={hero_section_iamge} alt="" />
+            <motion.div {...newTextAnim} style={{y: newTextOffset}} className="new-text">
                 <u>NEW</u>
             </motion.div>
-            <motion.div {...collectionTextAnim} className="collection-text">
+            <motion.div {...collectionTextAnim} style={{y: collectionTextOffset}} className="collection-text">
                 COLLECTION
             </motion.div>
-            <motion.div {...verticalLineAnim} className="vertical-line"/>
-            <motion.img {...descriptionAnim} src={ collection_description } alt="" className="collection-description" />
-            <motion.img {...learnMoreAnim} src={ learn_more } alt="" className="learn-more-button" />
+            <motion.div {...verticalLineAnim} style={{height: verticalLineOffset}} className="vertical-line"/>
+            <motion.img {...descriptionAnim} style={{y: descriptionOffset}} src={ collection_description } alt="" className="collection-description" />
+            <motion.img {...learnMoreAnim} style={{y: learnMoreOffset}} src={ learn_more } alt="" className="learn-more-button" />
         </div>
     )
 }
