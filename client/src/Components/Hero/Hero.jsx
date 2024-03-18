@@ -104,11 +104,6 @@ export const Hero = ({}) => {
     const verticalLineOffset = useTransform(useTransform(scrollYProgress, [0, 1], [35, 0]), (v) => `${v}%`)
     const imageOffset = useTransform(useTransform(scrollYProgress, [0, 1], [0, 40]), (v) => `${v}vh`)
 
-
-    useMotionValueEvent(scrollYProgress, "change", (latest) => {
-        console.log("Page scroll: ", latest)
-      })
-
     return (
         <div className="hero" ref={containerRef}>
             <motion.img {...imageAnim} style={{y: imageOffset}} className='image' src={hero_section_iamge} alt="" />
