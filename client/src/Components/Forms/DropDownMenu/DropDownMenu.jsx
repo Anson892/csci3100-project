@@ -17,7 +17,7 @@ export const DropDownMenu = ({ items, initial, setFucn }) => {
         if (isOpen) {
             const openAnimation = async () => {
                 await animate([
-                    [".container", { height: h }, { duration: 0.8, at: 0, ease: [0.65, 0, 0.35, 1]}],
+                    [scope.current, { height: h }, { duration: 0.8, at: 0, ease: [0.65, 0, 0.35, 1]}],
                     [".drop-down-menu-button", { rotate: 90 }, { duration: 0.8, at: 0, ease: [0.65, 0, 0.35, 1]}]
                 ])
             }
@@ -26,7 +26,7 @@ export const DropDownMenu = ({ items, initial, setFucn }) => {
         else {
             const closeAnimation = async () => {
                 await animate([
-                    [".container", { height: "40px" }, { duration: 0.8, at: 0, ease: [0.65, 0, 0.35, 1]}],
+                    [scope.current, { height: "30px" }, { duration: 0.8, at: 0, ease: [0.65, 0, 0.35, 1]}],
                     [".drop-down-menu-button", { rotate: 0 }, { duration: 0.8, at: 0, ease: [0.65, 0, 0.35, 1]}]
                 ])
             }
@@ -48,35 +48,34 @@ export const DropDownMenu = ({ items, initial, setFucn }) => {
                 setOnClick(false);
             }
             onClickAnimation();
+            setIsOpen(false);
         }
     }, [isOpen, onClick])
 
     return (
         <div className="drop-down-menu" ref={scope}>
-            <div className="container">
-                <img 
-                    className="drop-down-menu-button"
-                    src={ drop_down_menu_icon }
-                    alt=""
-                    onClick={() => setIsOpen(!isOpen)}
-                    />
-                <hr></hr>
-                <div className="texts-container">
-                    <p className="current-item">{currentAnimateItem}</p>
-                    {items.map(item => {
-                        return <div
-                                    className="item-container"
-                                    onClick={()=>{
-                                        if (currentItem !== item) {
-                                            setCurrentItem(item);
-                                            setOnClick(true);
-                                            setFucn(item);
-                                        }
-                                    }}>
-                                    {item}
-                                </div>
-                        })}
-                </div>
+            <img 
+                className="drop-down-menu-button"
+                src={ drop_down_menu_icon }
+                alt=""
+                onClick={() => setIsOpen(!isOpen)}
+                />
+            <hr></hr>
+            <div className="texts-container">
+                <p className="current-item">{currentAnimateItem}</p>
+                {items.map(item => {
+                    return <div
+                                className="item-container"
+                                onClick={()=>{
+                                    if (currentItem !== item) {
+                                        setCurrentItem(item);
+                                        setOnClick(true);
+                                        setFucn(item);
+                                    }
+                                }}>
+                                {item}
+                            </div>
+                    })}
             </div>
         </div>
     )
