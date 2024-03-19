@@ -35,7 +35,6 @@
     height: 670px;
     left: calc(50% - 1595px/2 - 0.5px);
     top: 244px;
-    pointer-events: none;
 }
 
 .ResultContainer::-webkit-scrollbar {

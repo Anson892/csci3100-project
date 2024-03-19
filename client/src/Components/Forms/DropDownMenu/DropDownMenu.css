@@ -12,6 +12,7 @@
     justify-content: center;
     background-color: #F6F6E9;
     overflow: hidden;
+    z-index: 2;
 
     .drop-down-menu-button {
         width: 16px;
