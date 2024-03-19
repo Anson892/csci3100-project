@@ -3,11 +3,11 @@ import './FilterPopup.css'
 import { DropDownMenu } from '../Forms/DropDownMenu/DropDownMenu'
 import { motion, AnimatePresence } from 'framer-motion'
 
-export const FilterPopup = ({ setCategory, 
-                              setMinPrice,
-                              setMaxPrice, 
-                              setMinRating, 
-                              setMaxRating}) => {
+export const FilterPopup = ({ category, setCategory, 
+                              minPrice, setMinPrice,
+                              maxPrice, setMaxPrice, 
+                              minRating, setMinRating, 
+                              maxRating, setMaxRating}) => {
 
     const popupAnim = {
         initial: {
@@ -54,6 +54,7 @@ export const FilterPopup = ({ setCategory,
                     className='left-input'
                     type="number"
                     min="0"
+                    value={minPrice}
                     onChange={(e)=>{setMinPrice(e.target.value)}}
                     />
                 -
@@ -61,6 +62,7 @@ export const FilterPopup = ({ setCategory,
                     className='right-input' 
                     type="number" 
                     min="0"
+                    value={maxPrice}
                     onChange={(e)=>{setMaxPrice(e.target.value)}}
                     />
             </div>
@@ -72,6 +74,7 @@ export const FilterPopup = ({ setCategory,
                     type="number"
                     min="0"
                     max="5"
+                    value={minRating}
                     onChange={(e)=>{setMinRating(e.target.value)}}    
                     />
                 -
@@ -80,6 +83,7 @@ export const FilterPopup = ({ setCategory,
                     type="number"
                     min="0"
                     max="5"
+                    value={maxRating}
                     onChange={(e)=>{setMaxRating(e.target.value)}}
                     />
             </div>

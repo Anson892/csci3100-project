@@ -63,11 +63,11 @@ export const SearchBar = () => {
                 {isOpenFilterPanel ?
                     <FilterPopup
                     isOpen={isOpenFilterPanel}
-                    setCategory={setCategory}
-                    setMinPrice={setMinPrice}
-                    setMaxPrice={setMaxPrice}
-                    setMinRating={setMinRating}
-                    setMaxRating={setMaxRating}
+                    category={category} setCategory={setCategory}
+                    minPrice={minPrice} setMinPrice={setMinPrice}
+                    maxPrice={maxPrice} setMaxPrice={setMaxPrice}
+                    minRating={minRating} setMinRating={setMinRating}
+                    maxRating={maxRating} setMaxRating={setMaxRating}
                     />
                     :
                     null
