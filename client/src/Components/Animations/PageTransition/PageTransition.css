@@ -2,6 +2,7 @@
     position: absolute;
     top: 0px;
     width: 100%;
+    
 
     .upper-overlay {
         width: 100%;
@@ -31,6 +32,6 @@
         position: absolute;
         width: 100%;
         top: 0vh;
-        filter: brightness(0.1)
+        filter: brightness(0.3)
     }
 }
