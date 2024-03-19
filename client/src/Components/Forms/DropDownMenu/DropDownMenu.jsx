@@ -14,27 +14,12 @@ export const DropDownMenu = ({ items, initial, setFucn }) => {
     const[scope, animate] = useAnimate();
     useEffect(() => {
         const h = (6 + 24 + 13 + 24 * items.length + 13).toString() + "px";
-        if (isOpen) {
-            const openAnimation = async () => {
-                await animate([
-                    [scope.current, { height: h }, { duration: 0.8, at: 0, ease: [0.65, 0, 0.35, 1]}],
-                    [".drop-down-menu-button", { rotate: 90 }, { duration: 0.8, at: 0, ease: [0.65, 0, 0.35, 1]}]
-                ])
-            }
-            openAnimation();
-        }
-        else {
-            const closeAnimation = async () => {
+        if (isOpen && onClick) {
+            const onClickAnimation = async () => {
                 await animate([
                     [scope.current, { height: "30px" }, { duration: 0.8, at: 0, ease: [0.65, 0, 0.35, 1]}],
                     [".drop-down-menu-button", { rotate: 0 }, { duration: 0.8, at: 0, ease: [0.65, 0, 0.35, 1]}]
                 ])
-            }
-            closeAnimation();
-        }
-
-        if (onClick) {
-            const onClickAnimation = async () => {
                 await animate([
                     ["p", { opacity: 0, y: "13px" }, { duration: 0.2, at: 0, ease: [0.32, 0, 0.67, 0]}]
                 ]);
@@ -46,9 +31,28 @@ export const DropDownMenu = ({ items, initial, setFucn }) => {
                     ["p", { opacity: 1, y: "0px" }, { duration: 0.2 , ease: [0.33, 1, 0.68, 1]}]
                 ]);
                 setOnClick(false);
+                setIsOpen(false);
             }
             onClickAnimation();
-            setIsOpen(false);
+        }
+        else if (isOpen) {
+            const openAnimation = async () => {
+                await animate([
+                    [scope.current, { height: h }, { duration: 0.8, at: 0, ease: [0.65, 0, 0.35, 1]}],
+                    [".drop-down-menu-button", { rotate: 90 }, { duration: 0.8, at: 0, ease: [0.65, 0, 0.35, 1]}]
+                ])
+            }
+            openAnimation();
+        }
+        else if (!isOpen) {
+            const closeAnimation = async () => {
+                await animate([
+                    [scope.current, { height: "30px" }, { duration: 0.8, at: 0, ease: [0.65, 0, 0.35, 1]}],
+                    [".drop-down-menu-button", { rotate: 0 }, { duration: 0.8, at: 0, ease: [0.65, 0, 0.35, 1]}]
+                ])
+            }
+            closeAnimation();
+            
         }
     }, [isOpen, onClick])
 
@@ -67,11 +71,9 @@ export const DropDownMenu = ({ items, initial, setFucn }) => {
                     return <div
                                 className="item-container"
                                 onClick={()=>{
-                                    if (currentItem !== item) {
                                         setCurrentItem(item);
                                         setOnClick(true);
                                         setFucn(item);
-                                    }
                                 }}>
                                 {item}
                             </div>
