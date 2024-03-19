@@ -15,7 +15,7 @@ export const Hero = ({}) => {
             opacity: 1,
             y: "0vh",
             transition: {
-                delay: 0.5,
+                delay: 1.5,
                 duration: 0.8,
             }
         }
@@ -30,7 +30,7 @@ export const Hero = ({}) => {
             opacity: 1,
             y: "0vh",
             transition: {
-                delay: 1.0,
+                delay: 2.0,
                 duration: 0.8,
             }
         }
@@ -43,7 +43,7 @@ export const Hero = ({}) => {
         animate: {
             height: "75vh",
             transition: {
-                delay: 2.0,
+                delay: 3.0,
                 duration: 1.0,
                 ease: [0.65, 0, 0.35, 1],
             }
@@ -57,7 +57,7 @@ export const Hero = ({}) => {
         animate: {
             height: "35%",
             transition: {
-                delay: 2.2,
+                delay: 3.2,
                 duration: 0.7,
                 ease: [0.65, 0, 0.35, 1],
             }
@@ -71,7 +71,7 @@ export const Hero = ({}) => {
         animate: {
             width: "20%",
             transition: {
-                delay: 3.0,
+                delay: 4.0,
                 duration: 0.7,
                 ease: [0.65, 0, 0.35, 1],
             }
@@ -85,7 +85,7 @@ export const Hero = ({}) => {
         animate: {
             scale: 1,
             transition: {
-                delay: 3.5,
+                delay: 4.5,
                 duration: 0.8,
                 ease: [0.65, 0, 0.35, 1],
             }
