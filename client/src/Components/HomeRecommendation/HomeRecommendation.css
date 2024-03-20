@@ -11,21 +11,26 @@
 
     }
 
-    .product-text {
+    .product-text-container {
         width: 30vw;
+        text-overflow: clip;
+        overflow: hidden;
 
-        h1 {
-            font-size: 2.5vw;
-            font-weight: bold;
-            text-align: left;
-            margin-top: 8vh;
-        }
-
-        p {
-            font-size: 1.5vw;
-            text-align: justify;
-
-            margin: 0px;
+        .product-text {
+            width: 30vw;
+            
+            h1 {
+                font-size: 2.5vw;
+                font-weight: bold;
+                text-align: left;
+                margin-top: 8vh;
+            }
+            
+            p {
+                font-size: 1.5vw;
+                text-align: justify;
+                margin: 0px;
+            }
         }
     }
 
@@ -53,24 +58,28 @@
         width: 30vw;
         height: 25vw;
         object-fit: cover;
-
     }
-
-    .product-text {
+    
+    .product-text-container {
         width: 30vw;
+        text-overflow: clip;
+        overflow: hidden;
 
-        h1 {
-            font-size: 2.5vw;
-            font-weight: bold;
-            text-align: left;
-            margin-top: 8vh;
-        }
-
-        p {
-            font-size: 1.5vw;
-            text-align: justify;
-
-            margin: 0px;
+        .product-text {
+            width: 30vw;
+            
+            h1 {
+                font-size: 2.5vw;
+                font-weight: bold;
+                text-align: left;
+                margin-top: 8vh;
+            }
+            
+            p {
+                font-size: 1.5vw;
+                text-align: justify;
+                margin: 0px;
+            }
         }
     }
 
@@ -92,6 +101,7 @@
 .HomeRecommendation {
     position: relative;
     background-color: #DADACA;
+    overflow: hidden;
 
     .title-container {
         position: relative;
@@ -147,7 +157,7 @@
             align-items: center;           
             padding-bottom: 20vh;
             padding-top: 10vh;
-            gap: 10vh;
+            gap: 20vh;
         }
     }
 }
