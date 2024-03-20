@@ -1,11 +1,10 @@
 .TopicContainer{
     position: absolute;
-    width: 100%;
-    height: 251px;
+    width: 794px;
+    height: 143px;
     left: 0px;
-    top: 0px;
+    top: 108px;
     display: flex;
-    background-color: #F6F6E9;
 
 }
 
@@ -18,10 +17,6 @@
     display: flex;
     letter-spacing: -0.02em;
     text-transform: uppercase;
-    background-color: #F6F6E9;
-    position: absolute;
-    top: 108px;
-
 }
 
 .ResultContainer{
@@ -41,8 +36,6 @@
     height: 670px;
     left: calc(50% - 1595px/2 - 0.5px);
     top: 244px;
-    background-color: #F6F6E9;
-
 }
 
 .ResultContainer::-webkit-scrollbar {
