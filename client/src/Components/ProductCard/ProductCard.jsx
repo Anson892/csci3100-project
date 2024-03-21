@@ -2,6 +2,7 @@ import React from "react";
 import './ProductCard.css';
 import  ProductIcon from '../../Assets/Images/ProductIcon.jpg'
 import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion'
 // get icon
 // const product_icon = () => {
 //     return(
@@ -10,8 +11,30 @@ import { Link } from 'react-router-dom';
 // }
 
 export const ProductCard = () => {
+
+    const cardAnim = {
+        initial: {
+            opacity: 0,
+        },
+        animate: {
+            opacity: 1,
+            transition: {
+                delay: 1.5,
+                duration: 0.5,
+                ease: [0.65, 0, 0.35, 1],
+            }
+        },
+        whileHover: {
+            scale: 1.1,
+            transition: {
+                duration: 0.3,
+                ease: [0.65, 0, 0.35, 1],
+            }
+        }
+    }
+
     return(
-        <div className='ProductCardContainer'>
+        <motion.div {...cardAnim} className='ProductCardContainer'>
             <Link to={'/product/:1'} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
                 <div>
                 <img src={ProductIcon} alt=""/>
@@ -26,6 +49,6 @@ export const ProductCard = () => {
                     <p className='onsale'>ON SALE</p>
                 </div>
             </div>
-        </div>
+        </motion.div>
     )
 }
