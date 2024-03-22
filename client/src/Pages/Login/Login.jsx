@@ -19,7 +19,7 @@ const LoginForm = () => {
       </div>
       <div class="redirectLink">
         Don’t have an account yet? &nbsp;
-        <Link to={'/register'} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>Sign up</Link>
+        <Link class="signUpLink" to={'/register'} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>Sign up</Link>
       </div>
       <Link to={'/'} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
         <button class="loginButton" type="submit">Sign In</button>
@@ -30,7 +30,7 @@ const LoginForm = () => {
 }
 export const Login = () => {
   return (
-    <div>
+    <div class="loginPage">
       <LoginForm/>
       <img class="loginImage" src={loginImage} alt='login img'></img>
     </div>
