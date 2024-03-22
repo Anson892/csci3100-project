@@ -22,6 +22,5 @@ export const LoginRegisterForm = ({title, redirectMessage, redirectPage, action,
         <button class="submitBtn" type="submit">{submitBtnMessage}</button>
       </Link>
     </form>
-    
   )
 }
