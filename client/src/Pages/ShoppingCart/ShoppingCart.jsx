@@ -1,6 +1,7 @@
 import React from 'react';
 import { Navbar } from '../../Components/Navbar/Navbar';
 import { CartItem } from '../../Components/CartItem/CartItem'
+import { Link } from 'react-router-dom';
 import './ShoppingCart.css'
 
 export const ShoppingCart = () => {
@@ -20,7 +21,9 @@ export const ShoppingCart = () => {
           <CartItem/>
         </div>
         <div class="cart-footer">
-          <button class="check-out-button">CHECKOUT</button>
+          <Link to={'/checkout'} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
+            <button class="check-out-button">CHECKOUT</button>
+          </Link>
         </div>
       </div>
     </div>

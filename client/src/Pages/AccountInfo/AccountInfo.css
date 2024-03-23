@@ -1,0 +1,22 @@
+.account-page-container{
+    position: absolute;
+    top: 12vh;
+    display: flex;
+    width: 70%;
+    margin: 0 15% 0 15%;
+    justify-content: center;
+}
+
+.account-page-title{
+    position: fixed;
+    left: 0;
+    writing-mode: vertical-rl;
+    font-size: 11vh;
+    font-weight: 800;
+    line-height: 11vh;
+}
+
+.profile-details{
+    display: grid;
+    grid-template-columns: auto auto;
+}
