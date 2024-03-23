@@ -5,8 +5,8 @@ module.exports = (sequelize, Sequelize) => {
       primaryKey: true,
       autoIncrement: true,
     },
-    file_path: {
-      type: Sequelize.STRING(200),
+    path: {
+      type: Sequelize.STRING,
       allowNull: false,
     },
   });
