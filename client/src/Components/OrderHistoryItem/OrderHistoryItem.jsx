@@ -63,16 +63,18 @@ export const OrderHistoryItem = () => {
     return (
         <div class="order-history-item">
             <div class="order-info">
-                <p>ORDER DATE/TIME</p><p>{orderTimestamp}</p>
-                <p>DELIVER DATE</p><p>{deliverDate}</p>
-                <p>RECEIVER NAME</p><p>{receiverName}</p>
-                <p>TOTAL PRICE</p><p>{totalPrice}</p>
-                <p>PAYMENT METHOD</p><p>{paymentMethod}</p>
-                <p>DELIVERY STATUS</p>
-                <div>
-                    <p>{deliveryStatus}</p>
-                    <img src={arrivedIcon} alt="aarived_icon"></img>
+                <p class="order-info-field">ORDER DATE/TIME</p><p>{orderTimestamp}</p>
+                <p class="order-info-field">DELIVER DATE</p><p>{deliverDate}</p>
+                <p class="order-info-field">RECEIVER NAME</p><p>{receiverName}</p>
+                <p class="order-info-field">TOTAL PRICE</p><p>{totalPrice}</p>
+                <p class="order-info-field">PAYMENT METHOD</p><p>{paymentMethod}</p>
+                <p class="order-info-field">DELIVERY STATUS</p>
+                <div class="order-info-delivery-status">
+                    <p>{deliveryStatus}</p>&nbsp;
                     <img src={deliveringIcon} alt="delivering_icon"></img>
+                    &nbsp;||&nbsp;
+                    <p>ARRIVED</p>&nbsp;
+                    <img src={arrivedIcon} alt="aarived_icon"></img>
                 </div>
             </div>
             <div class="order-product-list">

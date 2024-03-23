@@ -1,18 +1,37 @@
 .order-history-item{
     background: #DADACA;
     margin-bottom: 10px;
+    /* align-items: flex-start; */
 }
 
 .order-info{
     display: grid;
-    grid-template-columns: auto auto;
-    column-gap: 10px;
+    grid-template-columns: 1fr 2fr;
+    row-gap: 3px;
+    column-gap: 15px;
+    font-size: 2vh;
+    line-height: 2.8vh;
+    align-items: center;
+}
+
+.order-info-field{
+    color: #7F7F7F;
+}
+
+.order-info-delivery-status{
+    display: flex;
+    align-items: center;
+}
+
+.order-info-delivery-status > img {
+    height: 2.8vh;
 }
 
 .order-product-bar{
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 30vw;
 }
 
 .add-comment-button{

@@ -1,9 +1,8 @@
 .account-page-container{
     position: absolute;
     top: 12vh;
-    display: flex;
-    width: 70%;
-    margin: 0 15% 0 15%;
+    width: 80%;
+    margin: 0 10% 0 10%;
     justify-content: center;
 }
 
@@ -14,6 +13,47 @@
     font-size: 11vh;
     font-weight: 800;
     line-height: 11vh;
+}
+
+.account-info-selection{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    height: 18vh;
+    width: 23vw;
+    justify-content: space-between;
+}
+
+.account-info-selection > button {
+    background: none;
+    border: 1px solid black;
+    border-left: none;
+    border-right: none;
+    font-size: 3vh;
+    line-height: 6vh;
+    font-weight: 700;
+    text-align: start;
+    cursor: pointer;
+}
+
+/* .account-info-selection > button:hover, */
+.account-info-selection > .active {
+    box-shadow: -12px 0px #9DEFE7;
+}
+
+.account-info-selection > button:hover {
+    box-shadow: -12px 0px darkturquoise;;
+}
+
+.account-info-container{
+    position: absolute;
+    left: 27vw;
+    height: 80vh;
+    overflow-y: auto;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    padding-top: 10px;
+    width: 40vw;
 }
 
 .profile-details{
