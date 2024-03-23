@@ -59,7 +59,7 @@ export const AccountInfo = () => {
         <div class="account-page-container">
           <h class="account-page-title">Account</h>
           <div class="account-info-selection">
-            <button onClick= {ProfileButton_clicked} class={buttonState1}>Profile</button>
+            <button onClick={ProfileButton_clicked} class={buttonState1}>Profile</button>
             <button onClick= {OrderHistoryButton_clicked} class={buttonState2}>Order History</button>
           </div>
           <div className='account-info-container'>

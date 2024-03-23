@@ -36,7 +36,6 @@
     cursor: pointer;
 }
 
-/* .account-info-selection > button:hover, */
 .account-info-selection > .active {
     box-shadow: -12px 0px #9DEFE7;
 }
@@ -53,7 +52,7 @@
     border-top: 1px solid black;
     border-bottom: 1px solid black;
     padding-top: 10px;
-    width: 40vw;
+    width: 43vw;
 }
 
 .profile-details{
