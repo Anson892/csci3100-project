@@ -75,9 +75,9 @@ controller.create = async (req, res, next) => {
 controller.findAll = async (req, res) => {
   Product.findAll({ include: ProductImage })
     .then((data) => {
-      res.json(data);
+      res.status(200).json({ message: "All products found!", data: data });
     })
-    .catch((err) => res.status(500).send(err));
+    .catch((err) => res.status(500).send({ error: err.message }));
 };
 
 //Show by category
