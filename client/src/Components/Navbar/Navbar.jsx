@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { SearchBar } from '../SearchBar/SearchBar'
 import logo from '../../Assets/logo.svg';
 import shopping_cart_icon from '../../Assets/Icons/shopping_cart_icon.svg'
+import profile_icon from '../../Assets/Icons/profile_icon.svg'
 
 export const Navbar = () => {
 
@@ -20,6 +21,9 @@ export const Navbar = () => {
             <div className="nav-right">
                 <Link to={'/shopping-cart'} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
                     <img src={shopping_cart_icon} alt="" />
+                </Link>
+                <Link to={'/account'} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
+                    <img src={profile_icon} alt="" />
                 </Link>
                 <Link to={'/login'} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
                     <button>

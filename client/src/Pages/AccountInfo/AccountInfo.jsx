@@ -5,6 +5,14 @@ import { OrderHistoryItem } from '../../Components/OrderHistoryItem/OrderHistory
 import './AccountInfo.css'
 
 const Profile = () => {
+  
+  /*
+  const getUserInfo = () => {
+  }
+
+  const updateUserInfo = () => {
+  }
+  */
 
   const [NewUserName, setNewUsername] = useState();
   const [NewPassword, setNewPassword] = useState();
@@ -63,7 +71,7 @@ export const AccountInfo = () => {
             <button onClick= {OrderHistoryButton_clicked} class={buttonState2}>Order History</button>
           </div>
           <div className='account-info-container'>
-            { AccountInfo ?  <Profile/> : <OrderHistory/>}
+            { AccountInfo ?  <Profile/> : <OrderHistory/> }
           </div>
         </div>
     </div>
