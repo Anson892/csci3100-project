@@ -12,7 +12,7 @@ const sequelize = new Sequelize(config.DATABASE, config.USER, config.PASSWORD, {
     idle: config.pool.acquire
   },
 
-  logging: (...msg) => console.log("[SQL LOG]" + msg)
+  logging: (...msg) => console.log("[SQL LOG] " + msg)
 });
 
 const db = {};

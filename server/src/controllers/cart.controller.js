@@ -9,7 +9,7 @@ const controller = {};
 controller.createCart = (req, res) => {
   // Validate request
   if (!req.body.userId) {
-    res.status(400).send({
+    res.status(400).json({
       message: "userId cannot be empty!",
     });
     return;
@@ -25,16 +25,16 @@ controller.createCart = (req, res) => {
       // Save new Cart in the database
       Cart.create(cart)
         .then((data) => {
-          res.send(data);
+          res.json(data);
         })
         .catch((err) => {
-          res.status(500).send({
+          res.status(500).json({
             message:
               err.message || "Some error occurred while creating the cart.",
           });
         });
     } else {
-      res.status(400).send({ message: "user already has a cart!" });
+      res.status(400).json({ message: "user already has a cart!" });
     }
   });
 };
@@ -46,17 +46,17 @@ controller.getUserCart = (req, res) => {
   Cart.findOne({ where: { userId: userId } })
     .then((cart) => {
       if (cart === null) {
-        res.status(404).send({
+        res.status(404).json({
           message: "Cart not found",
         });
       } else {
         // Get cart items
         CartItem.findAll({ where: { cartId: cart.id }, include: Product })
           .then((cartItems) => {
-            res.send(cartItems);
+            res.json(cartItems);
           })
           .catch((err) => {
-            res.status(500).send({
+            res.status(500).json({
               message:
                 err.message ||
                 "Some error occurred while retrieving cart items.",
@@ -65,20 +65,37 @@ controller.getUserCart = (req, res) => {
       }
     })
     .catch((err) => {
-      res.status(500).send({
+      res.status(500).json({
         message: err.message || "Some error occurred while retrieving cart.",
       });
     });
 };
 
 controller.addToCart = (req, res) => {
-  const { userId, productId, quantity } = req.body;
+  const userID = req.body.userID;
+  const productID = req.body.productID;
+  const quantity = req.body.quantity;
+
+  // validate request
+  if (!userID || !productID || !quantity) {
+    res.status(400).json({
+      error: "userID, productID and quantity cannot be empty!",
+    });
+    return;
+  }
+
+  if (quantity <= 0) {
+    res.status(400).json({
+      error: "quantity must be greater than 0!",
+    });
+    return;
+  }
 
   // Find user cart
   Cart.findOne({ where: { userId: userId } }).then((cart) => {
     if (cart === null) {
-      res.status(404).send({
-        message: "Cart not found",
+      res.status(404).json({
+        error: "Cart not found",
       });
     } else {
       // Check if product is already in cart
@@ -96,11 +113,13 @@ controller.addToCart = (req, res) => {
 
           CartItem.create(cartItem)
             .then((data) => {
-              res.send(data);
+              res
+                .status(200)
+                .json({ message: "Product added to cart", data: data });
             })
             .catch((err) => {
-              res.status(500).send({
-                message:
+              res.status(500).json({
+                error:
                   err.message ||
                   "Some error occurred while adding product to cart.",
               });
@@ -112,11 +131,11 @@ controller.addToCart = (req, res) => {
           cartItem
             .save()
             .then((data) => {
-              res.send(data);
+              res.status(200).json({ message: "Product updated in cart" });
             })
             .catch((err) => {
-              res.status(500).send({
-                message:
+              res.status(500).json({
+                error:
                   err.message ||
                   "Some error occurred while updating product in cart.",
               });
@@ -134,7 +153,7 @@ controller.removeCartItem = (req, res) => {
   Cart.findOne({ where: { userId: userId } }).then((cart) => {
     if (cart === null) {
       // cart not found
-      res.status(404).send({
+      res.status(404).json({
         message: "Cart not found",
       });
     } else {
@@ -144,7 +163,7 @@ controller.removeCartItem = (req, res) => {
       }).then((cartItem) => {
         if (cartItem === null) {
           // product not in cart
-          res.status(404).send({
+          res.status(404).json({
             message: "Product not in cart",
           });
         } else {
@@ -152,10 +171,10 @@ controller.removeCartItem = (req, res) => {
           cartItem
             .destroy()
             .then(() => {
-              res.send({ message: "Product removed from cart" });
+              res.json({ message: "Product removed from cart" });
             })
             .catch((err) => {
-              res.status(500).send({
+              res.status(500).json({
                 message:
                   err.message ||
                   "Some error occurred while removing product from cart.",
@@ -175,17 +194,17 @@ controller.clearCart = (req, res) => {
     .then((cart) => {
       if (cart === null) {
         // cart not found
-        res.status(404).send({
+        res.status(404).json({
           message: "Cart not found",
         });
       } else {
         // Clear cart
         CartItem.destroy({ where: { cartId: cart.id } })
           .then(() => {
-            res.send({ message: "Cart cleared" });
+            res.json({ message: "Cart cleared" });
           })
           .catch((err) => {
-            res.status(500).send({
+            res.status(500).json({
               message:
                 err.message || "Some error occurred while clearing cart.",
             });
@@ -193,7 +212,7 @@ controller.clearCart = (req, res) => {
       }
     })
     .catch((err) => {
-      res.status(500).send({
+      res.status(500).json({
         message: err.message || "Some error occurred while retrieving cart.",
       });
     });
@@ -207,7 +226,7 @@ controller.deleteCart = (req, res) => {
     .then((cart) => {
       if (cart === null) {
         // cart not found
-        res.status(404).send({
+        res.status(404).json({
           message: "Cart not found",
         });
       } else {
@@ -217,17 +236,17 @@ controller.deleteCart = (req, res) => {
             // Delete cart
             Cart.destroy({ where: { userId: userId } })
               .then(() => {
-                res.send({ message: "Cart deleted" });
+                res.json({ message: "Cart deleted" });
               })
               .catch((err) => {
-                res.status(500).send({
+                res.status(500).json({
                   message:
                     err.message || "Some error occurred while deleting cart.",
                 });
               });
           })
           .catch((err) => {
-            res.status(500).send({
+            res.status(500).json({
               message:
                 err.message || "Some error occurred while deleting cart.",
             });
@@ -235,7 +254,7 @@ controller.deleteCart = (req, res) => {
       }
     })
     .catch((err) => {
-      res.status(500).send({
+      res.status(500).json({
         message: err.message || "Some error occurred while retrieving cart.",
       });
     });
@@ -248,7 +267,7 @@ controller.updateCartItem = (req, res) => {
   Cart.findOne({ where: { userId: userId } }).then((cart) => {
     if (cart === null) {
       // cart not found
-      res.status(404).send({
+      res.status(404).json({
         message: "Cart not found",
       });
     } else {
@@ -258,7 +277,7 @@ controller.updateCartItem = (req, res) => {
       }).then((cartItem) => {
         if (cartItem === null) {
           // product not in cart
-          res.status(404).send({
+          res.status(404).json({
             message: "Product not in cart",
           });
         } else {
@@ -269,10 +288,10 @@ controller.updateCartItem = (req, res) => {
             cartItem
               .destroy()
               .then(() => {
-                res.send({ message: "Product removed from cart" });
+                res.json({ message: "Product removed from cart" });
               })
               .catch((err) => {
-                res.status(500).send({
+                res.status(500).json({
                   message:
                     err.message ||
                     "Some error occurred while removing product from cart.",
@@ -283,10 +302,10 @@ controller.updateCartItem = (req, res) => {
             cartItem
               .save()
               .then((data) => {
-                res.send(data);
+                res.json(data);
               })
               .catch((err) => {
-                res.status(500).send({
+                res.status(500).json({
                   message:
                     err.message ||
                     "Some error occurred while updating product in cart.",
