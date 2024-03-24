@@ -9,20 +9,22 @@ import smallStarFilledIcon from '../../Assets/Icons/small_star_filled.svg'
 import './OrderHistoryItem.css'
 
 const OrderInfo = () => {
+    const orderID = "AD21187920"
     const orderTimestamp = "03/24/2020 21:34:25"
     const deliverDate = "3/26/2020"
-    const receiverName = "3/26/2020"
+    const receiverName = "CHRIS WONG"
     const totalPrice = "$600"
     const paymentMethod = "CREDIT CARD"
     const deliveryStatus = "DELIVERING"
 
     return (
         <div class="order-info">
-            <p class="order-info-field">ORDER DATE/TIME</p><p>{orderTimestamp}</p>
-            <p class="order-info-field">DELIVER DATE</p><p>{deliverDate}</p>
+            <p class="order-info-field">ORDER ID</p><p>{orderID}</p>
+            <p class="order-info-field">ORDER TIME</p><p>{orderTimestamp}</p>
             <p class="order-info-field">RECEIVER NAME</p><p>{receiverName}</p>
-            <p class="order-info-field">TOTAL PRICE</p><p>{totalPrice}</p>
+            <p class="order-info-field">ORDER TOTAl</p><p>{totalPrice}</p>
             <p class="order-info-field">PAYMENT METHOD</p><p>{paymentMethod}</p>
+            <p class="order-info-field">EXPECTED ARRIVAL</p><p>{deliverDate}</p>
 
             <p class="order-info-field">DELIVERY STATUS</p>
             <div class="order-info-delivery-status">
@@ -30,7 +32,7 @@ const OrderInfo = () => {
                 <img src={deliveringIcon} alt="delivering_icon"></img>
                 &nbsp;||&nbsp;
                 <p>ARRIVED</p>&nbsp;
-                <img src={arrivedIcon} alt="aarived_icon"></img>
+                <img src={arrivedIcon} alt="arrived_icon"></img>
             </div>
         </div>
     )
