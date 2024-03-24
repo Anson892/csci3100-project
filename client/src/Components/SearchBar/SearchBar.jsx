@@ -9,7 +9,8 @@ import { AnimatePresence } from 'framer-motion';
 
 export const SearchBar = () => {
     const [keywords, setKeywords] = useState("");
-    const [category, setCategory] = useState("All");
+    const [status, setStatus] = useState("All");
+    const [category, setCategory] = useState("Category");
     const [minPrice, setMinPrice] = useState(0);
     const [maxPrice, setMaxPrice] = useState(1000000);
     const [minRating, setMinRating] = useState(1);
@@ -63,6 +64,7 @@ export const SearchBar = () => {
                 {isOpenFilterPanel ?
                     <FilterPopup
                     isOpen={isOpenFilterPanel}
+                    status={status} setStatus={setStatus}
                     category={category} setCategory={setCategory}
                     minPrice={minPrice} setMinPrice={setMinPrice}
                     maxPrice={maxPrice} setMaxPrice={setMaxPrice}

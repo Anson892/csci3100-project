@@ -3,7 +3,8 @@ import './FilterPopup.css'
 import { DropDownMenu } from '../Forms/DropDownMenu/DropDownMenu'
 import { motion, AnimatePresence } from 'framer-motion'
 
-export const FilterPopup = ({ category, setCategory, 
+export const FilterPopup = ({ status, setStatus,
+                              category, setCategory, 
                               minPrice, setMinPrice,
                               maxPrice, setMaxPrice, 
                               minRating, setMinRating, 
@@ -36,18 +37,26 @@ export const FilterPopup = ({ category, setCategory,
         }
     }
 
+    const statusList = ["All", "New", "On Sales", "Available"]
+    const categoryList = ["Category1", "Category2", "Category3", "Category4", "Category5", "Category6"]
+
     return (
         <motion.div {...popupAnim} className="filter-popup">
-            <div className="title">Filter Settings</div>
-            <hr />
+            <div className="filter-title">Filter Settings</div>
+            <div className="sub-title">Status</div>
+            <DropDownMenu
+                items={statusList}
+                initial={Math.max(0, statusList.indexOf(status))}
+                setFucn={setStatus}
+            />
+            <div className="space"></div>
             <div className="sub-title">Category</div>
             <DropDownMenu
-                items={["All", "New", "Sales", "Chair", "Desk", "Category3", "Category4"]}
-                initial={0}
+                items={categoryList}
+                initial={Math.max(0, categoryList.indexOf(category))}
                 setFucn={setCategory}
             />
             <div className="space"></div>
-            <hr />
             <div className="sub-title">Price</div>
             <div className="inputs-container">
                 <input
@@ -66,7 +75,6 @@ export const FilterPopup = ({ category, setCategory,
                     onChange={(e)=>{setMaxPrice(e.target.value)}}
                     />
             </div>
-            <hr />
             <div className="sub-title">Rating</div>
             <div className="inputs-container">
                 <input 
