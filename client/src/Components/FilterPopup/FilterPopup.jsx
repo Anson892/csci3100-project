@@ -23,7 +23,8 @@ export const FilterPopup = ({ status, setStatus,
             originX: 0,
             originY: 0,
             transition: {
-                duration: 0.3,
+                duration: 0.5,
+                ease: [0.83, 0, 0.17, 1]
             }
         },
         exit: {
@@ -32,7 +33,8 @@ export const FilterPopup = ({ status, setStatus,
             originX: 0,
             originY: 0,
             transition: {
-                duration: 0.3,
+                duration: 0.5,
+                ease: [0.83, 0, 0.17, 1]
             }
         }
     }
