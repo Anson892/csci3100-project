@@ -22,6 +22,7 @@ export const SearchBar = () => {
         navigate({
             pathname: '/search',
             search: '?keywords=' + keywords +
+                    '&status=' + status +
                     '&category=' + category +
                     '&min_price=' + minPrice +
                     '&max_price=' + maxPrice +
