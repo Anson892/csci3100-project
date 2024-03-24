@@ -1,40 +1,70 @@
 import React, { useState } from 'react';
 import { Navbar } from '../../Components/Navbar/Navbar';
-import { TextInput } from '../../Components/Forms/TextInput/TextInput'
 import { OrderHistoryItem } from '../../Components/OrderHistoryItem/OrderHistoryItem'
+import editIcon from '../../Assets/Icons/edit_icon.svg'
+import saveIcon from '../../Assets/Icons/save_icon.svg'
 import './AccountInfo.css'
 
 const Profile = () => {
-  
+
   /*
   const getUserInfo = () => {
+  //API get
+  // save initial state before edit
   }
+  
 
   const updateUserInfo = () => {
+  // API post
+  // restore initial state before edit if edit is rejected
   }
   */
 
-  const [NewUserName, setNewUsername] = useState();
-  const [NewPassword, setNewPassword] = useState();
-  const [NewAddress, setNewAddress] = useState();
+  const [edit, setEdit] = useState(false);
+
+  const [username, setUsername] = useState('my_username');
+  const [password, setPassword] = useState('my_password');
+  const [firstName, setFirstName] = useState('Chris');
+  const [lastName, setLastName] = useState('Wong');
+  const [phoneNo, setPhoneNo] = useState('98745263');
+  const [address, setAddress] = useState(
+    `Room1028, Ho Sin-Hang Engineering Building, The Chinese University of Hong Kong, Shatin, N.T., Hong Kong SAR`); 
+
+  
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (edit) {
+      setEdit(false); // save edit on click
+    } else {
+      setEdit(true);  // make edit on click
+    }
+  }
 
   return(
-    <div class="profile">
-      <div class="profile-details">
-        <p>username</p>
-        <p>my_username</p>
-        <p>password</p>
-        <p>************</p>
-        <p>address</p>
-        <p>my_address</p>
-        <button class="edit-prile-button">edit profile</button>
-      </div>
-      <div class="edit-profile">
-        <TextInput type="text" onChange={(e)=>{setNewUsername(e.target.value)}}>new username</TextInput>
-        <TextInput type="text" onChange={(e)=>{setNewPassword(e.target.value)}}>new password</TextInput>
-        <TextInput type="text" onChange={(e)=>{setNewAddress(e.target.value)}}>new address</TextInput>
-      </div>
-    </div>    
+    <form class="profile-details">
+
+      <label class="profile-details-field">USERNAME</label>
+      <input class="profile-details-input" type="text" disabled={!edit} value={username} onChange={(e)=>setUsername(e.target.value)}></input>
+
+      <label class="profile-details-field">PASSWORD</label>
+      <input class="profile-details-input" type="text" disabled={!edit} value={password} onChange={(e)=>setPassword(e.target.value)}></input>
+
+      <label class="profile-details-field">FIRST NAME</label>
+      <input class="profile-details-input" type="text" disabled={!edit} value={firstName} onChange={(e)=>setFirstName(e.target.value)}></input>
+
+      <label class="profile-details-field">LAST NAME</label>
+      <input class="profile-details-input" type="text" disabled={!edit} value={lastName} onChange={(e)=>setLastName(e.target.value)}></input>
+
+      <label class="profile-details-field">PHONE NUMBER</label>
+      <input class="profile-details-input" type="text" disabled={!edit} value={phoneNo} onChange={(e)=>setPhoneNo(e.target.value)}></input>
+
+      <label class="profile-details-field">SHIPPING ADDRESS</label>
+      <textarea class="profile-details-input" type="text" disabled={!edit} value={address} onChange={(e)=>setAddress(e.target.value)}></textarea>
+
+      <button class="edit-profile-button"><img src={edit ? saveIcon : editIcon} alt="" onClick={handleSubmit}/></button>
+
+    </form>
   )
 
 }
@@ -50,7 +80,7 @@ const OrderHistory = () => {
 
 export const AccountInfo = () => {
   
-  const [AccountInfo, setAccounInfo]=useState(false);
+  const [AccountInfo, setAccounInfo]=useState(true);
   const ProfileButton_clicked = () =>{
     setAccounInfo(true);
   }

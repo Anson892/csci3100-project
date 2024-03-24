@@ -51,11 +51,45 @@
     overflow-y: auto;
     border-top: 1px solid black;
     border-bottom: 1px solid black;
-    padding-top: 10px;
+    padding: 10px 15px 0;
     width: 43vw;
 }
 
 .profile-details{
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: 14vw 25vw;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 4fr;
+    font-size: 2vh;
+    row-gap: 12px;
+}
+
+.profile-details-field{
+    color: #7F7F7F;
+}
+
+.profile-details .edit-profile-button{
+    position: absolute;
+    right: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.profile-details-input{
+    background: none;
+    border: none;
+    outline: 1px solid #7F7F7F;
+    font-size: 2vh;
+    color: black;
+    resize: none;
+    overflow: visible;
+}
+
+.profile-details-input[disabled]{
+    background: none;
+    border: none;
+    outline: none;
+    font-size: 2vh;
+    color: black;
+    
 }
