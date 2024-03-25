@@ -4,6 +4,10 @@ import { Navbar } from '../../Components/Navbar/Navbar';
 import { useParams } from 'react-router-dom';
 import { ProductCard } from '../../Components/ProductCard/ProductCard';
 import ProductImage from '../../Assets/Images/ProductImage.jpg'
+import ProductImage1 from '../../Assets/Images/ProductImage1.jpg'
+import ProductImage2 from '../../Assets/Images/ProductImage2.jpg'
+import ProductImage3 from '../../Assets/Images/ProductImage3.jpg'
+import ProductImage4 from '../../Assets/Images/ProductImage4.jpg'
 import add_icon from '../../Assets/Icons/add-icon.svg'
 import minus_icon from '../../Assets/Icons/minus-icon.svg'
 import star_filled from '../../Assets/Icons/star_filled.svg'
@@ -224,19 +228,34 @@ const Product = () => {
     const CommentButton_clicked = () =>{
         setRightContent(false);
     }
-
+    const [ProductImageSelected, setProductImageSelected]=useState(ProductImage);
+    const photo_clicked = ( ) => {
+        setProductImageSelected(ProductImage);
+    };
+    const photo_clicked1 = ( ) => {
+        setProductImageSelected(ProductImage1);
+    };
+    const photo_clicked2 = ( ) => {
+        setProductImageSelected(ProductImage2);
+    };
+    const photo_clicked3 = ( ) => {
+        setProductImageSelected(ProductImage3);
+    };
+    const photo_clicked4 = ( ) => {
+        setProductImageSelected(ProductImage4);
+    };
 
     return(
         <div className='ProductContainer'>
             <div className='ImgContainer'>
             <div className='ImgListContainer'>
-                <img src={ProductImage} alt=''></img>
-                <img src={ProductImage} alt=''></img>
-                <img src={ProductImage} alt=''></img>
-                <img src={ProductImage} alt=''></img>
-                <img src={ProductImage} alt=''></img>
+                <button onClick={photo_clicked} ><img src={ProductImage} alt=''></img> </button>
+                <button onClick={photo_clicked1} ><img src={ProductImage1} alt=''></img> </button>
+                <button onClick={photo_clicked2} ><img src={ProductImage2} alt=''></img> </button>
+                <button onClick={photo_clicked3} ><img src={ProductImage3} alt=''></img> </button>
+                <button onClick={photo_clicked4} ><img src={ProductImage4} alt=''></img> </button>
             </div>
-                <img src={ProductImage} alt=''></img>
+                <img src={ProductImageSelected} alt=''></img>
             </div>
             <div className='RightContainer'>
                 <button onClick= {InfoButton_clicked} className='InfoButton'>

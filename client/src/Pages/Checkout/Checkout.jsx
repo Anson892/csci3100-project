@@ -6,14 +6,19 @@ import { TextInput } from '../../Components/Forms/TextInput/TextInput'
 import { SubmitButton } from '../../Components/Forms/SubmitButton/SubmitButton'
 
 export const Checkout = () => {
-  const [Address, setAddress] = useState();
-  const [Receiver, setReceiver] = useState();
-  const [CardNum, setCardNum] = useState();
-  const [ExpireDate, setExpireDate] = useState();
-  const [CVC, setCVC] = useState();
-  const [PostalCode, setPostalCode] = useState();
+  const [Address, setAddress] = useState('');
+  const [Receiver, setReceiver] = useState('');
+  const [CardNum, setCardNum] = useState('');
+  const [ExpireDate, setExpireDate] = useState('');
+  const [CVC, setCVC] = useState('');
+  const [PostalCode, setPostalCode] = useState('');
   const handleSubmit = () => {
-    alert ("Ordered!")
+    if ((Address != '')&&(Receiver != '')&&(CardNum != '')&&(ExpireDate != '')&&(CVC != '')&&(PostalCode != '')){
+      alert ("Ordered!")
+    }
+    else{
+      alert ("error")
+    }
   }
 
 
@@ -36,8 +41,7 @@ export const Checkout = () => {
           <TextInput type="text" onChange={(e)=>{setCVC(e.target.value)}}>CVC/CVV</TextInput>
           <TextInput type="text" onChange={(e)=>{setPostalCode(e.target.value)}}>Postal Code</TextInput>
           <Link to ={'/'} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
-            <SubmitButton onClick={handleSubmit}>
-              <p className='PlaceOrderText'>PLACE ORDER</p>
+            <SubmitButton onClick={handleSubmit} children="Place Order">
             </SubmitButton>
           </Link>
       </div>

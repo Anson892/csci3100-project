@@ -64,6 +64,12 @@ order: 0;
 flex-grow: 0;
 }
 
+.ImgListContainer button{
+    border-color: transparent;
+    background-color:  transparent;
+}
+
+
 .ImgListContainer img{
 
 width: 100px;
