@@ -8,7 +8,7 @@ const controller = {};
 
 //product image crud also done with same controller?
 
-//Add product
+// Add product: POST /api/product
 controller.create = async (req, res, next) => {
   console.log("[LOG] Creating product with data =", req.body);
   // product information
@@ -71,7 +71,7 @@ controller.create = async (req, res, next) => {
     .catch((err) => res.status(500).json({ error: err.message }));
 };
 
-// Get all product information with images
+// Get all product information with images: GET /api/product
 controller.findAll = async (req, res) => {
   Product.findAll({ include: ProductImage })
     .then((data) => {
@@ -94,7 +94,7 @@ controller.findbycategory = async (req, res) => {
     .catch((err) => res.status(500).send(err));
 };
 
-//find product by product id
+// find product by product id: GET /api/product/:productID
 controller.findbyid = (req, res) => {
   //console.log(req.params.productID);
   Product.findOne({
