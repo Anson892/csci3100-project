@@ -33,12 +33,12 @@ export const SearchResult = () => {
 
     const keywords = searchParams.get('keywords');
 
-    const [dataSource, setDataSource] =useState(Array.from({length:12}))
+    const [dataSource, setDataSource] =useState(Array.from({length:15}))
 
     const fetchMoreData = () =>{
         setTimeout(() => {
-            setDataSource(dataSource.concat(Array.from({length:8})))
-        }, 500);
+            setDataSource(dataSource.concat(Array.from({length:5})))
+        }, 1500);
     }
 
     const [hasMore, setHasMore] = useState(true);
