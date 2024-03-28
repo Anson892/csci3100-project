@@ -273,22 +273,6 @@ const Product = () => {
 
 }
 
-const Hori = () => {
-    return(
-        <div>
-            <hr className='horizon'></hr>
-            <hr className='horizon'></hr>
-            <hr className='horizon'></hr>
-            <hr className='horizon'></hr>
-            <hr className='horizon'></hr>
-            <hr className='horizon'></hr>
-            <hr className='horizon'></hr>
-            <hr className='horizon'></hr>
-            <hr className='horizon'></hr>
-        </div>
-    )
-}
-
 export const ProductInfo = () => {
     const { productId } = useParams();
     return (
@@ -296,7 +280,7 @@ export const ProductInfo = () => {
             <Navbar/>
             <div className='MainContainer'>
             <Product/>
-            <Hori/>
+            <div className="horizon"></div>
             <Recommendation/>
             </div>
         </div>

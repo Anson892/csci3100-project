@@ -34,8 +34,8 @@
 
 .ImgContainer img{
 
-    width: 784px;
-    height: 607px;
+    width: 80%;
+    height: 100%;
     position: absolute;
     left: 160px;
     /* Inside auto layout */
@@ -48,20 +48,20 @@
 .ImgListContainer{
     /* images-list */
 
-/* Auto layout */
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-padding: 54px 14px;
-gap: 10px;
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 54px 14px;
+    gap: 10px;
 
-width: 128px;
-height: 544.67px;
+    width: 128px;
+    height: 544.67px;
 
-flex: none;
-order: 0;
-flex-grow: 0;
+    flex: none;
+    order: 0;
+    flex-grow: 0;
 }
 
 .ImgListContainer button{
@@ -88,12 +88,18 @@ opacity: 100%;
     position: absolute;
     top: 66.1%;
     left: 3%;
-    width: 80%;
+    width: 80vw;
     height : 17%;
 
     display: flex;
     padding: 105px;
     gap: 350px;
+    overflow: scroll;
+    
+}
+
+.RecommendationContainer::-webkit-scrollbar {
+    display: none;
 }
 
 .RecommendationText{
@@ -118,35 +124,36 @@ opacity: 100%;
 .horizon{
     position: absolute;
     left: 9%;
-    width : 1716px;
+    width : 90vw;
+    height: 0.3vh;
     top : 827px;
-    border-width: 2px;
-    color: #000000;
+    background-color: black;
+    display: block;
 }
 
 .RightContainer{
     /* right-container */
 
-box-sizing: border-box;
+    box-sizing: border-box;
 
-/* Auto layout */
-display: flex;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-padding: 19px 49px;
-gap: 10px;
+    /* Auto layout */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 19px 49px;
+    gap: 10px;
 
-position: absolute;
-width: 769px;
-height: 607px;
-right: -10px;
-top: 0px;
+    position: absolute;
+    width: 40%;
+    height: 607px;
+    right: -10px;
+    top: 0px;
 
-border-width: 1px 0px;
-border-style: solid;
-border-color: #000000;
-background-color: #72880400;
+    border-width: 1px 0px;
+    border-style: solid;
+    border-color: #000000;
+    background-color: #72880400;
 }
 
 .ProductTag{
