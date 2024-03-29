@@ -13,6 +13,7 @@ controller.addcomment = (req, res) => {
 
 //comment rating
 controller.status = async (req, res) => {
+
     try{
         const pid = req.params.pid
         const five_star = await comment.count({
@@ -54,7 +55,6 @@ controller.status = async (req, res) => {
             "two_star": JSON.stringify(two_star),
             "one_star": JSON.stringify(one_star)
         }
-        console.log(status)
         res.send(status)
     }
     catch(err){
@@ -72,13 +72,16 @@ controller.commentlist = (req, res) => {
         const setlimit = 1;
     }
     comment.findAll({
+        attributes: ['username', 'rating', 'content'],
         where: {
-            id: id
+            productId: id
         },
         offset: setoffset,
         limit: setlimit
     }).then((data) => {
         res.send(data)
+    }).catch((err) => {
+        res.status(400).send(err)
     })
 }
 

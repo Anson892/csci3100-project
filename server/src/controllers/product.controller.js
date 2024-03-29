@@ -1,7 +1,9 @@
 const fs = require("fs");
 const db = require("../models");
+const sequelize = require("sequelize");
 const Product = db.Product;
 const ProductImage = db.ProductImage;
+const Comment = db.Comment;
 const Op = db.Sequelize.Op;
 const uploadFiles = require("../middlewares/upload");
 const controller = {};
@@ -70,6 +72,147 @@ controller.create = async (req, res, next) => {
     })
     .catch((err) => res.status(500).json({ error: err.message }));
 };
+
+//search product system
+controller.search = (req, res) => {
+  const { searchpointer, name, category, orderby, order, minprice, maxprice, minrating, maxrating} = req.body;
+  const name_key = "%" + name + "%";
+  const category_key = "%" + category + "%";
+  const setoffset = 0;
+  const setlimit = 15;
+  if(searchpointer>0){
+      const setoffset = 15 + 5*(searchpointer-1);
+      const setlimit = 5;
+  }
+  const resultlist = [];
+  const ignorelist = [];
+  if(orderby=="avgrating"){
+    Comment.findAll({
+      attributes: ['productId', [sequelize.fn('AVG', sequelize.col('rating')), 'avgrating']],
+      group: 'productId',
+      include: [{
+        model: Product,
+        attributes: ['name', 'category', 'price', 'discount'],
+        where:{
+          name: {[Op.like]: name_key},
+          category: {[Op.like]: category_key},
+          price: {[Op.between]: [minprice, maxprice]}
+        }
+      }],
+      order: [['avgrating', order]],
+      offset: setoffset,
+      limit: setlimit
+        }).then((data) => {
+          data.forEach(element => {
+            resultlist.push(element);
+            ignorelist.push(element.productId);
+          });
+          if(data.length<setlimit){
+            const remainlimit = setlimit - data.length;
+            Product.findAll({
+              attributes: ['id', 'name', 'category', 'price', 'discount'],
+              where: {
+                id: {[Op.notIn]: ignorelist},
+                name: {[Op.like]: name_key},
+                category: {[Op.like]: category_key},
+                price: {[Op.between]: [minprice, maxprice]}
+              },
+              order: [['name', order]],
+              limit: remainlimit
+            }).then((data) => {
+              data.forEach(element => {
+                const result = {
+                  "productId": element.id,
+                  "avgrating": 0,
+                  "product": {
+                    "name": element.name,
+                    "category": element.category,
+                    "price": element.price,
+                    "discount": element.discount
+                  }
+                };
+                resultlist.push(result);
+              });
+              res.send(resultlist)
+            })
+          }else{
+            res.send(resultlist)
+          }
+        }).catch((err) => res.status(500).send(err))
+    }else{
+      Comment.findAll({
+        attributes: ['productId', [sequelize.fn('AVG', sequelize.col('rating')), 'avgrating']],
+        group: 'productId',
+        include: [{
+          model: Product,
+          attributes: ['name', 'category', 'price', 'discount'],
+          where:{
+            name: {[Op.like]: name_key},
+            category: {[Op.like]: category_key},
+            price: {[Op.between]: [minprice, maxprice]}
+          }
+        }],
+        order: [[Product, 'price', order]]
+          }).then((data) => {
+            data.forEach(element => {
+              resultlist.push(element);
+              ignorelist.push(element.productId);
+            });
+            if(data.length<setlimit){
+              const remainlimit = setlimit - data.length;
+              Product.findAll({
+                attributes: ['id', 'name', 'category', 'price', 'discount'],
+                where: {
+                  id: {[Op.notIn]: ignorelist},
+                  name: {[Op.like]: name_key},
+                  category: {[Op.like]: category_key},
+                  price: {[Op.between]: [minprice, maxprice]}
+                },
+                order: [['price', order]],
+                limit: remainlimit
+              }).then((data) => {
+                data.forEach(element => {
+                  const result = {
+                    "productId": element.id,
+                    "avgrating": 0,
+                    "product": {
+                      "name": element.name,
+                      "category": element.category,
+                      "price": element.price,
+                      "discount": element.discount
+                    }
+                  };
+                  resultlist.push(result);
+                });
+                res.send(resultlist)
+              })
+            }else{
+              res.send(resultlist)
+            }
+          }).catch((err) => res.status(500).send(err))
+    }
+}
+
+//global recommand
+controller.recommand = (req, res) => {
+  const { id, category, order } = req.body;
+  Comment.findAll({
+    attributes: [[sequelize.fn('AVG', sequelize.col('rating')), 'avgrating']],
+    group: 'productId',
+    order: [['avgrating', order]],
+    include: [{
+      model: Product,
+      attributes: ['id'],
+      where: {
+        id: {[Op.ne]: id},
+        category: category
+      }
+    }],
+    limit: 5
+      }).then((data) => {
+          res.send(data)
+      }).catch((err) => res.status(500).send(err))
+}
 
 // Get all product information with images: GET /api/product
 controller.findAll = async (req, res) => {

@@ -1,4 +1,5 @@
 const config = require("../config/db.config.js");
+const fs = require('fs');
 
 const Sequelize = require("sequelize");
 const sequelize = new Sequelize(config.DATABASE, config.USER, config.PASSWORD, {

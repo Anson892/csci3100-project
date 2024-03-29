@@ -16,8 +16,7 @@ controller.login = async (req, res) => {
     }
     await User.findOne({
         where:{
-             username: username,
-             password: password
+             username: username
             }
     })
     .then( data => {

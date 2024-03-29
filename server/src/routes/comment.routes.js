@@ -1,11 +1,11 @@
-const controller = require("../controllers/comment.controller");
+const comment = require("../controllers/comment.controller");
 const router = require('express').Router();
 
 module.exports = app => {
-    router.post('/add', controller.addcomment);
+    router.post('/add', comment.addcomment);
 
-    router.post('/comment', controller.commentlist);
-    router.get('/id/:pid', controller.status);
+    router.post('/list', comment.commentlist);
+    router.get('/id/:pid', comment.status);
 
     app.use('/api/comment', router);
 }
