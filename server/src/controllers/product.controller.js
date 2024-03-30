@@ -4,6 +4,8 @@ const sequelize = require("sequelize");
 const Product = db.Product;
 const ProductImage = db.ProductImage;
 const Comment = db.Comment;
+const Order = db.Order;
+const OrderItem = db.OrderItem;
 const Op = db.Sequelize.Op;
 const uploadFiles = require("../middlewares/upload");
 const controller = {};
@@ -94,7 +96,8 @@ controller.search = (req, res) => {
         model: Product,
         attributes: ['name', 'category', 'price', 'discount'],
         where:{
-          name: {[Op.like]: name_key},
+          [Op.or]: [{name: {[Op.like]: name_key}},
+                    {id: {[Op.like]: name_key}}],
           category: {[Op.like]: category_key},
           price: {[Op.between]: [minprice, maxprice]}
         }
@@ -112,8 +115,9 @@ controller.search = (req, res) => {
             Product.findAll({
               attributes: ['id', 'name', 'category', 'price', 'discount'],
               where: {
+                [Op.or]: [{name: {[Op.like]: name_key}},
+                    {id: {[Op.like]: name_key}}],
                 id: {[Op.notIn]: ignorelist},
-                name: {[Op.like]: name_key},
                 category: {[Op.like]: category_key},
                 price: {[Op.between]: [minprice, maxprice]}
               },
@@ -147,7 +151,8 @@ controller.search = (req, res) => {
           model: Product,
           attributes: ['name', 'category', 'price', 'discount'],
           where:{
-            name: {[Op.like]: name_key},
+            [Op.or]: [{name: {[Op.like]: name_key}},
+                    {id: {[Op.like]: name_key}}],
             category: {[Op.like]: category_key},
             price: {[Op.between]: [minprice, maxprice]}
           }
@@ -163,8 +168,9 @@ controller.search = (req, res) => {
               Product.findAll({
                 attributes: ['id', 'name', 'category', 'price', 'discount'],
                 where: {
+                  [Op.or]: [{name: {[Op.like]: name_key}},
+                    {id: {[Op.like]: name_key}}],
                   id: {[Op.notIn]: ignorelist},
-                  name: {[Op.like]: name_key},
                   category: {[Op.like]: category_key},
                   price: {[Op.between]: [minprice, maxprice]}
                 },
@@ -196,6 +202,9 @@ controller.search = (req, res) => {
 //global recommand
 controller.recommand = (req, res) => {
   const { id, category, order } = req.body;
+  const resultlist = [];
+  const ignorelist = [];
+  ignorelist.push(id);
   Comment.findAll({
     attributes: [[sequelize.fn('AVG', sequelize.col('rating')), 'avgrating']],
     group: 'productId',
@@ -210,8 +219,99 @@ controller.recommand = (req, res) => {
     }],
     limit: 5
       }).then((data) => {
-          res.send(data)
+        data.forEach(element => {
+          resultlist.push(element);
+          ignorelist.push(element.productId);
+        });
+        if(data.length<5){
+          const remainlimit = 5 - data.length;
+          Product.findAll({
+            attributes: ['id'],
+            where: {
+              id: {[Op.notIn]: ignorelist},
+              category: category
+            },
+            order: [[Product, 'price', 'ASC']],
+            limit: remainlimit
+          }).then((data) => {
+            data.forEach(element => {
+              const result = {
+                "avgrating": 0,
+                "product": {
+                  "id": element.id
+                }
+              };
+              resultlist.push(result);
+            });
+            res.send(resultlist)
+          })
+        }else{
+          res.send(resultlist)
+        }
       }).catch((err) => res.status(500).send(err))
+}
+
+//User recommandation
+controller.userrecommand = async (req, res) => {
+  const {id} = req.body;
+  Order.findAll({
+    attributes: ['id'],
+    where: {userId: id}
+  }).then((data) => {
+    const relatelist = [];
+    data.forEach(element => {
+      relatelist.push(element.id);
+    });
+    OrderItem.findAll({
+      attributes: ['productId'],
+      where: {
+        orderId: {[Op.in]: relatelist}
+      },
+      include:[{
+        model: Product,
+        attributes: ['category']
+      }]
+    }).then((data) => {
+      const categorylist = []
+      const ignorelist = []
+      data.forEach(element => {
+        categorylist.push(element.product.category)
+        ignorelist.push(element.productId)
+      })
+      Product.findAll({
+        attributes: ['id', 'name', 'category', 'price', 'stock'],
+        where: {
+          id: {[Op.notIn]: ignorelist},
+          category: {[Op.in]: categorylist}
+        },
+        order: [['price', 'ASC']],
+        limit: 5
+      }).then((data) => {
+        const resultlist = [];
+        data.forEach(element => {
+          resultlist.push(element);
+        })
+        if(data.length<5){
+          const remainlimit = 5 - data.length;
+          Product.findAll({
+            attributes: ['id', 'name', 'category', 'price', 'stock'],
+            where: {
+              id: {[Op.notIn]: ignorelist},
+            },
+            order: [[Product, 'price', 'ASC']],
+            limit: remainlimit
+          }).then((data) => {
+            data.forEach(element => {
+              resultlist.push(data);
+            });
+            res.send(resultlist)
+          })
+        }else{
+          res.send(resultlist)
+        }
+      })
+    })
+  }).catch((err) => res.status(500).send(err))
 }
 
 // Get all product information with images: GET /api/product
