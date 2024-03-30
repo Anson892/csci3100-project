@@ -88,7 +88,7 @@ opacity: 100%;
     position: absolute;
     top: 66.1%;
     left: 3%;
-    width: 80vw;
+    width: 85vw;
     height : 17%;
 
     display: flex;
@@ -203,7 +203,7 @@ position: relative;
 width: 430px;
 height: 71px;
 top: 60.5px;
-left: -72px;
+left: -8vh;
 
 font-family: 'Literata';
 font-style: normal;
@@ -246,7 +246,7 @@ color: #7F7F7F;
 position: absolute;
 width: 114px;
 height: 48px;
-left: 170px;
+left: 9vh;
 top: 106.5px;
 
 }
@@ -282,8 +282,8 @@ color: #000000;
 position: absolute;
 width: 30px;
 height: 26px;
-right: 8px;
-bottom: -13px;
+right: 0px;
+bottom: 0px;
 
 font-family: 'Literata';
 font-style: normal;
@@ -305,7 +305,7 @@ color: #7F7F7F;
 position: absolute;
 width: 451px;
 height: 216px;
-left: 167px;
+left: 9vh;
 top: 170px;
 
 font-family: 'Literata';
@@ -330,7 +330,7 @@ color: #000000;
     position: absolute;
     width: 158px;
     height: 46px;
-    left: 167px;
+    left: 9vh;
     top: 440px;
 
     border: 1px solid #000000;
@@ -393,7 +393,7 @@ bottom: 24px;
     position: absolute;
     width: 305px;
     height: 72px;
-    left: 167px;
+    left: 9vh;
     top: 500.5px;
     border: 1px transparent;
 
