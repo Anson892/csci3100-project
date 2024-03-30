@@ -1,0 +1,5 @@
+firstName,lastName,address,city,country,zipCode,phoneNumber,userId
+STRING,STRING,STRING,STRING,STRING,STRING,STRING,INT
+Tom,Wan,AB1,HK,HK,852,12345678,1
+John,Wake,AB2,HK,HK,852,23212312,2
+Ivan,Kock,AB3,HK,HK,852,23381313,3
