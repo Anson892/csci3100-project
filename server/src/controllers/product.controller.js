@@ -285,14 +285,14 @@ controller.userrecommand = async (req, res) => {
           category: {[Op.in]: categorylist}
         },
         order: [['price', 'ASC']],
-        limit: 5
+        limit: 6
       }).then((data) => {
         const resultlist = [];
         data.forEach(element => {
           resultlist.push(element);
         })
-        if(data.length<5){
-          const remainlimit = 5 - data.length;
+        if(data.length<6){
+          const remainlimit = 6 - data.length;
           Product.findAll({
             attributes: ['id', 'name', 'category', 'price', 'stock'],
             where: {
