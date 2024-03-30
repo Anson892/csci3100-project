@@ -1,0 +1,27 @@
+POST http://localhost:8080/api/product/update
+Content-Type: application/json
+
+{
+    "id": 4,
+    "name": "PC4new",
+    "category": "trynew",
+    "description": "This is for delete and update testing data.",
+    "price": 20,
+    "discount": 0.2,
+    "stock": 10
+}
+
+
+###
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+    "username": "tom",
+    "password": "123"
+}
+
+###
+POST http://localhost:8080/api/auth/logout
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRvbSIsInVzZXJUeXBlIjoiY3VzdG9tZXIiLCJpYXQiOjE3MDk2MjM1MTAsImV4cCI6MTcwOTcwOTkxMH0.GKHUfw3n8aUAuBZMQZO1xp3lHaq7tWkVZc4dONoUMS4

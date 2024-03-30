@@ -1,0 +1,7 @@
+﻿username,password,usertype
+STRING,STRING,STRING
+tom,123456,customer
+john,223456,customer
+ivan,123321,customer
+admin1,999,admin
+admin2,911,admin

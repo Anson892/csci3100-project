@@ -11,10 +11,12 @@
     "install": "npm run install_client && npm run install_server"
   },
   "author": "",
-  "license": "",
+  "license": "ISC",
   "dependencies": {
     "@studio-freight/react-lenis": "^0.0.46",
     "framer": "^2.4.1",
     "motion": "^10.17.0"
   }
+  ,
+  "main": "index.js"
 }
