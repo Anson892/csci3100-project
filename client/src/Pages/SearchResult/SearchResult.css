@@ -52,9 +52,9 @@
 .SortByContainer{
     position: absolute;
     width: 201px;
-    height: 16  0px;
-    left: 1446px;
-    top: 183px;
+    height: 160px;
+    right:9vw;
+    top: 16.5vh;
     background-color: #F6F6E9;
 
 }
@@ -65,8 +65,8 @@
     position: absolute;
     width: 235px;
     height: 17px;
-    left: 1305px;
-    top: 191px;
+    right:14vw;
+    top: 17vh;
 
     font-family: 'Literata';
     font-style: normal;
