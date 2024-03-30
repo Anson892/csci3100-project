@@ -29,6 +29,7 @@ export const SearchBar = () => {
                     '&min_rating=' + minRating +
                     '&max_rating=' + maxRating
         });
+        window.location.reload(false);
     }
 
     const handelOnKeyDown = (e) => {

@@ -4,8 +4,11 @@ import './Checkout.css'
 import { Link } from 'react-router-dom';
 import { TextInput } from '../../Components/Forms/TextInput/TextInput'
 import { SubmitButton } from '../../Components/Forms/SubmitButton/SubmitButton'
+import { useNavigate } from 'react-router-dom';
+
 
 export const Checkout = () => {
+  const navigate = useNavigate();
   const [Address, setAddress] = useState('');
   const [Receiver, setReceiver] = useState('');
   const [CardNum, setCardNum] = useState('');
@@ -15,6 +18,9 @@ export const Checkout = () => {
   const handleSubmit = () => {
     if ((Address != '')&&(Receiver != '')&&(CardNum != '')&&(ExpireDate != '')&&(CVC != '')&&(PostalCode != '')){
       alert ("Ordered!")
+      navigate({
+        pathname: '/',
+     });
     }
     else{
       alert ("error")
@@ -40,10 +46,8 @@ export const Checkout = () => {
           <TextInput type="text" onChange={(e)=>{setExpireDate(e.target.value)}}>Expiration Date (MM/YYY)</TextInput>
           <TextInput type="text" onChange={(e)=>{setCVC(e.target.value)}}>CVC/CVV</TextInput>
           <TextInput type="text" onChange={(e)=>{setPostalCode(e.target.value)}}>Postal Code</TextInput>
-          <Link to ={'/'} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
             <SubmitButton onClick={handleSubmit} children="Place Order">
             </SubmitButton>
-          </Link>
       </div>
     </div>
   )
