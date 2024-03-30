@@ -46,22 +46,24 @@ export const SearchResult = () => {
     return (
         <div >
         <Navbar/>
-        <Topic/>
-        <SortOrder/>
-            <InfiniteScroll 
-                className='ResultContainer' 
-                dataLength={dataSource.length} 
-                next={fetchMoreData} 
-                hasMore={hasMore}
-                loader={<h4>Loading...</h4>}
-            >
-                {dataSource.map((item,index)=>{
-                    return (
-                        <div><ProductCard/></div>
-                    )
-                })}
-            </InfiniteScroll>
-        <TopButton/>
+        <InfiniteScroll 
+            className='PageContainer' 
+            dataLength={dataSource.length} 
+            next={fetchMoreData} 
+            hasMore={hasMore}
+            loader={<h4>Loading...</h4>}
+        >
+            <Topic/>
+            <SortOrder/>
+                <div className="ResultContainer">
+                    {dataSource.map((item,index)=>{
+                        return (
+                            <ProductCard/>
+                            )
+                        })}
+                </div>
+            <TopButton/>
+        </InfiniteScroll>
         </div>
             
     )   

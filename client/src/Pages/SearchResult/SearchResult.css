@@ -19,23 +19,22 @@
     text-transform: uppercase;
 }
 
-.ResultContainer{
-
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: start;
-    align-content: center;
-    padding: 105px;
-    gap: 350px;
-    overflow: hidden;
-
+.PageConatiner {
     position: absolute;
-    width: 80%;
-    height: 670px;
-    left: -4%;
-    top: 244px;
+    width: 100%;
+    height: 100vh;
+    top: 0px;
+    left: 0px;
+}
+
+.ResultContainer {
+    display: grid;
+    gap: 2vw;
+    grid-template-columns: repeat(auto-fit, 306px);
+    justify-content: center;
+    position: absolute;
+    top: 300px;
+    width: 100%;
 }
 
 .ResultContainer::-webkit-scrollbar {
