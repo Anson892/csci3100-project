@@ -37,10 +37,6 @@
     width: 100%;
 }
 
-.ResultContainer::-webkit-scrollbar {
-    display: none;
-}
-
 .ProductTag{
     position: relative;
     width: 58px;
