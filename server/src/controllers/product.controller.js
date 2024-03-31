@@ -76,7 +76,7 @@ controller.create = async (req, res, next) => {
 };
 
 //search product system
-controller.search = (req, res) => {
+controller.search = async (req, res) => {
   const { searchpointer, name, category, orderby, order, minprice, maxprice, minrating, maxrating} = req.body;
   const name_key = "%" + name + "%";
   const category_key = "%" + category + "%";
@@ -89,7 +89,7 @@ controller.search = (req, res) => {
   const resultlist = [];
   const ignorelist = [];
   if(orderby=="avgrating"){
-    Comment.findAll({
+    await Comment.findAll({
       attributes: ['productId', [sequelize.fn('AVG', sequelize.col('rating')), 'avgrating']],
       group: 'productId',
       include: [{
@@ -105,14 +105,14 @@ controller.search = (req, res) => {
       order: [['avgrating', order]],
       offset: setoffset,
       limit: setlimit
-        }).then((data) => {
+        }).then(async (data) => {
           data.forEach(element => {
             resultlist.push(element);
             ignorelist.push(element.productId);
           });
           if(data.length<setlimit){
             const remainlimit = setlimit - data.length;
-            Product.findAll({
+            await Product.findAll({
               attributes: ['id', 'name', 'category', 'price', 'discount'],
               where: {
                 [Op.or]: [{name: {[Op.like]: name_key}},
@@ -144,7 +144,7 @@ controller.search = (req, res) => {
           }
         }).catch((err) => res.status(500).send(err))
     }else{
-      Comment.findAll({
+      await Comment.findAll({
         attributes: ['productId', [sequelize.fn('AVG', sequelize.col('rating')), 'avgrating']],
         group: 'productId',
         include: [{
@@ -158,14 +158,14 @@ controller.search = (req, res) => {
           }
         }],
         order: [[Product, 'price', order]]
-          }).then((data) => {
+          }).then(async (data) => {
             data.forEach(element => {
               resultlist.push(element);
               ignorelist.push(element.productId);
             });
             if(data.length<setlimit){
               const remainlimit = setlimit - data.length;
-              Product.findAll({
+              await Product.findAll({
                 attributes: ['id', 'name', 'category', 'price', 'discount'],
                 where: {
                   [Op.or]: [{name: {[Op.like]: name_key}},
@@ -200,12 +200,12 @@ controller.search = (req, res) => {
 }
 
 //global recommand
-controller.recommand = (req, res) => {
+controller.recommand = async (req, res) => {
   const { id, category, order } = req.body;
   const resultlist = [];
   const ignorelist = [];
   ignorelist.push(id);
-  Comment.findAll({
+  await Comment.findAll({
     attributes: [[sequelize.fn('AVG', sequelize.col('rating')), 'avgrating']],
     group: 'productId',
     order: [['avgrating', order]],
@@ -218,14 +218,14 @@ controller.recommand = (req, res) => {
       }
     }],
     limit: 5
-      }).then((data) => {
+      }).then(async (data) => {
         data.forEach(element => {
           resultlist.push(element);
           ignorelist.push(element.productId);
         });
         if(data.length<5){
           const remainlimit = 5 - data.length;
-          Product.findAll({
+          await Product.findAll({
             attributes: ['id'],
             where: {
               id: {[Op.notIn]: ignorelist},
@@ -254,15 +254,15 @@ controller.recommand = (req, res) => {
 //User recommandation
 controller.userrecommand = async (req, res) => {
   const {id} = req.body;
-  Order.findAll({
+  await Order.findAll({
     attributes: ['id'],
     where: {userId: id}
-  }).then((data) => {
+  }).then(async (data) => {
     const relatelist = [];
     data.forEach(element => {
       relatelist.push(element.id);
     });
-    OrderItem.findAll({
+    await OrderItem.findAll({
       attributes: ['productId'],
       where: {
         orderId: {[Op.in]: relatelist}
@@ -271,14 +271,14 @@ controller.userrecommand = async (req, res) => {
         model: Product,
         attributes: ['category']
       }]
-    }).then((data) => {
+    }).then(async (data) => {
       const categorylist = []
       const ignorelist = []
       data.forEach(element => {
         categorylist.push(element.product.category)
         ignorelist.push(element.productId)
       })
-      Product.findAll({
+      await Product.findAll({
         attributes: ['id', 'name', 'category', 'price', 'stock'],
         where: {
           id: {[Op.notIn]: ignorelist},
@@ -286,14 +286,14 @@ controller.userrecommand = async (req, res) => {
         },
         order: [['price', 'ASC']],
         limit: 6
-      }).then((data) => {
+      }).then(async (data) => {
         const resultlist = [];
         data.forEach(element => {
           resultlist.push(element);
         })
         if(data.length<6){
           const remainlimit = 6 - data.length;
-          Product.findAll({
+          await Product.findAll({
             attributes: ['id', 'name', 'category', 'price', 'stock'],
             where: {
               id: {[Op.notIn]: ignorelist},
@@ -316,7 +316,7 @@ controller.userrecommand = async (req, res) => {
 
 // Get all product information with images: GET /api/product
 controller.findAll = async (req, res) => {
-  Product.findAll({ include: ProductImage })
+  await Product.findAll({ include: ProductImage })
     .then((data) => {
       res.status(200).json({ message: "All products found!", data: data });
     })
@@ -371,23 +371,24 @@ controller.findbyname = (req, res) => {
 // update product
 controller.update = (req, res) => {
   const { id, name, category, description, price, discount, stock } = req.body;
-  Product.findOne({
+  Product.update({
+    name: name,
+    category: category,
+    description: description,
+    price: price,
+    discount: discount,
+    stock: stock,
+  },{
     where: {
       id: id,
     },
-  })
-    .then((data) => {
-      data.update({
-        name: name,
-        category: category,
-        description: description,
-        price: price,
-        discount: discount,
-        stock: stock,
-      });
-    })
-    .then(() => {
-      console.log("update successful!");
+  }).then((data) => {
+      Product.findOne({where: { id: id }})
+      .then((data) => {
+        console.log("update successful!");
+        res.send(data)
+      })
+
     })
     .catch((err) => res.status(500).send(err));
 };

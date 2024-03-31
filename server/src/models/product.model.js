@@ -23,23 +23,17 @@ module.exports = (sequelize, Sequelize) => {
     discount: {
       type: Sequelize.DECIMAL(10, 2),
       defaultValue: 1,
-      set(value) {
-        if (value > 1)
-          throw {
-            error: {
-              message: "discount percentage should smaller than or equal to 1!",
-            },
-          };
-      },
+      validate: {
+        max: 1
+      }
     },
     stock: {
       type: Sequelize.INTEGER,
       allowNull: false,
       defaultValue: 0,
-      set(value) {
-        if (value < 0)
-          throw { error: { message: "stock should not less than zero!" } };
-      },
+      validate:{
+        min: 0
+      }
     },
   });
 

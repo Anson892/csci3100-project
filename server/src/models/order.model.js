@@ -13,6 +13,7 @@ module.exports = (sequelize, Sequelize) => {
       paymentMethod: {
         type: Sequelize.STRING,
         allowNull: false,
+        defaultValue: "pending"
       },
     });
 
