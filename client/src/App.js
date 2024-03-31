@@ -4,7 +4,8 @@ import { AnimatePresence } from 'framer-motion';
 import { Home } from './Pages/Home/Home';
 import { Login } from './Pages/Login/Login';
 import { Register } from './Pages/Register/Register';
-import { AdminPanel } from './Pages/AdminPanel/AdminPanel';
+import { AdminUser } from './Pages/AdminUser/AdminUser';
+import { AdminProduct } from './Pages/AdminProduct/AdminProduct';
 import { ShoppingCart } from './Pages/ShoppingCart/ShoppingCart';
 import { Checkout } from './Pages/Checkout/Checkout';
 import { AccountInfo } from './Pages/AccountInfo/AccountInfo';
@@ -31,7 +32,8 @@ function App() {
                     <Route path='/account' element={<PageTransition><AccountInfo/></PageTransition>}/>
                     <Route path='/product/:productId' element={<PageTransition><ProductInfo/></PageTransition>}/>
                     <Route path='/search' element={<PageTransition><SearchResult/></PageTransition>}/>
-                    <Route path='/admin' element={<PageTransition><AdminPanel/></PageTransition>}/>
+                    <Route path='/admin/user' element={<PageTransition><AdminUser/></PageTransition>}/>
+                    <Route path='/admin/product' element={<PageTransition><AdminProduct/></PageTransition>}/>
                     <Route path='*' element={<PageTransition><NotFound/></PageTransition>}/>
                 </Routes>
             </AnimatePresence>
