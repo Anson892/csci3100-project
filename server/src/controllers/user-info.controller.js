@@ -49,7 +49,10 @@ controller.createUserInfo = async (req, res) => {
 controller.getUserInfo = async (req, res) => {
   const id = req.params.id;
 
-  UserInfo.findByPk(id, { include: User })
+  UserInfo.findAll({
+    where: {id: id},
+    include: [{ model: User,
+                attribute: ['id', 'username']}]})
     .then((data) => {
       if (data === null) {
         res.status(404).json({
@@ -73,15 +76,32 @@ controller.getUserInfo = async (req, res) => {
 // update user info: PUT /api/info/:id
 controller.updateUserInfo = async (req, res) => {
   const id = req.params.id;
-
-  UserInfo.update(req.body, {
-    where: { id: id },
+  const { InfoId, firstName, lastName, address, city, country, zipCode, phoneNumber } = req.body
+  UserInfo.update(
+    {
+      firstName: firstName,
+      lastName: lastName,
+      address: address,
+      city: city,
+      country: country,
+      zipCode: zipCode,
+      phoneNumber: phoneNumber
+    }, 
+    {where: { id: InfoId,
+             userId: id }
   })
     .then(async (num) => {
       if (num == 1) {
         // retrieve updated user info
-        const updatedUserInfo = await UserInfo.findByPk(id, { include: User });
-
+        const updatedUserInfo = await UserInfo.findOne({
+          include: [{
+            model: User,
+            attribute: ['id', 'username']
+          }],
+          where: {
+            id: InfoId
+          }
+        });
         res.status(200).json({
           message: "User info updated successfully.",
           data: updatedUserInfo,
