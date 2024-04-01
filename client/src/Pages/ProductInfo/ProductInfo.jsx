@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import './ProductInfo.css'
 import { Navbar } from '../../Components/Navbar/Navbar';
 import { useParams } from 'react-router-dom';
@@ -65,8 +65,16 @@ const SmallStarFilled = () => {
 }
 
 const StarProgressBar = ({number,count,percent}) => {
-    const text = percent.toString();
-    const [Width,SetWidth] =useState(text+"%");
+    percent = percent.toFixed(0)
+    console.log(typeof(percent), percent)
+    const [Width,SetWidth] = useState(0);
+    console.log(typeof(Width), Width)
+
+    useEffect(()=>{
+        SetWidth(percent+'%')
+    }, [percent])
+
+
     return(
         <div className='CommentProgressBarContainer'>
             <p className='CommentProgressBarFirstText'>{number} STAR </p>
@@ -107,7 +115,29 @@ const CommentBox = ({userID,text,stars})=>{
     )
 }
 
-const CommentContainer = () => {
+const CommentContainer = ({id}) => {
+    const { productId } = useParams();
+    const url2 = 'http://localhost:8080/api/comment/id/'+ productId;
+    const [Count1, setCount1] = useState(0)
+    const [Count2, setCount2] = useState(0)
+    const [Count3, setCount3] = useState(0)
+    const [Count4, setCount4] = useState(0)
+    const [Count5, setCount5] = useState(0)
+
+
+    fetch(url2,{method : 'GET'})
+        .then((res) => {
+            return res.json();
+        })
+        .then( (response) => {
+            setCount1(+response.five_star);
+            setCount2(+response.four_star);
+            setCount3(+response.three_star);
+            setCount4(+response.two_star);
+            setCount5(+response.one_star);
+        })
+        
+
     const Star = ({requirement}) => {
         return(
             <div>
@@ -115,12 +145,6 @@ const CommentContainer = () => {
             </div>
         )
     }
-
-    const [Count1, setCount1] = useState(8)
-    const [Count2, setCount2] = useState(1)
-    const [Count3, setCount3] = useState(4)
-    const [Count4, setCount4] = useState(2)
-    const [Count5, setCount5] = useState(1)
 
     const [dataSource, setDataSource] =useState(Array.from({length:12}))
 
@@ -132,12 +156,11 @@ const CommentContainer = () => {
 
     const [hasMore, setHasMore] = useState(true);
 
-    
     const [CommentContent, setCommentContent] = useState ("Lorem ipsum dolor sit amet consectetur. Vitae sapien facilisi enim diam quis ultricies turpis. Fames mus adipiscing neque tempor ridiculus. Dolor natoque  elementum mi penatibus scelerisque. Scelerisque augue cras")
 
     const total = Count1+Count2+Count3+Count4+Count5;
+    const StarNum = ((Count5+Count4*2+Count3*3+Count2*4+Count1*5)/total).toFixed(1);
 
-    const [StarNum, setStarNum]=useState(((Count5+Count4*2+Count3*3+Count2*4+Count1*5)/total).toFixed(1));
     return(
         <div className='CommentContainer'>
             <p className='StarText'>{StarNum}</p>
@@ -274,7 +297,7 @@ const Product = ({name,price,discount,stock,description,id}) => {
                     <p> Comment </p>
                 </button>
                 <div>
-                { RightContent ?  <InfoContainer name={name} price={price} discount={discount} stock={stock} description={description} id = {id}></InfoContainer> : <CommentContainer/>}
+                { RightContent ?  <InfoContainer name={name} price={price} discount={discount} stock={stock} description={description} id = {id}></InfoContainer> : <CommentContainer id = {id} ></CommentContainer>}
                 </div>
             </div>
         </div>
@@ -291,7 +314,7 @@ export const ProductInfo = () => {
     const [FetchedProductdescription,SetFetchedProductdescription] =useState([])
     const url1 = 'http://localhost:8080/api/product/'+ productId;
 
-    let Pname = fetch(url1,{method : 'GET'})
+    fetch(url1,{method : 'GET'})
         .then((res) => {
             return res.json();
         })
