@@ -15,31 +15,38 @@ controller.login = async (req, res) => {
         return;
     }
     await User.findOne({
-        where:{
-             username: username
-            }
+      attributes: ['username', 'password', 'userType'],
+      where:{
+            username: username
+      }
     })
     .then( data => {
-        if(data.length == 1){
-            const user = data[0];
-            const verifiedPassword = bcrypt.compareSync(password, user.password);
-            if(!verifiedPassword){
-                res.status(401).send({message: 'Password invalid!'});
-            }else{
-                // generate access token with cart data?.
-                const token = generateToken(user);
-                res.status(200).send(
-                    {
-                        username: user.username,
-                        userType: user.userType,
-                        accesstoken: token
-                    }
-                );
-            }
-            
-        }else{
-            res.status(401).send({message: 'User not exist'});
+      if(data != null){
+        const user = {
+          username: data.username,
+          password: data.password,
+          userType: data.userType
         }
+        console.log(user)
+        const verifiedPassword = bcrypt.compareSync(password, user.password);
+        if(!verifiedPassword){
+          console.log("fail")
+          res.status(401).send({message: 'Password invalid!'});
+        }else{
+          // generate access token with cart data?.
+          console.log("token")
+          const token = generateToken(user);
+          res.status(200).send(
+              {
+                  username: user.username,
+                  userType: user.userType,
+                  accesstoken: token
+              }
+          );
+        }
+    }else{
+        res.status(401).send({message: 'User not exist'});
+    }
     })
     .catch(err => res.status(500).send(err));
 
@@ -47,10 +54,11 @@ controller.login = async (req, res) => {
 
 //logout
 controller.logout = async (req, res) => {
+    console.log("turnback")
     try {
         const username = req.payload.id;
 
-        const user = await User.findByPk(username);
+        const user = await User.findOne(username);
         
         if(!user) return res.status(400).send({message: "User not exist"});
 
@@ -59,8 +67,7 @@ controller.logout = async (req, res) => {
                 username: null,
                 userType: null,
                 accesstoken: null
-            },
-            message: 'Logout successfully.'
+            }
         });
 
 

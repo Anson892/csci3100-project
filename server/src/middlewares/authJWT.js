@@ -26,47 +26,42 @@ exports.generateToken = (user) => {
 }
 
 // Verify token
-exports.verifyUser = (req, res, next) => {
+exports.verifytoken = (req, res, next) => {
     const headersToken = req.headers.authorization;
     
     if(!headersToken) return res.status(401).send({message: "No access token sended."});
 
-    const token = headersToken.split(' ')[1];
+    const userType = headersToken.split(' ')[1];
+    const token = headersToken.split(' ')[2];
+    console.log(userType)
+    if(userType=="customer"){
+        jwt.verify(token, UserSecretKey, (err, payload) => {
+        
+            if(err) return res.status(403).send({message: "You are not authorized."});
     
-    jwt.verify(token, UserSecretKey, (err, payload) => {
-        
-        if(err) return res.status(403).send({message: "You are not authorized."});
-
-        console.log(payload); 
-
-        req.payload = payload;
-        
-        next();
-
-    });
-
-}
-
-// Verify token
-exports.verifyAdmin = (req, res, next) => {
-    const headersToken = req.headers.authorization;
+            console.log(payload); 
     
-    if(!headersToken) return res.status(401).send({message: "No access token sended."});
-
-    const token = headersToken.split(' ')[1];
+            req.payload = payload;
+            
+            next();
     
-    jwt.verify(token, AdminSecretKey, (err, payload) => {
+        });
+    }else if(userType=="admin"){
+        jwt.verify(token, AdminSecretKey, (err, payload) => {
         
-        if(err) return res.status(403).send({message: "You are not authorized."});
-
-        console.log(payload); 
-
-        req.payload = payload;
-        
-        next();
-
-    });
-
+            if(err) return res.status(403).send({message: "You are not authorized."});
+    
+            console.log(payload); 
+    
+            req.payload = payload;
+            
+            next();
+    
+        });
+    }else{
+        return res.status(401).send({message: "Unauthorized"});
+    }
+    
 }
 
 
