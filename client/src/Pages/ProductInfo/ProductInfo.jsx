@@ -18,6 +18,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link } from 'react-router-dom';
 
 
+
 const Recommendation = () => {
     return (
             <div className='RecommendationContainer'>
@@ -173,7 +174,7 @@ const CommentContainer = () => {
     )
 }
 
-const InfoContainer = () => {
+const InfoContainer = ({name,price,discount,stock,description,id}) => {
     const AddToCart = () => {
         alert( "Added! ");
     }
@@ -185,19 +186,26 @@ const InfoContainer = () => {
     const increment = () => {
         setCount(count+1);
     };
+
     return(
-        <div className='InfoContainer'>
-            <div className='ProductTag'>
-                <p>ON SALE</p>
-            </div>
-            <p className='ProductName'> ProductName</p>
-            <p className='ProductIDText'>ProductID#1111</p>
+        <div className='InfoContainer'  >
+                { (stock == 0 )
+                    ? (<div className='ProductTag1'> <p> Out of Stock</p> </div> )
+                    : (<div className='ProductTag'> <p> On Sale</p> </div>)
+                }
+            <div><p className='ProductName'>{name}</p></div>
             <div className='PriceContainer'>
-                <p className='PriceText'>$30 </p>
-                <p className='DiscountText'>$50 </p>
+            <p className='ProductIDText'>ProductID#{id}</p>
+                <div>
+                <p className='PriceText'>${price}</p>
+                { (discount<1)
+                    ? (<p className='DiscountText'>${price*discount} </p> )
+                    : (<div> </div> )
+                }
+                </div>
             </div>
             <p className='ProductDetail'>
-                Lorem ipsum dolor sit amet consectetur. Risus sed lacinia aliquet pulvinar nascetur netus molestie nisi. Duis habitant cursus arcu turpis. Viverra enim malesuada eget dictumst lacus sed enim volutpat ante. At quis velit neque enim elementum nullam purus ipsum risus. Sit nunc orci dictumst habitasse. Quis potenti senectus lacus nisl massa sit orci potenti vulputate. Aliquet lobortis sit diam dui duis id lectus sed pellentesque.
+                {description}
             </p>
             <div className='ProductAmountContainer'>
 
@@ -220,11 +228,12 @@ const InfoContainer = () => {
     )
 }
 
-const Product = () => {
+const Product = ({name,price,discount,stock,description,id}) => {
     const [RightContent, setRightContent]=useState(true);
     const InfoButton_clicked = () =>{
         setRightContent(true);
     }
+
     const CommentButton_clicked = () =>{
         setRightContent(false);
     }
@@ -265,7 +274,7 @@ const Product = () => {
                     <p> Comment </p>
                 </button>
                 <div>
-                { RightContent ?  <InfoContainer/> : <CommentContainer/>}
+                { RightContent ?  <InfoContainer name={name} price={price} discount={discount} stock={stock} description={description} id = {id}></InfoContainer> : <CommentContainer/>}
                 </div>
             </div>
         </div>
@@ -275,14 +284,47 @@ const Product = () => {
 
 export const ProductInfo = () => {
     const { productId } = useParams();
+    const [FetchedProductName,SetFetchedProductName] =useState([])
+    const [FetchedProductPrice,SetFetchedProductPrice] =useState([])
+    const [FetchedProductDiscount,SetFetchedProductDiscount] =useState([])
+    const [FetchedProductstock,SetFetchedProductstock] =useState([])
+    const [FetchedProductdescription,SetFetchedProductdescription] =useState([])
+    const url1 = 'http://localhost:8080/api/product/'+ productId;
+
+    let Pname = fetch(url1,{method : 'GET'})
+        .then((res) => {
+            return res.json();
+        })
+        .then( (response) => {
+            SetFetchedProductName(response.data.name);
+            SetFetchedProductPrice(response.data.price);
+            SetFetchedProductDiscount(response.data.discount);
+            SetFetchedProductstock(response.data.stock);
+            SetFetchedProductdescription(response.data.description);
+        })
+        
+        // console.log(FetchedProductName);
+        // console.log(FetchedProductPrice);
+        // console.log(FetchedProductDiscount);
+        // console.log(FetchedProductstock);
+        // console.log(FetchedProductdescription);
+
     return (
         <div>
             <Navbar/>
             <div className='MainContainer'>
-            <Product/>
+            <Product
+                name = {FetchedProductName}
+                price = {FetchedProductPrice}
+                discount = {FetchedProductDiscount}
+                stock = {FetchedProductstock}
+                description = {FetchedProductdescription}
+                id = {productId}
+            ></Product>
             <div className="horizon"></div>
             <Recommendation/>
             </div>
+            <data></data>
         </div>
     )
 }

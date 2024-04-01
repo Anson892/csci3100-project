@@ -1,17 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import './ProductCard.css';
 import  ProductIcon from '../../Assets/Images/ProductIcon.jpg'
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion'
-// get icon
-// const product_icon = () => {
-//     return(
-
-//     )
-// }
+import { useParams } from 'react-router-dom';
 
 export const ProductCard = () => {
-
     const cardAnim = {
         initial: {
             opacity: 0,
@@ -32,10 +26,9 @@ export const ProductCard = () => {
             }
         }
     }
-
     return(
         <motion.div {...cardAnim} className='ProductCardContainer'>
-            <Link to={'/product/:1'} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
+            <Link to={'/product/:'+ 22 } onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
                 <div>
                 <img src={ProductIcon} alt=""/>
                 </div>

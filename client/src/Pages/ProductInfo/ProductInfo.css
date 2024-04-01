@@ -157,16 +157,46 @@ opacity: 100%;
 }
 
 .ProductTag{
-    position: relative;
-    width: 82px;
+    position: absolute;
+    width: 80px;
     height: 23px;
-    left: 0px;
-    top: 48.5px;
+    left: 9.5vh;
+    top: 12px;
     background: #9bc78b;
     display: flex;
     text-align: center;
-
 }
+
+
+.ProductTag1 p{
+position: relative;
+width: 160px;
+height: 23px;
+left: 0px;
+top: -2px;
+
+font-family: 'Literata';
+font-style: normal;
+font-weight: 700;
+font-size: 16px;
+line-height: 24px;
+text-align: center;
+letter-spacing: 0.05em;
+text-transform: uppercase;
+
+color: #000000;
+}
+.ProductTag1 {
+    position: absolute;
+    width: 160px;
+    height: 23px;
+    left: 9.5vh;
+    top: 10px;
+    background: #be5151;
+    display: flex;
+    text-align: center;
+}
+
 
 .ProductTag p{
 position: relative;
@@ -200,10 +230,10 @@ flex-grow: 0;
     /* PRODUCT NAME */
 
 position: relative;
-width: 430px;
+width: 25vw;
 height: 71px;
 top: 60.5px;
-left: -8vh;
+left: 0vh;
 
 font-family: 'Literata';
 font-style: normal;
@@ -213,7 +243,6 @@ line-height: 71px;
 display: flex;
 align-items: center;
 letter-spacing: 0.05em;
-
 color: #000000;
 }
 
@@ -221,10 +250,10 @@ color: #000000;
     /* Product ID #12345 */
 
 position: relative;
-width: 183px;
-height: 30px;
-right: 430px;
-top: 116.5px;
+width: 0px;
+height: 0vw;
+left: 0vh;
+top: -1.5vw;
 
 font-family: 'Literata';
 font-style: normal;
@@ -279,11 +308,11 @@ color: #000000;
 .DiscountText{
 /* original-price */
 
-position: absolute;
+position: relative;
 width: 30px;
 height: 26px;
-right: 0px;
-bottom: 0px;
+right: -12vw;
+bottom: -2vh;
 
 font-family: 'Literata';
 font-style: normal;
@@ -314,7 +343,7 @@ font-weight: 300;
 font-size: 16px;
 line-height: 24px;
 display: flex;
-align-items: center;
+align-items: start;
 letter-spacing: 0.05em;
 
 color: #000000;
