@@ -1,13 +1,50 @@
 const { on } = require("nodemon");
 const db = require("../models");
-const comment = db.Comment;
+const Comment = db.Comment;
+const User = db.User;
+const Order = db.Order;
+const OrderItem = db.OrderItem;
 const Op = db.Sequelize.Op;
 const controller = {};
 
 //add comment and rating
-controller.addcomment = (req, res) => {
-    comment.create(req.body).then(() => {
-        }).catch((err) => res.status(500).send(err))
+controller.addcomment = async (req, res) => {
+    const { username, rating, content, productId, orderId } = req.body;
+    const findcomment = await Comment.findOne({
+        where: { username: username,
+                 orderId: orderId,
+                 productId: productId
+    }})
+    const findorder = await OrderItem.findOne({
+        attributes: ['orderId', 'productId'],
+        include: [{
+            model: Order,
+            attributes: ['userId']
+        }],
+        where: { orderId: orderId,
+                 productId: productId
+    }})
+    await User.findOne({ attributes: ['id'],
+           where: { username: username }})
+    .then(async (data) => {
+        if((findcomment==null)&&(findorder!=null)&&(findorder.order.userId==data.id)){
+            const view = {
+                username: username,
+                rating: rating,
+                content: content,
+                userId: data.id,
+                productId: productId,
+                orderId: orderId
+            }
+            console.log("go")
+            await Comment.create(view)
+                .then(() => {
+                    res.send("Add comment success.")
+                }).catch((err) => res.status(500).send(err))
+        }else{
+            res.status(400).send("fail to add comment")
+        }
+    }).catch((err) => res.status(500).send(err))
 }
 
 
@@ -16,31 +53,31 @@ controller.status = async (req, res) => {
 
     try{
         const pid = req.params.pid
-        const five_star = await comment.count({
+        const five_star = await Comment.count({
             where: {
                 productId: pid,
                 rating: 5 // count rating = 5
             }
         })
-        const four_star = await comment.count({
+        const four_star = await Comment.count({
             where: {
                 productId: pid,
                 rating: 4 // count rating = 4
             }
         })
-        const three_star = await comment.count({
+        const three_star = await Comment.count({
             where: {
                 productId: pid,
                 rating: 3 // count rating = 3
             }
         })
-        const two_star = await comment.count({
+        const two_star = await Comment.count({
             where: {
                 productId: pid,
                 rating: 2 // count rating = 2
             }
         })
-        const one_star = await comment.count({
+        const one_star = await Comment.count({
             where: {
                 productId: pid,
                 rating: 1 // count rating = 1
@@ -71,7 +108,7 @@ controller.commentlist = (req, res) => {
         const setoffset = 2 + 1*(commentpointer-1);
         const setlimit = 1;
     }
-    comment.findAll({
+    Comment.findAll({
         attributes: ['username', 'rating', 'content'],
         where: {
             productId: id
