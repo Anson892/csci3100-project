@@ -102,11 +102,11 @@ controller.status = async (req, res) => {
 //show comment 
 controller.commentlist = (req, res) => {
     const { commentpointer, id } = req.body;
-    const setoffset = 0;
-    const setlimit = 2;
+    var setoffset = 0;
+    var setlimit = 2;
     if(commentpointer>0){
-        const setoffset = 2 + 1*(commentpointer-1);
-        const setlimit = 1;
+        var setoffset = 2 + 1*(commentpointer-1);
+        var setlimit = 1;
     }
     Comment.findAll({
         attributes: ['username', 'rating', 'content'],

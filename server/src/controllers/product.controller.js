@@ -80,11 +80,11 @@ controller.search = async (req, res) => {
   const { searchpointer, name, category, orderby, order, minprice, maxprice, minrating, maxrating} = req.body;
   const name_key = "%" + name + "%";
   const category_key = "%" + category + "%";
-  const setoffset = 0;
-  const setlimit = 15;
+  var setoffset = 0;
+  var setlimit = 15;
   if(searchpointer>0){
-      const setoffset = 15 + 5*(searchpointer-1);
-      const setlimit = 5;
+      var setoffset = 15 + 5*(searchpointer-1);
+      var setlimit = 5;
   }
   const resultlist = [];
   const ignorelist = [];
