@@ -27,14 +27,11 @@ controller.login = async (req, res) => {
           password: data.password,
           userType: data.userType
         }
-        console.log(user)
         const verifiedPassword = bcrypt.compareSync(password, user.password);
         if(!verifiedPassword){
-          console.log("fail")
           res.status(401).send({message: 'Password invalid!'});
         }else{
           // generate access token with cart data?.
-          console.log("token")
           const token = generateToken(user);
           res.status(200).send(
               {
