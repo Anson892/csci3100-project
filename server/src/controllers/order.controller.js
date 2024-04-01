@@ -178,6 +178,7 @@ controller.findbyid = async (req, res) => {
     .catch((err) => res.status(500).send(err));
 };
 
+//update order status
 controller.update = async (req, res) => {
   const { id, status } = req.body;
   Order.findOne({
