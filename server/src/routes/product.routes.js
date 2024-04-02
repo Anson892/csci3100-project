@@ -11,8 +11,6 @@ module.exports = (app) => {
   router.put("/update", product.update);
   router.delete("/:productID", product.delete);
   router.post('/search', product.search);
-  router.post('/rec', product.recommand);
-  router.post('/user_rec', product.userrecommand);
   //router.delete('/deleteall', controller.deleteAll);
   app.use("/api/product", router);
 };
