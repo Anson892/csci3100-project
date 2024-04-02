@@ -158,18 +158,18 @@ const CommentContainer = ({id}) => {
 
     const [CommentContent, setCommentContent] = useState ("Lorem ipsum dolor sit amet consectetur. Vitae sapien facilisi enim diam quis ultricies turpis. Fames mus adipiscing neque tempor ridiculus. Dolor natoque  elementum mi penatibus scelerisque. Scelerisque augue cras")
 
-    const total = Count1+Count2+Count3+Count4+Count5;
+    const total = Math.max(Count1+Count2+Count3+Count4+Count5, 1);
     const StarNum = ((Count5+Count4*2+Count3*3+Count2*4+Count1*5)/total).toFixed(1);
 
     return(
         <div className='CommentContainer'>
             <p className='StarText'>{StarNum}</p>
             <div className='StarContainer'>
-                <Star requirement = '0'/>
-                <Star requirement = '1'/>
-                <Star requirement = '2'/>
-                <Star requirement = '3'/>
-                <Star requirement = '4'/>
+                <Star requirement = '0.0'/>
+                <Star requirement = '1.0'/>
+                <Star requirement = '2.0'/>
+                <Star requirement = '3.0'/>
+                <Star requirement = '4.0'/>
             </div>
             <div className='CommentSummaryContainer'>
                 <StarProgressBar number = '5' count = {Count1} percent = {Count1/total*100}/>

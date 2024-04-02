@@ -28,7 +28,7 @@ export const ProductCard = () => {
     }
     return(
         <motion.div {...cardAnim} className='ProductCardContainer'>
-            <Link to={'/product/:'+ 22 } onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
+            <Link to={'/product/'+ 22 } onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
                 <div>
                 <img src={ProductIcon} alt=""/>
                 </div>
