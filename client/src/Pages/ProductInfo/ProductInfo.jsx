@@ -158,9 +158,9 @@ const CommentContainer = ({id}) => {
 
     const [CommentContent, setCommentContent] = useState ("Lorem ipsum dolor sit amet consectetur. Vitae sapien facilisi enim diam quis ultricies turpis. Fames mus adipiscing neque tempor ridiculus. Dolor natoque  elementum mi penatibus scelerisque. Scelerisque augue cras")
 
-    const total = Math.max(Count1+Count2+Count3+Count4+Count5, 1);
-    const StarNum = ((Count5+Count4*2+Count3*3+Count2*4+Count1*5)/total).toFixed(1);
-
+    const total = Count1+Count2+Count3+Count4+Count5;
+    let StarNum = (0+((Count5+Count4*2+Count3*3+Count2*4+Count1*5)/total)).toFixed(1);
+    if (total == 0) StarNum = 0;
     return(
         <div className='CommentContainer'>
             <p className='StarText'>{StarNum}</p>
@@ -214,15 +214,18 @@ const InfoContainer = ({name,price,discount,stock,description,id}) => {
         <div className='InfoContainer'  >
                 { (stock == 0 )
                     ? (<div className='ProductTag1'> <p> Out of Stock</p> </div> )
-                    : (<div className='ProductTag'> <p> On Sale</p> </div>)
+                    :   [   ( discount < 1)
+                            ?<div className='ProductTag'> <p> On Sale</p> </div>
+                            : <div> </div>
+                        ]
                 }
             <div><p className='ProductName'>{name}</p></div>
             <div className='PriceContainer'>
             <p className='ProductIDText'>ProductID#{id}</p>
                 <div>
-                <p className='PriceText'>${price}</p>
+                <p className='PriceText'>${price*discount}</p>
                 { (discount<1)
-                    ? (<p className='DiscountText'>${price*discount} </p> )
+                    ? (<p className='DiscountText'>${price} </p> )
                     : (<div> </div> )
                 }
                 </div>
