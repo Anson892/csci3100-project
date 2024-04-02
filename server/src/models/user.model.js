@@ -22,7 +22,7 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.ENUM("admin", "customer"),
       defaultValue: "customer"
     }
-  });
+  }, {sequelize, paranoid: true});
 
   // foreign keys to
   // UserInfo: a user has one user info
