@@ -68,17 +68,17 @@ controller.getRecommend = async (req, res) => {
     const resultlist = [];
     const ignorelist = [];
     // find the best rated products in terms of avg rating
-    const bestRatedProduct = await findBestRatedProducts(null, [], 3);
+    const bestRatedProduct = await findBestRatedProducts(null, [], 4);
     // add to result list and ignore list
     bestRatedProduct.forEach((element) => {
       resultlist.push({ productId: element.product.id });
       ignorelist.push(element.product.id);
     });
 
-    // if there are less than 5 products in the result list,
+    // if there are less than 4 products in the result list,
     // fill the rest with random products
-    if (resultlist.length < 5) {
-      const remainlimit = 5 - resultlist.length;
+    if (resultlist.length < 4) {
+      const remainlimit = 4 - resultlist.length;
       const randomProduct = await findRandomProducts(null, ignorelist, remainlimit);
       randomProduct.forEach((element) => {
         resultlist.push({ productId: element.id });
@@ -134,14 +134,14 @@ controller.getUserRecommend = async (req, res) => {
       (a, b) => categoryFrequency[b] - categoryFrequency[a]
     );
 
-    // Find 5 products
-    // 1, 2, 3. Find the best rated product in the user's favourite categories
-    // 4. Find the best rated product in general
-    // 5. random products
+    // Find 4 products
+    // 1, 2, Find the best rated product in the user's favourite categories
+    // 3. Find the best rated product in general
+    // 4. random products
     const resultlist = [];
     const ignorelist = [];
 
-    for (let i = 0; i < sortedCategories.length && resultlist.length <= 3; i++) {
+    for (let i = 0; i < sortedCategories.length && resultlist.length <= 2; i++) {
       const bestRatedProduct = await findBestRatedProducts(
         sortedCategories[i],
         ignorelist,
@@ -160,10 +160,10 @@ controller.getUserRecommend = async (req, res) => {
       ignorelist.push(element.product.id);
     });
 
-    // If there are less than 5 products in the result list,
+    // If there are less than 4 products in the result list,
     // fill the rest with the random products
-    if (resultlist.length < 5) {
-      const remainlimit = 5 - resultlist.length;
+    if (resultlist.length < 4) {
+      const remainlimit = 4 - resultlist.length;
       const randomProduct = await findRandomProducts(null, ignorelist, remainlimit);
       randomProduct.forEach((element) => {
         resultlist.push({ productId: element.id });
