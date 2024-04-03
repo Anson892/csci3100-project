@@ -268,11 +268,28 @@ const CommentContainer = ({id}) => {
 
 const InfoContainer = ({name,price,discount,stock,description,id}) => {
     const AddToCart = () => {
-        alert( "Added! ");
+        const url5 = "http://localhost:8080/api/cart/add";
+        fetch(url5, {
+            method : 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                "userId": 1, // !!!! to be filled after login system !!!!
+                "productId": id,
+                "quantity": count
+            }) 
+        })
+        .then((res) => {
+            return res.json();
+        })
+        // .then((response) => {
+        //     console.log( JSON.stringify(response));
+        // })
     }
-    const [count, setCount]=useState(0);
+    const [count, setCount]=useState(1);
     const decrement = () => {
-        if( count > 0)
+        if( count > 1)
         setCount(count-1);
     };
     const increment = () => {
