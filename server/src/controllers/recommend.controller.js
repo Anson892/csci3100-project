@@ -68,7 +68,7 @@ controller.getRecommend = async (req, res) => {
     const resultlist = [];
     const ignorelist = [];
     // find the best rated products in terms of avg rating
-    const bestRatedProduct = await findBestRatedProducts(null, [], 4);
+    const bestRatedProduct = await findBestRatedProducts(null, [], 6);
     // add to result list and ignore list
     bestRatedProduct.forEach((element) => {
       resultlist.push({ productId: element.product.id });
@@ -77,8 +77,8 @@ controller.getRecommend = async (req, res) => {
 
     // if there are less than 4 products in the result list,
     // fill the rest with random products
-    if (resultlist.length < 4) {
-      const remainlimit = 4 - resultlist.length;
+    if (resultlist.length < 6) {
+      const remainlimit = 6 - resultlist.length;
       const randomProduct = await findRandomProducts(null, ignorelist, remainlimit);
       randomProduct.forEach((element) => {
         resultlist.push({ productId: element.id });
@@ -134,14 +134,14 @@ controller.getUserRecommend = async (req, res) => {
       (a, b) => categoryFrequency[b] - categoryFrequency[a]
     );
 
-    // Find 4 products
+    // Find 6 products
     // 1, 2, Find the best rated product in the user's favourite categories
     // 3. Find the best rated product in general
     // 4. random products
     const resultlist = [];
     const ignorelist = [];
 
-    for (let i = 0; i < sortedCategories.length && resultlist.length <= 2; i++) {
+    for (let i = 0; i < sortedCategories.length && resultlist.length <= 3; i++) {
       const bestRatedProduct = await findBestRatedProducts(
         sortedCategories[i],
         ignorelist,
@@ -154,7 +154,7 @@ controller.getUserRecommend = async (req, res) => {
     }
 
     // Find the best rated products in general
-    const bestRatedProduct = await findBestRatedProducts(null, ignorelist, 1);
+    const bestRatedProduct = await findBestRatedProducts(null, ignorelist, 2);
     bestRatedProduct.forEach((element) => {
       resultlist.push({ productId: element.product.id });
       ignorelist.push(element.product.id);
@@ -162,8 +162,8 @@ controller.getUserRecommend = async (req, res) => {
 
     // If there are less than 4 products in the result list,
     // fill the rest with the random products
-    if (resultlist.length < 4) {
-      const remainlimit = 4 - resultlist.length;
+    if (resultlist.length < 6) {
+      const remainlimit = 6 - resultlist.length;
       const randomProduct = await findRandomProducts(null, ignorelist, remainlimit);
       randomProduct.forEach((element) => {
         resultlist.push({ productId: element.id });
