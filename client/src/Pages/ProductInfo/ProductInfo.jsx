@@ -66,9 +66,7 @@ const SmallStarFilled = () => {
 
 const StarProgressBar = ({number,count,percent}) => {
     percent = percent.toFixed(0)
-    console.log(typeof(percent), percent)
     const [Width,SetWidth] = useState(0);
-    console.log(typeof(Width), Width)
 
     useEffect(()=>{
         SetWidth(percent+'%')
@@ -98,19 +96,22 @@ function formatFloat (source, position){
     return Math.round(source*Math.pow(10, position))/Math.pow(10,position);
 }
 
-const CommentBox = ({userID,text,stars})=>{
+const CommentBox = ({username,star,content,index})=>{
 
+    console.log(username)
+    console.log(star)
+    console.log(content)
     return(
         <div className='Comment'>
-            <p className='SmallCommentText'>{text}</p>
+            <p className='SmallCommentText'>{content}</p>
             <div className='SmallCommentStarContainer'>
-                <SmallStar smallStarCount = {stars} requirement='0'/>
-                <SmallStar smallStarCount = {stars} requirement='1'/>
-                <SmallStar smallStarCount = {stars} requirement='2'/>
-                <SmallStar smallStarCount = {stars} requirement='3'/>
-                <SmallStar smallStarCount = {stars} requirement='4'/>
+                <SmallStar smallStarCount = {star} requirement='0'/>
+                <SmallStar smallStarCount = {star} requirement='1'/>
+                <SmallStar smallStarCount = {star} requirement='2'/>
+                <SmallStar smallStarCount = {star} requirement='3'/>
+                <SmallStar smallStarCount = {star} requirement='4'/>
             </div>
-            <p className='SmallCommentUserId'>{userID}</p>
+            <p className='SmallCommentUserId'>{username}</p>
         </div>
     )
 }
@@ -146,17 +147,60 @@ const CommentContainer = ({id}) => {
         )
     }
 
-    const [dataSource, setDataSource] =useState(Array.from({length:12}))
+    const [itemsjs, setItemsJS] = useState([])
+    const [hasMore, setHasMore] = useState(true);
+    const [pointer, setpointer] = useState(0);
+
+    useEffect(() => {
+        const url3 = "http://localhost:8080/api/comment/list"
+        fetch(url3,{
+            method : 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                "commentpointer": pointer,
+                "id": productId
+            })
+        })
+        .then((res) => {
+            return res.json();
+        })
+        .then( (response) => {
+            var text = JSON.stringify(response)
+            var array1 = (JSON.parse(text))
+            setItemsJS (array1);
+            setpointer (pointer+1)
+            if (array1.length < 3) setHasMore(false)
+        })
+    },[])
+
 
     const fetchMoreData = () =>{
         setTimeout(() => {
-            setDataSource(dataSource.concat(Array.from({length:8})))
+            const url3 = "http://localhost:8080/api/comment/list"
+            fetch(url3,{
+                method : 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    "commentpointer": pointer,
+                    "id": productId
+                })
+            })
+            .then((res) => {
+                return res.json();
+            })
+            .then( (response) => {
+                var text = JSON.stringify(response)
+                var array1 = (JSON.parse(text))
+                setItemsJS (itemsjs.concat(array1));
+                setpointer (pointer+1)
+                if (array1.length == 0) setHasMore(false)
+            })
         }, 500);
     }
-
-    const [hasMore, setHasMore] = useState(true);
-
-    const [CommentContent, setCommentContent] = useState ("Lorem ipsum dolor sit amet consectetur. Vitae sapien facilisi enim diam quis ultricies turpis. Fames mus adipiscing neque tempor ridiculus. Dolor natoque  elementum mi penatibus scelerisque. Scelerisque augue cras")
 
     const total = Count1+Count2+Count3+Count4+Count5;
     let StarNum = (0+((Count5+Count4*2+Count3*3+Count2*4+Count1*5)/total)).toFixed(1);
@@ -181,17 +225,16 @@ const CommentContainer = ({id}) => {
             <p className='CommentNumber'>{total} COMMENTS</p>
             <InfiniteScroll
             className='CommentListContainer'
-            dataLength={dataSource.length} 
+            dataLength={itemsjs.length} 
             next={fetchMoreData} 
             hasMore={hasMore}
             loader={<h4>Loading...</h4>}
+            endMessage={<h4>End of Comment</h4>}
             height = {279}
             >
-                {dataSource.map((item,index)=>{
-                    return (
-                        <div><CommentBox userID="#11" text = "This is a Comment" stars = '3'/></div>
-                    )
-                })}
+                {itemsjs.map((itemsjs,index)=>
+                        <div key= {itemsjs.id} ><CommentBox username={itemsjs.username} star={itemsjs.rating} content={itemsjs.content} index = {index}  /></div>
+                )}  
             </InfiniteScroll>
         </div> 
     )
