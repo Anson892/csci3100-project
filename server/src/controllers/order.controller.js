@@ -93,6 +93,7 @@ controller.PlaceOrder = async (req, res) => {
     },
     { where: {id: orderId} }
   )
+  res.send("success")
 };
 
 controller.removeOrderItem = async (req, res) => {
