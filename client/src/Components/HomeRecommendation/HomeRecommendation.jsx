@@ -1,11 +1,11 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import scrolling_circles from '../../Assets/UI/scrolling_circles.svg'
 import recommend_title from '../../Assets/UI/recommend_title.svg'
 import product_image_test from '../../Assets/Images/product_image_test.png'
 import './HomeRecommendation.css'
-import { motion, useScroll, useTransform, useMotionValueEvent, useSpring  } from 'framer-motion'
+import { motion, useScroll, useTransform  } from 'framer-motion'
 
-const ProductItemLeft = () => {
+const ProductItemLeft = ({id}) => {
 
     const productContainerRef = useRef(null);
 
@@ -34,6 +34,25 @@ const ProductItemLeft = () => {
     const textOffset = useTransform(useTransform(productAnimAlpha, [0, 1], [-5, 5]), (v) => `${v}vw`)
     const rightLineOffset = useTransform(useTransform(productAnimAlpha, [0, 1], [0, -10]), (v) => `${v}vw`)
 
+    const [name, setName] = useState()
+    const [description, setDescription] = useState()
+    useEffect(()=> {
+        fetch(
+            'http://localhost:8080/api/product/'+ id,
+            { method: "GET" }
+            )
+            .then((res) => {
+                return res.json();
+            })
+            .then((data) => {
+                setName(data.data.name);
+                setDescription(data.data.description);
+            })
+            .catch((error) => {
+                return
+            } )
+    }, [id])
+
     return (
         <motion.div 
              className="product-item-left" 
@@ -60,8 +79,8 @@ const ProductItemLeft = () => {
                 }}
             >
                 <div className="product-text" >
-                    <h1 className="product-name">PRODUCT NAME</h1>
-                    <p className="product-description">Lorem ipsum dolor sit amet consectetur. Risus sed lacinia aliquet pulvinar nascetur netus molestie nisi. Duis habitant cursus arcu turpis. Viverra enim malesuada eget dictumst lacus sed enim volutpat ante. At quis velit neque enim elementum nullam purus ipsum risus. Sit nunc orci dictumst habitasse. Quis potenti senectus lacus nisl massa sit orci potenti vulputate. Aliquet lobortis sit diam dui duis id lectus sed pellentesque.</p>
+                    <h1 className="product-name">{name}</h1>
+                    <p className="product-description">{description}</p>
                 </div>
             </motion.div>
             <motion.div
@@ -74,7 +93,7 @@ const ProductItemLeft = () => {
     )
 }
 
-const ProductItemRight = () => {
+const ProductItemRight = ({id}) => {
 
     const productContainerRef = useRef(null);
 
@@ -103,6 +122,25 @@ const ProductItemRight = () => {
     const textOffset = useTransform(useTransform(productAnimAlpha, [0, 1], [-5, 5]), (v) => `${v}vw`)
     const rightLineOffset = useTransform(useTransform(productAnimAlpha, [0, 1], [0, 10]), (v) => `${v}vw`)
 
+    const [name, setName] = useState()
+    const [description, setDescription] = useState()
+    useEffect(()=> {
+        fetch(
+            'http://localhost:8080/api/product/'+ id,
+            { method: "GET" }
+            )
+            .then((res) => {
+                return res.json();
+            })
+            .then((data) => {
+                setName(data.data.name);
+                setDescription(data.data.description);
+            })
+            .catch((error) => {
+                return
+            } )
+    }, [id])
+
     return (
         <motion.div 
              className="product-item-right" 
@@ -129,8 +167,9 @@ const ProductItemRight = () => {
                 }}
             >
                 <div className="product-text" >
-                    <h1 className="product-name">PRODUCT NAME</h1>
-                    <p className="product-description">Lorem ipsum dolor sit amet consectetur. Risus sed lacinia aliquet pulvinar nascetur netus molestie nisi. Duis habitant cursus arcu turpis. Viverra enim malesuada eget dictumst lacus sed enim volutpat ante. At quis velit neque enim elementum nullam purus ipsum risus. Sit nunc orci dictumst habitasse. Quis potenti senectus lacus nisl massa sit orci potenti vulputate. Aliquet lobortis sit diam dui duis id lectus sed pellentesque.</p>
+                    <h1 className="product-name">{name}</h1>
+                    {/* Lorem ipsum dolor sit amet consectetur. Risus sed lacinia aliquet pulvinar nascetur netus molestie nisi. Duis habitant cursus arcu turpis. Viverra enim malesuada eget dictumst lacus sed enim volutpat ante. At quis velit neque enim elementum nullam purus ipsum risus. Sit nunc orci dictumst habitasse. Quis potenti senectus lacus nisl massa sit orci potenti vulputate. Aliquet lobortis sit diam dui duis id lectus sed pellentesque. */}
+                    <p className="product-description">{description}</p>
                 </div>
             </motion.div>
             <motion.div
@@ -154,10 +193,27 @@ export const HomeRecommendation = () => {
     const topCirclesOffset = useTransform(useTransform(titleAlpha, [0, 1], [-25, 15]), (v) => `${v}vh`)
     const bottomCirclesOffset = useTransform(useTransform(titleAlpha, [0, 1], [-25, 25]), (v) => `${v}vh`)
 
-   
+    const [productIds, setProductsIds] = useState()
 
-    return (
-        <div className="HomeRecommendation">
+    useEffect(() => {
+        fetch(
+            'http://localhost:8080/api/recommend/',
+            { method: "GET" }
+        )
+        .then((res) => {
+            return res.json();
+        })
+        .then((data) => {
+            setProductsIds(data.map((obj) => {return obj.productId}))
+            console.log(data)
+            console.log(productIds)
+        })
+        .catch((error) => {
+        })        
+    }, [])
+            
+            return (
+                <div className="HomeRecommendation">
             <div className="title-container"  ref={titleContainerRef}>
                 <motion.img
                     src={ scrolling_circles }
@@ -180,12 +236,39 @@ export const HomeRecommendation = () => {
             </div>
             <div className="lower-part-container">
                 <div className="products-container">
-                    <ProductItemLeft/>
-                    <ProductItemRight/>
-                    <ProductItemLeft/>
-                    <ProductItemRight/>
-                    <ProductItemLeft/>
-                    <ProductItemRight/>
+                    {
+                        Array.isArray(productIds) && productIds.length > 0 ?
+                            <ProductItemLeft  id={productIds[0]}/>
+                        : null
+                    }
+                    {
+                        Array.isArray(productIds) && productIds.length > 1 ?
+                            <ProductItemRight  id={productIds[1]}/>
+                        : null
+                    }
+                    {
+    
+                        Array.isArray(productIds) && productIds.length > 2 ?
+                            <ProductItemLeft  id={productIds[2]}/>
+                        : null
+                    }
+                    {
+    
+                        Array.isArray(productIds) && productIds.length > 3 ?
+                            <ProductItemRight  id={productIds[3]}/>
+                        : null
+                    }
+                    {
+    
+                        Array.isArray(productIds) && productIds.length > 4 ?
+                            <ProductItemLeft  id={productIds[4]}/>
+                        : null
+                    }
+                    {
+                        Array.isArray(productIds) && productIds.length > 5 ?
+                            <ProductItemRight  id={productIds[5]}/>
+                        : null
+                    }
                 </div>
                 <div className="vertical-line"/>
             </div>

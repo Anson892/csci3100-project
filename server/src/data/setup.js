@@ -18,7 +18,7 @@ const Comment = db.Comment;
 //insert data
 //User
 async function import_user(){
-    const fileContent = fs.readFileSync("../data/user.csv", 'utf8');
+    const fileContent = fs.readFileSync("./user.csv", 'utf8');
       const lines = fileContent.split("\r\n");
       const dataLines = lines.slice(2, lines.length); //remover headers
       const Users = [];
@@ -44,7 +44,7 @@ async function import_user(){
 
 //UserInfo
 async function import_userInfo(){
-    const fileContent = fs.readFileSync("../data/userInfo.csv", 'utf8');
+    const fileContent = fs.readFileSync("./userInfo.csv", 'utf8');
       const lines = fileContent.split("\r\n");
       const dataLines = lines.slice(2, lines.length); //remover headers
       const Info = [];
@@ -75,7 +75,7 @@ async function import_userInfo(){
 
 //Product
 async function import_Product(){
-    const fileContent = fs.readFileSync("../data/product.csv", 'utf8');
+    const fileContent = fs.readFileSync("./product.csv", 'utf8');
       const lines = fileContent.split("\r\n");
       const dataLines = lines.slice(2, lines.length); //remover headers
       const Products = [];
@@ -104,7 +104,7 @@ async function import_Product(){
 
 //order
 async function import_Order(){
-    const fileContent = fs.readFileSync("../data/order.csv", 'utf8');
+    const fileContent = fs.readFileSync("./order.csv", 'utf8');
       const lines = fileContent.split("\r\n");
       const dataLines = lines.slice(2, lines.length); //remover headers
       const Orders = [];
@@ -131,7 +131,7 @@ async function import_Order(){
 
 //orderItem
 async function import_OrderItem(){
-    const fileContent = fs.readFileSync("../data/orderitem.csv", 'utf8');
+    const fileContent = fs.readFileSync("./orderitem.csv", 'utf8');
       const lines = fileContent.split("\r\n");
       const dataLines = lines.slice(2, lines.length); //remover headers
       const Itemlist = [];
@@ -158,7 +158,7 @@ async function import_OrderItem(){
 
 //comment
 async function import_Comment(){
-    const fileContent = fs.readFileSync("../data/comment.csv", 'utf8');
+    const fileContent = fs.readFileSync("./comment.csv", 'utf8');
       const lines = fileContent.split("\r\n");
       const dataLines = lines.slice(2, lines.length); //remover headers
       const Commentlist = [];
