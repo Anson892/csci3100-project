@@ -3,7 +3,7 @@ const router = require("express").Router();
 
 module.exports = app => {
     router.post('/create', orders.create);
-    router.post('/add', orders.addToOrder);
+    router.put('/placeorder', orders.PlaceOrder);
     router.delete('/remove', orders.removeOrderItem);
     router.get('/', orders.findAll)
     router.get('/status/:status', orders.findbystatus)

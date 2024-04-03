@@ -8,84 +8,91 @@ const controller = {};
 
 //create order
 controller.create = async (req, res) => {
-  const { userId, infoId } = req.body;
+  const { userId, infoId, products } = req.body;
+  const productlist = [];
+  const productidlist = [];
+  const updatelist = [];
+  //create new order record
   await Order.create({
     userId: userId,
     userInfoId: infoId
   }).then(async (data) => {
-    const orderid = await Order.findOne({
+    //get the created order id
+    await Order.findOne({
       attributes: ['id'],
       where: { userId: userId,
                userInfoId: infoId },
       order: [ [ 'createdAt', 'DESC' ]]
+    }).then(async (data) => {
+      console.log(data.id)
+      products.forEach(element => {
+        const orderitem = {
+          orderId: data.id,
+          productId: element.productId,
+          price: element.price,
+          quantity: element.quantity
+        }
+        productlist.push(orderitem)
+        productidlist.push(element.productId)
+      });
+
+      // Find target product
+    productidlist.forEach(async element => {
+      await Product.findOne({ attributes: ['id', 'stock'],
+                        where: { id: element } })
+      .then((product) => {
+        if (product === null) {
+          res.status(404).send({
+            message: "Product not found",
+          });
+          }
+      })
+    });
+
+    //list of product user buy for further update
+    await Product.findAll({
+      attributes: ['id', 'stock'],
+      where: {id: {[Op.in]: productidlist}}
+    }).then((data) => {
+      data.forEach(element => {
+        productlist.forEach(listitem => {
+          if(element.id==listitem.productId){
+            const updatestock = element.stock - listitem.quantity;
+            const updateproduct = {
+              id: element.id,
+              stock: updatestock
+            };
+            updatelist.push(updateproduct)
+          }
+        })
+      })
     })
-    res.send(orderid)
+
+    //add cart item to order item
+    await OrderItem.bulkCreate(productlist);
+
+    //update stock number
+    updatelist.forEach(async element => {
+      await Product.update({ stock: element.stock },{ where: {id: element.id} })
+    })
+    res.send(data)
+    })
   })
+  .catch((err) => res.status(500).send({
+    message: err.message || "Error occurred while creating order.",
+  }));
 }
 
 // add products to order
-controller.addToOrder = async (req, res) => {
-  const { orderId, products } = req.body;
-  const productlist = [];
-  const productidlist = [];
-  const updatelist = [];
-  products.forEach(element => {
-    const orderitem = {
-      orderId: orderId,
-      productId: element.productId,
-      price: element.price,
-      quantity: element.quantity
-    }
-    productlist.push(orderitem)
-    productidlist.push(element.productId)
-  });
-  await Order.findOne({ where: { id: orderId } })
-    .then(async (order) => {
-      if (order === null) {
-        res.status(404).send({
-          message: "Order not found",
-        });
-      } else {
-        // Find target product
-        productidlist.forEach(async element => {
-          await Product.findOne({ attributes: ['id', 'stock'],
-                            where: { id: element } })
-          .then((product) => {
-            if (product === null) {
-              res.status(404).send({
-                message: "Product not found",
-              });
-              }
-          })
-        });
-        //list of product user buy for further update
-        await Product.findAll({
-          attributes: ['id', 'stock'],
-          where: {id: {[Op.in]: productidlist}}
-        }).then((data) => {
-          data.forEach(element => {
-            productlist.forEach(listitem => {
-              if(element.id==listitem.productId){
-                const updatestock = element.stock - listitem.quantity;
-                const updateproduct = {
-                  id: element.id,
-                  stock: updatestock
-                };
-                updatelist.push(updateproduct)
-              }
-            })
-          })
-        })
-        let result = await OrderItem.bulkCreate(productlist);
-        updatelist.forEach(async element => {
-          await Product.update({stock: element.stock},{where: {id: element.id}})
-        })
-        res.send("Add orderitem success!")
-      }
-    })
-    .catch((err) => res.status(500).send({
-      message: err.message || "Some error occurred while finding order.",
-    }));
+controller.PlaceOrder = async (req, res) => {
+  const { orderId, paymentMethod } = req.body;
+  Order.update(
+    {
+      status: "pending",
+      paymentMethod: paymentMethod
+    },
+    { where: {id: orderId} }
+  )
 };
 
 controller.removeOrderItem = async (req, res) => {
