@@ -20,14 +20,44 @@ import { Link } from 'react-router-dom';
 
 
 const Recommendation = () => {
+    const [recommend0_id,setrecommend0_id] =useState(0);
+    const [recommend1_id,setrecommend1_id] =useState(0);
+    const [recommend2_id,setrecommend2_id] =useState(0);
+    const [recommend3_id,setrecommend3_id] =useState(0);
+    const [recommend4_id,setrecommend4_id] =useState(0);
+    const { productId } = useParams();
+
+    const url4 = "http://localhost:8080/api/recommend/product/"+productId
+        fetch (url4,{method : 'GET'})
+        .then((res) => {
+            return res.json();
+        })
+        .then( (response) =>{
+            var text = JSON.stringify(response)
+            var array1 = (JSON.parse(text))
+            setrecommend0_id(array1[0].productId);
+            setrecommend1_id(array1[1].productId);
+            setrecommend2_id(array1[2].productId);
+            setrecommend3_id(array1[3].productId);
+            setrecommend4_id(array1[4].productId);
+        })    
+
+    // useEffect (()=>{
+    //     console.log(recommend0_id);
+    //     console.log(recommend1_id);
+    //     console.log(recommend2_id);
+    //     console.log(recommend3_id);
+    //     console.log(recommend4_id);
+    // },[ recommend0_id ])
+
     return (
             <div className='RecommendationContainer'>
                 <p className='RecommendationText'>Recommendation</p>
-                <div><ProductCard/></div>
-                <div><ProductCard/></div>
-                <div><ProductCard/></div>
-                <div><ProductCard/></div>
-                <div><ProductCard/></div>
+                <div><ProductCard id = {recommend0_id} /></div>
+                <div><ProductCard id = {recommend1_id}/></div>
+                <div><ProductCard id = {recommend2_id}/></div>
+                <div><ProductCard id = {recommend3_id}/></div>
+                <div><ProductCard id = {recommend4_id}/></div>
             </div>
     )
 }
@@ -66,9 +96,7 @@ const SmallStarFilled = () => {
 
 const StarProgressBar = ({number,count,percent}) => {
     percent = percent.toFixed(0)
-    console.log(typeof(percent), percent)
     const [Width,SetWidth] = useState(0);
-    console.log(typeof(Width), Width)
 
     useEffect(()=>{
         SetWidth(percent+'%')
@@ -98,19 +126,18 @@ function formatFloat (source, position){
     return Math.round(source*Math.pow(10, position))/Math.pow(10,position);
 }
 
-const CommentBox = ({userID,text,stars})=>{
-
+const CommentBox = ({username,star,content,index})=>{
     return(
         <div className='Comment'>
-            <p className='SmallCommentText'>{text}</p>
+            <p className='SmallCommentText'>{content}</p>
             <div className='SmallCommentStarContainer'>
-                <SmallStar smallStarCount = {stars} requirement='0'/>
-                <SmallStar smallStarCount = {stars} requirement='1'/>
-                <SmallStar smallStarCount = {stars} requirement='2'/>
-                <SmallStar smallStarCount = {stars} requirement='3'/>
-                <SmallStar smallStarCount = {stars} requirement='4'/>
+                <SmallStar smallStarCount = {star} requirement='0'/>
+                <SmallStar smallStarCount = {star} requirement='1'/>
+                <SmallStar smallStarCount = {star} requirement='2'/>
+                <SmallStar smallStarCount = {star} requirement='3'/>
+                <SmallStar smallStarCount = {star} requirement='4'/>
             </div>
-            <p className='SmallCommentUserId'>{userID}</p>
+            <p className='SmallCommentUserId'>{username}</p>
         </div>
     )
 }
@@ -146,30 +173,73 @@ const CommentContainer = ({id}) => {
         )
     }
 
-    const [dataSource, setDataSource] =useState(Array.from({length:12}))
+    const [itemsjs, setItemsJS] = useState([])
+    const [hasMore, setHasMore] = useState(true);
+    const [pointer, setpointer] = useState(0);
+
+    useEffect(() => {
+        const url3 = "http://localhost:8080/api/comment/list"
+        fetch(url3,{
+            method : 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                "commentpointer": pointer,
+                "id": productId
+            })
+        })
+        .then((res) => {
+            return res.json();
+        })
+        .then( (response) => {
+            var text = JSON.stringify(response)
+            var array1 = (JSON.parse(text))
+            setItemsJS (array1);
+            setpointer (pointer+1)
+            if (array1.length < 3) setHasMore(false)
+        })
+    },[])
+
 
     const fetchMoreData = () =>{
         setTimeout(() => {
-            setDataSource(dataSource.concat(Array.from({length:8})))
+            const url3 = "http://localhost:8080/api/comment/list"
+            fetch(url3,{
+                method : 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    "commentpointer": pointer,
+                    "id": productId
+                })
+            })
+            .then((res) => {
+                return res.json();
+            })
+            .then( (response) => {
+                var text = JSON.stringify(response)
+                var array1 = (JSON.parse(text))
+                setItemsJS (itemsjs.concat(array1));
+                setpointer (pointer+1)
+                if (array1.length == 0) setHasMore(false)
+            })
         }, 500);
     }
 
-    const [hasMore, setHasMore] = useState(true);
-
-    const [CommentContent, setCommentContent] = useState ("Lorem ipsum dolor sit amet consectetur. Vitae sapien facilisi enim diam quis ultricies turpis. Fames mus adipiscing neque tempor ridiculus. Dolor natoque  elementum mi penatibus scelerisque. Scelerisque augue cras")
-
     const total = Count1+Count2+Count3+Count4+Count5;
-    const StarNum = ((Count5+Count4*2+Count3*3+Count2*4+Count1*5)/total).toFixed(1);
-
+    let StarNum = (0+((Count5+Count4*2+Count3*3+Count2*4+Count1*5)/total)).toFixed(1);
+    if (total == 0) StarNum = 0;
     return(
         <div className='CommentContainer'>
             <p className='StarText'>{StarNum}</p>
             <div className='StarContainer'>
-                <Star requirement = '0'/>
-                <Star requirement = '1'/>
-                <Star requirement = '2'/>
-                <Star requirement = '3'/>
-                <Star requirement = '4'/>
+                <Star requirement = '0.0'/>
+                <Star requirement = '1.0'/>
+                <Star requirement = '2.0'/>
+                <Star requirement = '3.0'/>
+                <Star requirement = '4.0'/>
             </div>
             <div className='CommentSummaryContainer'>
                 <StarProgressBar number = '5' count = {Count1} percent = {Count1/total*100}/>
@@ -181,17 +251,16 @@ const CommentContainer = ({id}) => {
             <p className='CommentNumber'>{total} COMMENTS</p>
             <InfiniteScroll
             className='CommentListContainer'
-            dataLength={dataSource.length} 
+            dataLength={itemsjs.length} 
             next={fetchMoreData} 
             hasMore={hasMore}
             loader={<h4>Loading...</h4>}
+            endMessage={<h4>End of Comment</h4>}
             height = {279}
             >
-                {dataSource.map((item,index)=>{
-                    return (
-                        <div><CommentBox userID="#11" text = "This is a Comment" stars = '3'/></div>
-                    )
-                })}
+                {itemsjs.map((itemsjs,index)=>
+                        <div key= {itemsjs.id} ><CommentBox username={itemsjs.username} star={itemsjs.rating} content={itemsjs.content} index = {index}  /></div>
+                )}  
             </InfiniteScroll>
         </div> 
     )
@@ -199,11 +268,28 @@ const CommentContainer = ({id}) => {
 
 const InfoContainer = ({name,price,discount,stock,description,id}) => {
     const AddToCart = () => {
-        alert( "Added! ");
+        const url5 = "http://localhost:8080/api/cart/add";
+        fetch(url5, {
+            method : 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                "userId": 1, // !!!! to be filled after login system !!!!
+                "productId": id,
+                "quantity": count
+            }) 
+        })
+        .then((res) => {
+            return res.json();
+        })
+        // .then((response) => {
+        //     console.log( JSON.stringify(response));
+        // })
     }
-    const [count, setCount]=useState(0);
+    const [count, setCount]=useState(1);
     const decrement = () => {
-        if( count > 0)
+        if( count > 1)
         setCount(count-1);
     };
     const increment = () => {
@@ -214,15 +300,18 @@ const InfoContainer = ({name,price,discount,stock,description,id}) => {
         <div className='InfoContainer'  >
                 { (stock == 0 )
                     ? (<div className='ProductTag1'> <p> Out of Stock</p> </div> )
-                    : (<div className='ProductTag'> <p> On Sale</p> </div>)
+                    :   [   ( discount < 1)
+                            ?<div className='ProductTag'> <p> On Sale</p> </div>
+                            : <div> </div>
+                        ]
                 }
             <div><p className='ProductName'>{name}</p></div>
             <div className='PriceContainer'>
             <p className='ProductIDText'>ProductID#{id}</p>
                 <div>
-                <p className='PriceText'>${price}</p>
+                <p className='PriceText'>${price*discount}</p>
                 { (discount<1)
-                    ? (<p className='DiscountText'>${price*discount} </p> )
+                    ? (<p className='DiscountText'>${price} </p> )
                     : (<div> </div> )
                 }
                 </div>

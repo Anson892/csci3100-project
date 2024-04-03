@@ -4,16 +4,19 @@ const Op = db.Sequelize.Op;
 const controller = {};
 
 //admin add user
-controller.createuser = (req, res) => {
+controller.createUser = (req, res) => {
+  const { username, password, userType } = req.body;
+
   // Validate request
-  if (!req.body.username || !req.body.password) {
-    res.status(400).send({
-      message: "username/password cannot be empty!",
+  if (!username || !password) {
+    res.status(400).json({
+      error: "username and password cannot be empty!",
     });
     return;
   }
+
   // Find existing username
-  User.findOne({ where: { username: req.body.username } })
+  User.findOne({ where: { username: username } })
     .then((data) => {
       if (data == null) {
         // Create a User
@@ -25,21 +28,21 @@ controller.createuser = (req, res) => {
         // Save new User in the database
         User.create(user)
           .then((data) => {
-            res.send(data);
+            res.status(200).json({ message: "User was created successfully!" });
           })
           .catch((err) => {
-            res.status(500).send({
-              message:
+            res.status(500).json({
+              error:
                 err.message || "Some error occurred while creating the User.",
             });
           });
       } else {
-        res.status(400).send({ message: "username already in use!" });
+        res.status(400).json({ error: "username already in use!" });
       }
     })
     .catch((err) => {
       res.status(500).send({
-        message:
+        error:
           err.message ||
           "Some error occurred while checking the existend of user.",
       });
@@ -137,13 +140,13 @@ controller.delete = (req, res) => {
       if (num == 1) {
         // delete successful
         res.status(200).json({
-          message: `user ${username} was deleted successfully.`,
+          message: `User deleted successfully!`,
 
         });
       } else {
         // delete not successful
         res.status(404).json({
-          message: `Cannot delete user with username=${username}. Maybe user was not found!`,
+          message: `User not found!`,
         });
       }
     })
@@ -151,7 +154,7 @@ controller.delete = (req, res) => {
       res.status(500).json({
         error:
           err.message ||
-          "Some error occurred while deleting user with username=" + username,
+          "Some error occurred while deleting user.",
       });
     });
 };

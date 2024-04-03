@@ -2,82 +2,77 @@ const db = require("../models");
 const Cart = db.Cart;
 const CartItem = db.CartItem;
 const Product = db.Product;
+const ProductImage = db.ProductImage;
 const Op = db.Sequelize.Op;
 const controller = {};
 
 // Create a new cart for user
 controller.createCart = (req, res) => {
-  // Validate request
-  if (!req.body.userId) {
-    res.status(400).json({
-      message: "userId cannot be empty!",
-    });
-    return;
-  }
+  const { userId } = req.params;
   // Find existing cart
-  Cart.findOne({ where: { userId: req.body.userId } }).then((data) => {
+  Cart.findOne({ where: { userId: userId } }).then((data) => {
     if (data === null) {
       // Create a Cart for user
       const cart = {
-        userId: req.body.userId,
+        userId: userId,
       };
 
       // Save new Cart in the database
       Cart.create(cart)
         .then((data) => {
-          res.json(data);
+          res.json({success: true, message: "Cart created successfully!"});
         })
         .catch((err) => {
           res.status(500).json({
-            message:
+            success: false,
+            error:
               err.message || "Some error occurred while creating the cart.",
           });
         });
     } else {
-      res.status(400).json({ message: "user already has a cart!" });
+      res.status(400).json({ success: true, message: "user already has a cart!" });
     }
   });
 };
 
 // Get user cart
 controller.getUserCart = (req, res) => {
-  const userId = req.body.userId;
+  const userId = req.params.userId;
+
+  if (!userId) {
+    res.status(400).json({
+      error: "User Id cannot be empty!",
+    });
+    return;
+  }
+
   // find cart
   Cart.findOne({ where: { userId: userId } })
     .then((cart) => {
-      if (cart === null) {
-        res.status(404).json({
-          message: "Cart not found",
-        });
-      } else {
-        // Get cart items
-        CartItem.findAll({ where: { cartId: cart.id }, include: Product })
-          .then((cartItems) => {
-            res.json(cartItems);
-          })
-          .catch((err) => {
-            res.status(500).json({
-              message:
-                err.message ||
-                "Some error occurred while retrieving cart items.",
-            });
+      // Get cart items
+      CartItem.findAll({ where: { cartId: cart.id }, attributes: ["productId", "quantity"]})
+        .then((cartItems) => {
+          res.json(cartItems);
+        })
+        .catch((err) => {
+          res.status(500).json({
+            error:
+              err.message || "Some error occurred while retrieving cart items.",
           });
-      }
+        });
     })
     .catch((err) => {
       res.status(500).json({
-        message: err.message || "Some error occurred while retrieving cart.",
+        error: err.message || "Some error occurred while retrieving cart.",
       });
     });
 };
 
 controller.addToCart = (req, res) => {
-  const userID = req.body.userID;
-  const productID = req.body.productID;
-  const quantity = req.body.quantity;
+  const { userId, productId, quantity } = req.body;
 
   // validate request
-  if (!userID || !productID || !quantity) {
+  if (!userId || !productId || !quantity) {
     res.status(400).json({
       error: "userID, productID and quantity cannot be empty!",
     });
@@ -113,9 +108,7 @@ controller.addToCart = (req, res) => {
 
           CartItem.create(cartItem)
             .then((data) => {
-              res
-                .status(200)
-                .json({ message: "Product added to cart", data: data });
+              res.status(200).json({ message: "Product added to cart" });
             })
             .catch((err) => {
               res.status(500).json({
@@ -154,7 +147,7 @@ controller.removeCartItem = (req, res) => {
     if (cart === null) {
       // cart not found
       res.status(404).json({
-        message: "Cart not found",
+        error: "Cart not found",
       });
     } else {
       // Find product in cart
@@ -164,18 +157,18 @@ controller.removeCartItem = (req, res) => {
         if (cartItem === null) {
           // product not in cart
           res.status(404).json({
-            message: "Product not in cart",
+            error: "Product not in cart",
           });
         } else {
           // Remove product from cart
           cartItem
             .destroy()
             .then(() => {
-              res.json({ message: "Product removed from cart" });
+              res.status(200).json({ message: "Product removed from cart" });
             })
             .catch((err) => {
               res.status(500).json({
-                message:
+                error:
                   err.message ||
                   "Some error occurred while removing product from cart.",
               });
@@ -282,36 +275,18 @@ controller.updateCartItem = (req, res) => {
           });
         } else {
           // Update quantity
-          cartItem.quantity = quantity;
-          if (cartItem.quantity <= 0) {
-            // Remove product from cart
-            cartItem
-              .destroy()
-              .then(() => {
-                res.json({ message: "Product removed from cart" });
-              })
-              .catch((err) => {
-                res.status(500).json({
-                  message:
-                    err.message ||
-                    "Some error occurred while removing product from cart.",
-                });
-              });
-          } else {
-            // Save updated quantity
             cartItem
               .save()
               .then((data) => {
-                res.json(data);
+                res.status(200).json({message: "Product updated in cart"});
               })
               .catch((err) => {
                 res.status(500).json({
-                  message:
+                  error:
                     err.message ||
                     "Some error occurred while updating product in cart.",
                 });
               });
-          }
         }
       });
     }

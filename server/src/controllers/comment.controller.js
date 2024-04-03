@@ -42,7 +42,7 @@ controller.addcomment = async (req, res) => {
                     res.send("Add comment success.")
                 }).catch((err) => res.status(500).send(err))
         }else{
-            res.status(400).send("fail to add comment")
+            res.status(400).json("fail to add comment")
         }
     }).catch((err) => res.status(500).send(err))
 }
@@ -103,9 +103,9 @@ controller.status = async (req, res) => {
 controller.commentlist = (req, res) => {
     const { commentpointer, id } = req.body;
     var setoffset = 0;
-    var setlimit = 2;
+    var setlimit = 3;
     if(commentpointer>0){
-        var setoffset = 2 + 1*(commentpointer-1);
+        var setoffset = 3 + (commentpointer-1);
         var setlimit = 1;
     }
     Comment.findAll({
