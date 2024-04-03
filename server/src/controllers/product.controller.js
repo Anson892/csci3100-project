@@ -87,7 +87,8 @@ controller.search = async (req, res) => {
       var setlimit = 5;
   }
   const resultlist = [];
-  const ignorelist = [];
+  console.log(setoffset)
+  console.log(setlimit)
   if(orderby=="avgrating"){
     await Comment.findAll({
       attributes: ['productId', [sequelize.fn('AVG', sequelize.col('rating')), 'avgrating']],
@@ -102,101 +103,41 @@ controller.search = async (req, res) => {
           price: {[Op.between]: [minprice, maxprice]}
         }
       }],
+      having: { 'avgrating': {[Op.between]: [minrating, maxrating]}},
       order: [['avgrating', order]],
       offset: setoffset,
       limit: setlimit
         }).then(async (data) => {
           data.forEach(element => {
-            resultlist.push(element);
-            ignorelist.push(element.productId);
+            resultlist.push(element.productId);
           });
-          if(data.length<setlimit){
-            const remainlimit = setlimit - data.length;
-            await Product.findAll({
-              attributes: ['id', 'name', 'category', 'price', 'discount'],
-              where: {
-                [Op.or]: [{name: {[Op.like]: name_key}},
-                    {id: {[Op.like]: name_key}}],
-                id: {[Op.notIn]: ignorelist},
-                category: {[Op.like]: category_key},
-                price: {[Op.between]: [minprice, maxprice]}
-              },
-              order: [['name', order]],
-              limit: remainlimit
-            }).then((data) => {
-              data.forEach(element => {
-                const result = {
-                  "productId": element.id,
-                  "avgrating": 0,
-                  "product": {
-                    "name": element.name,
-                    "category": element.category,
-                    "price": element.price,
-                    "discount": element.discount
-                  }
-                };
-                resultlist.push(result);
-              });
-              res.send(resultlist)
-            })
-          }else{
             res.send(resultlist)
-          }
         }).catch((err) => res.status(500).send(err))
     }else{
-      await Comment.findAll({
-        attributes: ['productId', [sequelize.fn('AVG', sequelize.col('rating')), 'avgrating']],
-        group: 'productId',
-        include: [{
-          model: Product,
-          attributes: ['name', 'category', 'price', 'discount'],
-          where:{
-            [Op.or]: [{name: {[Op.like]: name_key}},
-                    {id: {[Op.like]: name_key}}],
-            category: {[Op.like]: category_key},
-            price: {[Op.between]: [minprice, maxprice]}
-          }
-        }],
-        order: [[Product, 'price', order]]
-          }).then(async (data) => {
-            data.forEach(element => {
-              resultlist.push(element);
-              ignorelist.push(element.productId);
-            });
-            if(data.length<setlimit){
-              const remainlimit = setlimit - data.length;
-              await Product.findAll({
-                attributes: ['id', 'name', 'category', 'price', 'discount'],
-                where: {
-                  [Op.or]: [{name: {[Op.like]: name_key}},
-                    {id: {[Op.like]: name_key}}],
-                  id: {[Op.notIn]: ignorelist},
-                  category: {[Op.like]: category_key},
-                  price: {[Op.between]: [minprice, maxprice]}
-                },
-                order: [['price', order]],
-                limit: remainlimit
-              }).then((data) => {
-                data.forEach(element => {
-                  const result = {
-                    "productId": element.id,
-                    "avgrating": 0,
-                    "product": {
-                      "name": element.name,
-                      "category": element.category,
-                      "price": element.price,
-                      "discount": element.discount
-                    }
-                  };
-                  resultlist.push(result);
-                });
-                res.send(resultlist)
-              })
-            }else{
-              res.send(resultlist)
-            }
-          }).catch((err) => res.status(500).send(err))
-    }
+    await Comment.findAll({
+      attributes: ['productId', [sequelize.fn('AVG', sequelize.col('rating')), 'avgrating']],
+      group: 'productId',
+      include: [{
+        model: Product,
+        attributes: ['name', 'category', 'price', 'discount'],
+        where:{
+          [Op.or]: [{name: {[Op.like]: name_key}},
+                  {id: {[Op.like]: name_key}}],
+          category: {[Op.like]: category_key},
+          price: {[Op.between]: [minprice, maxprice]}
+        }
+      }],
+      having: { 'avgrating': {[Op.between]: [minrating, maxrating]}},
+      order: [[Product, 'price', order]],
+      offset: setoffset,
+      limit: setlimit
+        }).then(async (data) => {
+          data.forEach(element => {
+            resultlist.push(element.productId);
+          });
+            res.send(resultlist)
+        }).catch((err) => res.status(500).send(err))
+      }
 }
 
 //global recommand
