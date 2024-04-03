@@ -20,14 +20,44 @@ import { Link } from 'react-router-dom';
 
 
 const Recommendation = () => {
+    const [recommend0_id,setrecommend0_id] =useState(0);
+    const [recommend1_id,setrecommend1_id] =useState(0);
+    const [recommend2_id,setrecommend2_id] =useState(0);
+    const [recommend3_id,setrecommend3_id] =useState(0);
+    const [recommend4_id,setrecommend4_id] =useState(0);
+    const { productId } = useParams();
+
+    const url4 = "http://localhost:8080/api/recommend/product/"+productId
+        fetch (url4,{method : 'GET'})
+        .then((res) => {
+            return res.json();
+        })
+        .then( (response) =>{
+            var text = JSON.stringify(response)
+            var array1 = (JSON.parse(text))
+            setrecommend0_id(array1[0].productId);
+            setrecommend1_id(array1[1].productId);
+            setrecommend2_id(array1[2].productId);
+            setrecommend3_id(array1[3].productId);
+            setrecommend4_id(array1[4].productId);
+        })    
+
+    // useEffect (()=>{
+    //     console.log(recommend0_id);
+    //     console.log(recommend1_id);
+    //     console.log(recommend2_id);
+    //     console.log(recommend3_id);
+    //     console.log(recommend4_id);
+    // },[ recommend0_id ])
+
     return (
             <div className='RecommendationContainer'>
                 <p className='RecommendationText'>Recommendation</p>
-                <div><ProductCard/></div>
-                <div><ProductCard/></div>
-                <div><ProductCard/></div>
-                <div><ProductCard/></div>
-                <div><ProductCard/></div>
+                <div><ProductCard id = {recommend0_id} /></div>
+                <div><ProductCard id = {recommend1_id}/></div>
+                <div><ProductCard id = {recommend2_id}/></div>
+                <div><ProductCard id = {recommend3_id}/></div>
+                <div><ProductCard id = {recommend4_id}/></div>
             </div>
     )
 }
@@ -97,10 +127,6 @@ function formatFloat (source, position){
 }
 
 const CommentBox = ({username,star,content,index})=>{
-
-    console.log(username)
-    console.log(star)
-    console.log(content)
     return(
         <div className='Comment'>
             <p className='SmallCommentText'>{content}</p>

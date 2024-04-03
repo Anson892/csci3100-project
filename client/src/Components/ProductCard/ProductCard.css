@@ -27,8 +27,8 @@
 
 .ProductNameCard {
 position: relative;
-width: 125px;
-height: 24px;
+width: 305px;
+height: 18px;
 left: 0px;
 top: 0px;
 
@@ -97,3 +97,32 @@ text-transform: uppercase;
 color: #000000;
 
 }
+
+.ProductTagCard_oos{
+    position: absolute;
+    width: 7vw;
+    height: 15px;
+    right: 0px;
+    top: 8px;
+    background: #e87575;
+    display: flex;
+}
+
+.ProductTagCard_oos p{
+    position: relative;
+    width: 7vw;
+    height: 23px;
+    left: 0px;
+    top: -5px;
+    
+    font-family: 'Literata';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 24px;
+    text-align: center;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    
+    color: #000000;
+    }
