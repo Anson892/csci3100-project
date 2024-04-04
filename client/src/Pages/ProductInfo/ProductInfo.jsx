@@ -20,9 +20,9 @@ import { Link } from 'react-router-dom';
 
 
 const Recommendation = () => {
-    const [recommend0_id,setrecommend0_id] =useState(0);
-    const [recommend1_id,setrecommend1_id] =useState(0);
-    const [recommend2_id,setrecommend2_id] =useState(0);
+    const [recommend0_id,setrecommend0_id] =useState(-1);
+    const [recommend1_id,setrecommend1_id] =useState(-1);
+    const [recommend2_id,setrecommend2_id] =useState(-1);
     const [recommend3_id,setrecommend3_id] =useState(-1);
     const [recommend4_id,setrecommend4_id] =useState(-1);
     const { productId } = useParams();
