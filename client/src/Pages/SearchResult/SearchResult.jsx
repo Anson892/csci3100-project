@@ -33,32 +33,97 @@ export const SearchResult = () => {
 
     const keywords = searchParams.get('keywords');
 
-    const [dataSource, setDataSource] =useState(Array.from({length:15}))
+    const [itemsjs, setItemsJS] = useState([])
+    const [hasMore, setHasMore] = useState(true);
+    const [pointer, setpointer] = useState(0);
+
+    useEffect (() => {
+        const Searchurl = "http://localhost:8080/api/product/search"
+        fetch(Searchurl,{
+            method : 'POST',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                "searchpointer": pointer,
+                "name": "",
+                "category": "",
+                "orderby": "price",
+                "order": "DESC",
+                "minprice": 1,
+                "maxprice": 100000,
+                "minrating": 0,
+                "maxrating": 5
+            })
+        })
+        .then((res) => {
+            return res.json();
+        })
+        .then( (response) => {
+            var text = JSON.stringify(response)
+            var array1 = (JSON.parse(text))
+            setItemsJS (array1);
+            setpointer (pointer+1)
+            console.log(itemsjs)
+            if (array1.length < 15) setHasMore(false)
+        })
+
+    },[])
 
     const fetchMoreData = () =>{
         setTimeout(() => {
-            setDataSource(dataSource.concat(Array.from({length:5})))
+            const Searchurl = "http://localhost:8080/api/product/search"
+            fetch(Searchurl,{
+                method : 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    "searchpointer": pointer,
+                    "name": "",
+                    "category": "",
+                    "orderby": "price",
+                    "order": "DESC",
+                    "minprice": 1,
+                    "maxprice": 100000,
+                    "minrating": 0,
+                    "maxrating": 5
+                })
+            })
+            .then((res) => {
+                return res.json();
+            })
+            .then( (response) => {
+                var text = JSON.stringify(response)
+                var array1 = (JSON.parse(text))
+                setItemsJS (itemsjs.concat(array1));
+                console.log(itemsjs)
+                setpointer (pointer+1)  
+                console.log( pointer )
+                if (array1.length < 5) setHasMore(false)
+            })
         }, 1500);
     }
-
-    const [hasMore, setHasMore] = useState(true);
 
     return (
         <div >
         <Navbar/>
         <InfiniteScroll 
             className='PageContainer' 
-            dataLength={dataSource.length} 
+            dataLength={itemsjs.length} 
             next={fetchMoreData} 
             hasMore={hasMore}
             loader={<h4>Loading...</h4>}
+            endMessage={<h4>End of Search Result</h4>}
         >
             <Topic/>
             <SortOrder/>
                 <div className="ResultContainer">
-                    {dataSource.map((item,index)=>{
+                    {itemsjs.map((itemsjs,index)=>{
                         return (
-                            <ProductCard/>
+                            <div key= {itemsjs.id}>
+                                <ProductCard id = {itemsjs} />
+                            </div>
                             )
                         })}
                 </div>
