@@ -205,6 +205,7 @@ controller.update = async (req, res) => {
     .catch((err) => res.status(500).send(err));
 };
 
+// Delete an order entry: DELETE /api/order/delete/:orderID
 controller.delete = async (req, res) => {
   Order.findOne({
     where: {
@@ -213,11 +214,13 @@ controller.delete = async (req, res) => {
   })
     .then((data) => {
       data.destroy().then(() => {
-        res.status(204);
+        res.status(200).json({
+          message: "Order deleted successfully!",
+        });
         console.log("deleted!");
       });
     })
-    .catch((err) => res.status(500).send(err));
+    .catch((err) => res.status(500).json({ error: err.message }));
 };
 /*
 controller.deleteAll = async (req, res) => {
