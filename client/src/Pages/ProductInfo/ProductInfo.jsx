@@ -39,10 +39,8 @@ const Recommendation = () => {
             setrecommend0_id(array1[0].productId);
             setrecommend1_id(array1[1].productId);
             setrecommend2_id(array1[2].productId);
-            if (array1[3].productId!='') setrecommend3_id(array1[3].productId);
-            if (array1[3].productId!='') setrecommend4_id(array1[4].productId);
-
-            console.log(array1[3].productId)
+            if (array1[3]!=undefined) setrecommend3_id(array1[3].productId);
+            if (array1[4]!=undefined) setrecommend4_id(array1[4].productId);
         })   
     },[]) 
 
