@@ -8,6 +8,14 @@ const User = db.User;
 const Op = db.Sequelize.Op;
 const controller = {};
 
+const shuffle = (array) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * i);
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+}
+
+
 const findBestRatedProducts = async (category, ignorelist, limit) => {
   where_clause = { id: { [Op.notIn]: ignorelist } };
   // if category is not null, add category to where clause
@@ -86,6 +94,7 @@ controller.getRecommend = async (req, res) => {
       });
     }
 
+    shuffle(resultlist);
     // send the result list
     res.status(200).json(resultlist);
   } catch (err) {
@@ -171,6 +180,7 @@ controller.getUserRecommend = async (req, res) => {
       });
     }
 
+    shuffle(resultlist);
     // send the result list
     res.status(200).json(resultlist);
   } catch (err) {
@@ -229,13 +239,14 @@ controller.relatedProduct = async (req, res) => {
     // fill the rest with the random products
     if (resultlist.length < 5) {
       const remainlimit = 5 - resultlist.length;
-      const randomProduct = await findRandomProducts(ignorelist, remainlimit);
+      const randomProduct = await findRandomProducts(null, ignorelist, remainlimit);
       randomProduct.forEach((element) => {
         resultlist.push({ productId: element.id });
         ignorelist.push(element.id);
       });
     }
 
+    shuffle(resultlist);
     // send the result list
     res.status(200).json(resultlist);
   } catch (err) {
