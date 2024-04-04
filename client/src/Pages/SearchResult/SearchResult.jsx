@@ -7,6 +7,7 @@ import { TopButton } from '../../Components/TopButton/TopButton'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { DropDownMenu } from '../../Components/Forms/DropDownMenu/DropDownMenu';
 
+
 const  Topic = () => {
     return(
         <div className = 'TopicContainer'>
@@ -15,24 +16,30 @@ const  Topic = () => {
     )
 }
 
-const SortOrder = () => {
-    const [Test, setTest]=useState();
-
+const SortOrder = ({set}) => {
     return(
         <div>
             <p className='SortedByText'>Sorted By</p>
             <div className='SortByContainer'>
-                <DropDownMenu items={["Highest Rating", "test1", "test2", "test3"]} initial={0} setFucn={setTest}/>
+                <DropDownMenu items={["Highest Rating", "Lowest Rating", "Highest Price", "Lowest Price"]} initial={0} setFucn={set}/>
             </div>
         </div>
     )
 }
 
+
+
 export const SearchResult = () => {
     const [searchParams, setSearchParams] = useSearchParams();
-
+    const [orderByfetch,setOrderByfetch] = useState("avgrating")
+    const [orderfetch,setOrderfetch] = useState("DESC")
     const keywords = searchParams.get('keywords');
-
+    const status = searchParams.get('status');
+    const category = searchParams.get('category')
+    const minPrice = searchParams.get('min_price')
+    const maxPrice = searchParams.get('max_price')
+    const minRating = searchParams.get('min_rating')
+    const maxRating = searchParams.get('max_rating')
     const [itemsjs, setItemsJS] = useState([])
     const [hasMore, setHasMore] = useState(true);
     const [pointer, setpointer] = useState(0);
@@ -46,14 +53,14 @@ export const SearchResult = () => {
             },
             body: JSON.stringify({
                 "searchpointer": pointer,
-                "name": "",
-                "category": "",
-                "orderby": "price",
-                "order": "DESC",
-                "minprice": 1,
-                "maxprice": 100000,
-                "minrating": 0,
-                "maxrating": 5
+                "name": keywords,
+                "category": "", //! to be modified
+                "orderby": orderByfetch,
+                "order": orderfetch,
+                "minprice": +minPrice,
+                "maxprice": +maxPrice,
+                "minrating": +minRating,
+                "maxrating": +maxRating
             })
         })
         .then((res) => {
@@ -64,11 +71,12 @@ export const SearchResult = () => {
             var array1 = (JSON.parse(text))
             setItemsJS (array1);
             setpointer (pointer+1)
-            console.log(itemsjs)
             if (array1.length < 15) setHasMore(false)
+
+            console.log(array1)
         })
 
-    },[])
+    },[orderByfetch,orderfetch])
 
     const fetchMoreData = () =>{
         setTimeout(() => {
@@ -80,14 +88,14 @@ export const SearchResult = () => {
                 },
                 body: JSON.stringify({
                     "searchpointer": pointer,
-                    "name": "",
+                    "name": keywords,
                     "category": "",
-                    "orderby": "price",
-                    "order": "DESC",
-                    "minprice": 1,
-                    "maxprice": 100000,
-                    "minrating": 0,
-                    "maxrating": 5
+                    "orderby": orderByfetch,
+                    "order": orderfetch,
+                    "minprice": +minPrice,
+                    "maxprice": +maxPrice,
+                    "minrating": +minRating,
+                    "maxrating": +maxRating
                 })
             })
             .then((res) => {
@@ -96,14 +104,52 @@ export const SearchResult = () => {
             .then( (response) => {
                 var text = JSON.stringify(response)
                 var array1 = (JSON.parse(text))
-                setItemsJS (itemsjs.concat(array1));
-                console.log(itemsjs)
+                setItemsJS (itemsjs.concat(array1));    
                 setpointer (pointer+1)  
-                console.log( pointer )
                 if (array1.length < 5) setHasMore(false)
             })
         }, 1500);
     }
+    const [option,setoption] = useState()
+    
+    useEffect(()=>{
+        console.log(option)
+        switch(option){
+            case 'Highest Rating':
+            {
+                setOrderfetch ( "DESC")
+                setOrderByfetch ("avgrating")
+            }
+            break;
+            case 'Lowest Rating':
+            {
+                setOrderfetch ( "ASC")
+                setOrderByfetch ("avgrating")
+            }
+            break;
+            case 'Highest Price':
+            {
+                setOrderfetch ( "DESC")
+                setOrderByfetch ("price");
+            }
+            break;
+            case 'Lowest Price':
+            {
+                setOrderfetch ( "ASC")
+                setOrderByfetch ("price")
+            }
+            break;
+            default:
+            break;
+        }
+        setpointer(0);
+    },[option])
+
+    useEffect(()=>{
+        console.log(orderByfetch)
+        console.log(orderfetch)
+    },[orderByfetch,orderfetch])
+
 
     return (
         <div >
@@ -117,7 +163,7 @@ export const SearchResult = () => {
             endMessage={<h4>End of Search Result</h4>}
         >
             <Topic/>
-            <SortOrder/>
+            <SortOrder set = {setoption}/>
                 <div className="ResultContainer">
                     {itemsjs.map((itemsjs,index)=>{
                         return (
