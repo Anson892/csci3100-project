@@ -10,7 +10,7 @@ module.exports = app => {
     router.get('/name/:method', orders.findbymethod)
     router.get('/id/:orderID', orders.findbyid)
     router.put('/update', orders.update);
-    router.delete('/delete/:orderID', orders.delete);//delete not work so use get first
+    router.delete('/delete/:orderID', orders.delete);
     //router.delete('/deleteall', controller.deleteAll);
     app.use('/api/order', router);
 };

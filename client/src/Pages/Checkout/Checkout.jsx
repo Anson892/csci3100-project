@@ -15,8 +15,28 @@ export const Checkout = () => {
   const [ExpireDate, setExpireDate] = useState('');
   const [CVC, setCVC] = useState('');
   const [PostalCode, setPostalCode] = useState('');
+  const [orderId, setorderId] = useState(1) // !!!!!! To be set by global or useparams !!!!!!
   const handleSubmit = () => {
     if ((Address != '')&&(Receiver != '')&&(CardNum != '')&&(ExpireDate != '')&&(CVC != '')&&(PostalCode != '')){
+      const CheckoutUrl = "http://localhost:8080/api/order/placeorder"
+      fetch(CheckoutUrl,{
+                method : 'PUT',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  "orderId": orderId,
+                  "paymentMethod": "Credit Card"
+                })
+      })
+      .then((res)=>{
+        return res.json()
+      })
+      .then((response)=>{
+        console.log(JSON.stringify(response))
+      })
+
+
       alert ("Ordered!")
       navigate({
         pathname: '/',
@@ -27,10 +47,25 @@ export const Checkout = () => {
     }
   }
 
+  const handleCancelorder = () => {
+    const cancelurl = "http://localhost:8080/api/order/delete/"+orderId
+    fetch (cancelurl,{
+      method : "DELETE"
+    })
+    .then((res)=>{
+      return res.json
+    })
+    .then((response)=>{
+      console.log(JSON.stringify(response.message))
+    })
+    
+
+    {window.scrollTo({top: (0, 0), behavior: 'instant'})}
+  }
 
   return (
     <div>
-      <Link to ={'/shopping-cart'} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
+      <Link to ={'/shopping-cart'} onClick={handleCancelorder}>
         <p className='CancelOrderText'>《Cancel Order</p>
       </Link>
       <div className='DeliveryContainer'>

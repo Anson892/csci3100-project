@@ -20,14 +20,15 @@ import { Link } from 'react-router-dom';
 
 
 const Recommendation = () => {
-    const [recommend0_id,setrecommend0_id] =useState(0);
-    const [recommend1_id,setrecommend1_id] =useState(0);
-    const [recommend2_id,setrecommend2_id] =useState(0);
-    const [recommend3_id,setrecommend3_id] =useState(0);
-    const [recommend4_id,setrecommend4_id] =useState(0);
+    const [recommend0_id,setrecommend0_id] =useState(-1);
+    const [recommend1_id,setrecommend1_id] =useState(-1);
+    const [recommend2_id,setrecommend2_id] =useState(-1);
+    const [recommend3_id,setrecommend3_id] =useState(-1);
+    const [recommend4_id,setrecommend4_id] =useState(-1);
     const { productId } = useParams();
 
-    const url4 = "http://localhost:8080/api/recommend/product/"+productId
+    useEffect (() => {
+        const url4 = "http://localhost:8080/api/recommend/product/"+productId
         fetch (url4,{method : 'GET'})
         .then((res) => {
             return res.json();
@@ -38,9 +39,10 @@ const Recommendation = () => {
             setrecommend0_id(array1[0].productId);
             setrecommend1_id(array1[1].productId);
             setrecommend2_id(array1[2].productId);
-            setrecommend3_id(array1[3].productId);
-            setrecommend4_id(array1[4].productId);
-        })    
+            if (array1[3]!=undefined) setrecommend3_id(array1[3].productId);
+            if (array1[4]!=undefined) setrecommend4_id(array1[4].productId);
+        })   
+    },[]) 
 
     // useEffect (()=>{
     //     console.log(recommend0_id);

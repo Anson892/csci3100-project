@@ -35,7 +35,7 @@ export const ProductCard = ( {id} ) => {
 
     useEffect( () =>{
 
-    if (id != 0) {
+    if (id != -1) {
         fetch(url1,{method : 'GET'})
         .then((res) => {
             return res.json();
@@ -51,25 +51,30 @@ export const ProductCard = ( {id} ) => {
 
 
     return(
-        <motion.div {...cardAnim} className='ProductCardContainer'>
-            <Link to={'/product/'+ id } onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
-                <div>
-                <img src={ProductIcon} alt=""/>
-                </div>
-            </Link>
-            <div className='ProductInfoContainer'>
-                <div>
-                <p className='ProductNameCard'>{FetchedProductName}</p>
-                <p className='ProductPrice'>${FetchedProductPrice*FetchedProductDiscount}</p>
-                </div>
-                { (FetchedProductstock == 0 )
-                    ? (<div className='ProductTagCard_oos'> <p className="onsale"> Out of Stock</p> </div> )
-                    :   [   ( FetchedProductDiscount < 1)
-                            ?<div className='ProductTagCard'> <p className="onsale"> On Sale</p> </div>
-                            : <div> </div>
-                        ]
-                }
-            </div>
-        </motion.div>
+    <div>
+        { (id != -1) 
+            ?   [ <motion.div {...cardAnim} className='ProductCardContainer'>
+                    <Link to={'/product/'+ id } onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
+                        <div>
+                        <img src={ProductIcon} alt=""/>
+                        </div>
+                    </Link>
+                    <div className='ProductInfoContainer'>
+                        <div>
+                        <p className='ProductNameCard'>{FetchedProductName}</p>
+                        <p className='ProductPrice'>${FetchedProductPrice*FetchedProductDiscount}</p>
+                        </div>
+                        { (FetchedProductstock == 0 )
+                            ? (<div className='ProductTagCard_oos'> <p className="onsale"> Out of Stock</p> </div> )
+                            :   [   ( FetchedProductDiscount < 1)
+                                    ?<div className='ProductTagCard'> <p className="onsale"> On Sale</p> </div>
+                                    : <div> </div>
+                                ]
+                        }
+                    </div>
+                </motion.div> ]
+            : <div></div>
+        }
+    </div>
     )
 }
