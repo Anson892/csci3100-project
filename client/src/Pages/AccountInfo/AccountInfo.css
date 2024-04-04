@@ -58,7 +58,7 @@
 .profile-details{
     display: grid;
     grid-template-columns: 14vw 25vw;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr 4fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 4fr;
     font-size: 2vh;
     row-gap: 12px;
 }
