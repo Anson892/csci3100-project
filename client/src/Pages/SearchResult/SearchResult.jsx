@@ -73,8 +73,6 @@ export const SearchResult = () => {
             setItemsJS (array1);
             setpointer (pointer+1)
             if (array1.length < 15) setHasMore(false)
-
-            console.log(array1)
         })
 
     },[orderByfetch,orderfetch])
@@ -108,8 +106,9 @@ export const SearchResult = () => {
                 setItemsJS (itemsjs.concat(array1));    
                 setpointer (pointer+1)  
                 if (array1.length < 5) setHasMore(false)
+                console.log(itemsjs)
             })
-        }, 1500);
+        }, 500);
     }
     const [option,setoption] = useState()
     

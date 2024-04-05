@@ -4,10 +4,6 @@ import { Navbar } from '../../Components/Navbar/Navbar';
 import { useParams } from 'react-router-dom';
 import { ProductCard } from '../../Components/ProductCard/ProductCard';
 import ProductImage from '../../Assets/Images/ProductImage.jpg'
-import ProductImage1 from '../../Assets/Images/ProductImage1.jpg'
-import ProductImage2 from '../../Assets/Images/ProductImage2.jpg'
-import ProductImage3 from '../../Assets/Images/ProductImage3.jpg'
-import ProductImage4 from '../../Assets/Images/ProductImage4.jpg'
 import add_icon from '../../Assets/Icons/add-icon.svg'
 import minus_icon from '../../Assets/Icons/minus-icon.svg'
 import star_filled from '../../Assets/Icons/star_filled.svg'
@@ -16,6 +12,7 @@ import small_star_filled from '../../Assets/Icons/small_star_filled.svg'
 import small_star_empty from '../../Assets/Icons/small_star_empty.svg'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Link } from 'react-router-dom';
+import { useContext,createContext } from 'react';
 
 
 
@@ -36,9 +33,9 @@ const Recommendation = () => {
         .then( (response) =>{
             var text = JSON.stringify(response)
             var array1 = (JSON.parse(text))
-            setrecommend0_id(array1[0].productId);
-            setrecommend1_id(array1[1].productId);
-            setrecommend2_id(array1[2].productId);
+            if (array1[0]!=undefined) setrecommend0_id(array1[0].productId);
+            if (array1[1]!=undefined) setrecommend1_id(array1[1].productId);
+            if (array1[2]!=undefined) setrecommend2_id(array1[2].productId);
             if (array1[3]!=undefined) setrecommend3_id(array1[3].productId);
             if (array1[4]!=undefined) setrecommend4_id(array1[4].productId);
         })   
@@ -347,36 +344,74 @@ const Product = ({name,price,discount,stock,description,id}) => {
     const InfoButton_clicked = () =>{
         setRightContent(true);
     }
-
     const CommentButton_clicked = () =>{
         setRightContent(false);
     }
-    const [ProductImageSelected, setProductImageSelected]=useState(ProductImage);
+    const [photo0,setPhoto0] = useState('-1')
+    const [photo1,setPhoto1] = useState('-1')
+    const [photo2,setPhoto2] = useState('-1')
+    const [photo3,setPhoto3] = useState('-1')
+    const [photo4,setPhoto4] = useState('-1')
+
     const photo_clicked = ( ) => {
-        setProductImageSelected(ProductImage);
+        setProductImageSelected(photo0);
     };
     const photo_clicked1 = ( ) => {
-        setProductImageSelected(ProductImage1);
+        setProductImageSelected(photo1);
     };
     const photo_clicked2 = ( ) => {
-        setProductImageSelected(ProductImage2);
+        setProductImageSelected(photo2);
     };
     const photo_clicked3 = ( ) => {
-        setProductImageSelected(ProductImage3);
+        setProductImageSelected(photo3);
     };
     const photo_clicked4 = ( ) => {
-        setProductImageSelected(ProductImage4);
+        setProductImageSelected(photo4);
     };
+
+    let k;
+    const { productId } = useParams();
+    const [ProductImageSelected, setProductImageSelected]=useState(photo0);
+    useEffect(()=>{
+        const url1 = 'http://localhost:8080/api/product/'+ productId;
+        k = fetch(url1,{method : 'GET'})
+        .then((res) => {
+            return res.json();
+        })
+        .then( (response) => {
+            if(response.data.product_images[0] != undefined) setPhoto0('http://localhost:8080/images/'+ (response.data.product_images[0].path));
+            if(response.data.product_images[1] != undefined) setPhoto1('http://localhost:8080/images/'+ (response.data.product_images[1].path));
+            if(response.data.product_images[2] != undefined) setPhoto2('http://localhost:8080/images/'+ (response.data.product_images[2].path));
+            if(response.data.product_images[3] != undefined) setPhoto3('http://localhost:8080/images/'+ (response.data.product_images[3].path));
+            if(response.data.product_images[4] != undefined) setPhoto4('http://localhost:8080/images/'+ (response.data.product_images[4].path));
+            if(response.data.product_images[0] != undefined) setProductImageSelected('http://localhost:8080/images/'+ (response.data.product_images[0].path));
+        })
+    },[])
 
     return(
         <div className='ProductContainer'>
             <div className='ImgContainer'>
             <div className='ImgListContainer'>
-                <button onClick={photo_clicked} ><img src={ProductImage} alt=''></img> </button>
-                <button onClick={photo_clicked1} ><img src={ProductImage1} alt=''></img> </button>
-                <button onClick={photo_clicked2} ><img src={ProductImage2} alt=''></img> </button>
-                <button onClick={photo_clicked3} ><img src={ProductImage3} alt=''></img> </button>
-                <button onClick={photo_clicked4} ><img src={ProductImage4} alt=''></img> </button>
+                { (photo0 != '-1')
+                    ? <button onClick={photo_clicked} ><img src={photo0} alt=''></img> </button>
+                    : <div></div>
+                }
+                { (photo1 != '-1')
+                    ? <button onClick={photo_clicked1} ><img src={photo1} alt=''></img> </button>
+                    : <div></div>
+                }
+                { (photo2 != '-1')
+                    ? <button onClick={photo_clicked2} ><img src={photo2} alt=''></img> </button>
+                    : <div></div>
+                }
+                { (photo3 != '-1')
+                    ? <button onClick={photo_clicked3} ><img src={photo3} alt=''></img> </button>
+                    : <div></div>
+                }
+                { (photo4 != '-1')
+                    ? <button onClick={photo_clicked4} ><img src={photo4} alt=''></img> </button>
+                    : <div></div>
+                }
             </div>
                 <img src={ProductImageSelected} alt=''></img>
             </div>
@@ -404,6 +439,9 @@ export const ProductInfo = () => {
     const [FetchedProductstock,SetFetchedProductstock] =useState([])
     const [FetchedProductdescription,SetFetchedProductdescription] =useState([])
     const url1 = 'http://localhost:8080/api/product/'+ productId;
+
+    const [UserAuth,SetAuth] = useState ( localStorage.getItem("UserAuth") )
+    console.log (JSON.stringify(UserAuth))
 
     fetch(url1,{method : 'GET'})
         .then((res) => {

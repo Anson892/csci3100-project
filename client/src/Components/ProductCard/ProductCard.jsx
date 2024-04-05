@@ -32,6 +32,7 @@ export const ProductCard = ( {id} ) => {
     const [FetchedProductPrice,SetFetchedProductPrice] =useState([])
     const [FetchedProductDiscount,SetFetchedProductDiscount] =useState([])
     const [FetchedProductstock,SetFetchedProductstock] =useState(0)
+    const [photo0,setPhoto0] = useState('-1')
 
     useEffect( () =>{
 
@@ -45,6 +46,7 @@ export const ProductCard = ( {id} ) => {
             SetFetchedProductPrice(response.data.price);
             SetFetchedProductDiscount(response.data.discount);
             SetFetchedProductstock(response.data.stock);
+            if(response.data.product_images[0] != undefined) setPhoto0('http://localhost:8080/images/'+ (response.data.product_images[0].path));
         })
     }
     },[id])
@@ -56,7 +58,10 @@ export const ProductCard = ( {id} ) => {
             ?   [ <motion.div {...cardAnim} className='ProductCardContainer'>
                     <Link to={'/product/'+ id } onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
                         <div>
-                        <img src={ProductIcon} alt=""/>
+                        {   (photo0 != -1)
+                            ? <img src={photo0} alt=""/>
+                            : <img src={ProductIcon} alt=""/>
+                        }
                         </div>
                     </Link>
                     <div className='ProductInfoContainer'>
