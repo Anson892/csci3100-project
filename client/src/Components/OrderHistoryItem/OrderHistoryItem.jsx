@@ -82,7 +82,7 @@ const Rating = () => {
                     <label
                         class="star"
                         onClick={() => setRating(ratingValue)}
-                        onMouseEnter={() => {console.log(ratingValue);setHover(ratingValue)}}
+                        onMouseEnter={() => setHover(ratingValue)}
                         onMouseLeave={() => setHover(null)}
                     >
                         <input class="star-radio" type="radio" value={ratingValue} />

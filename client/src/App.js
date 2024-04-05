@@ -1,5 +1,6 @@
 import './App.css';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { AuthContext } from './Context/AuthContext';
 import { AnimatePresence } from 'framer-motion';
 import { Home } from './Pages/Home/Home';
 import { Login } from './Pages/Login/Login';
@@ -13,6 +14,7 @@ import { SearchResult } from './Pages/SearchResult/SearchResult';
 import { ProductInfo } from './Pages/ProductInfo/ProductInfo';
 import { NotFound } from './Pages/NotFound/NotFound';
 import { PageTransition } from './Components/Animations/PageTransition/PageTransition';
+import { useContext } from 'react';
 
 
 function App() {
@@ -20,21 +22,58 @@ function App() {
     const PageTransitionRoutes = () => {
 
         const location = useLocation();
+        const { userAuth } = useContext(AuthContext)
+        const userType = userAuth ? userAuth.userType : null
 
         return (
             <AnimatePresence mode='wait'>
                 <Routes location={location} key={location.pathname}>
+                    
+                    {/* visible to all users, does not require authentification */}
                     <Route path='/' exact element={<PageTransition><Home/></PageTransition>}/>
-                    <Route path='/login' element={<PageTransition><Login/></PageTransition>}/>
-                    <Route path='/register' element={<PageTransition><Register/></PageTransition>}/>
-                    <Route path='/shopping-cart' element={<PageTransition><ShoppingCart/></PageTransition>}/>
-                    <Route path='/checkout' element={<PageTransition><Checkout/></PageTransition>}/>
-                    <Route path='/account' element={<PageTransition><AccountInfo/></PageTransition>}/>
                     <Route path='/product/:productId' element={<PageTransition><ProductInfo/></PageTransition>}/>
                     <Route path='/search' element={<PageTransition><SearchResult/></PageTransition>}/>
-                    <Route path='/admin/user' element={<PageTransition><AdminUser/></PageTransition>}/>
-                    <Route path='/admin/product' element={<PageTransition><AdminProduct/></PageTransition>}/>
+
+                    {/* page not found */}
                     <Route path='*' element={<PageTransition><NotFound/></PageTransition>}/>
+
+                    {/* redirect customer to home page, admin to admin user panel after successful login */}
+                    <Route path='/login' element={
+                        userType == "admin" ? <PageTransition><AdminUser/></PageTransition> :
+                        userType == "customer" ? <PageTransition><Home/></PageTransition> :
+                        <PageTransition><Login/></PageTransition>}/>
+                    
+                    {/* redirect customer to home page, admin to admin user panel after successful login */}
+                    <Route path='/register' element={
+                        userType == "admin" ? <PageTransition><AdminUser/></PageTransition> :
+                        userType == "customer" ? <PageTransition><Home/></PageTransition> :
+                        <PageTransition><Register/></PageTransition>}/>
+
+                    {/* redirect customer to login if not loggin in */}
+                    <Route path='/shopping-cart' element={
+                        userType == "customer" ? <PageTransition><ShoppingCart/></PageTransition>:
+                        <PageTransition><Navigate to='/login'/></PageTransition>}/>
+
+                    {/* redirect customer to login if not loggin in */}
+                    <Route path='/checkout' element={
+                        userType == "customer" ? <PageTransition><Checkout/></PageTransition>:
+                        <PageTransition><Navigate to='/login'/></PageTransition>}/>
+                    
+                    {/*  redirect customer to login if not loggin in */}
+                    <Route path='/account' element={
+                        userType == "customer" ? <PageTransition><AccountInfo/></PageTransition>:
+                        <PageTransition><Navigate to='/login'/></PageTransition>}/>
+
+                    {/*  redirect admin to login if not loggin in */}
+                    <Route path='/admin/user' element={
+                        userType == "admin" ? <PageTransition><AdminUser/></PageTransition>: 
+                        <PageTransition><Navigate to='/login'/></PageTransition>}/>
+                    
+                    {/*  redirect admin to login if not loggin in */}
+                    <Route path='/admin/product' element={
+                        userType == "admin" ? <PageTransition><AdminProduct/></PageTransition>:
+                        <PageTransition><Navigate to='/login'/></PageTransition>}/>
+
                 </Routes>
             </AnimatePresence>
         )

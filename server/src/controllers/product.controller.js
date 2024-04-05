@@ -40,23 +40,11 @@ controller.create = async (req, res, next) => {
   // Add images to the product
   if (images) {
     for (const image of images) {
-      const path =
-        __basedir + "/resources/static/assets/uploads/" + image.filename;
-
-      // move image to uploads folder
-      fs.rename(image.path, path, (err) => {
-        if (err) {
-          res.status(500).json({
-            error: "Could not move the image to the uploads folder.",
-          });
-        }
-      });
-
       // create a product image record
       await ProductImage.create({
         productId: product.id,
         name: image.originalname,
-        path: path,
+        path: image.filename,
       }).catch((err) => {
         res.status(500).json({
           error:

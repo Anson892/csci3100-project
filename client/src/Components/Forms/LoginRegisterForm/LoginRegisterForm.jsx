@@ -1,36 +1,57 @@
-import React, { useState} from 'react'
+import React, { useState, useContext } from 'react'
 import { Link } from 'react-router-dom';
 import './LoginRegisterForm.css'
+import { AuthContext } from '../../../Context/AuthContext';
 
-export const LoginRegisterForm = ({title, redirectMessage, redirectPage, action, submitBtnMessage}) => {
+
+export const LoginRegisterForm = ({apiEndPoint, title, redirectMessage, redirectPage, action, submitBtnMessage}) => {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const { dispatch } = useContext(AuthContext)
 
-  const handleSubmit = (e) => {
+  const login = async (e) => {
     e.preventDefault();
-    // fetch API -- POST
-    // verification
+
+    const url = 'http://localhost:8080/api/auth/' + apiEndPoint // "login" or "register"
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({
+        "username": username,
+        "password": password
+      })
+    })
+    const data = await res.json()
+    
+    if (res.ok) {
+      localStorage.setItem('userAuth', JSON.stringify(data))  // store username, usertype & JWT token in browser
+      dispatch({type: 'LOGIN', userAuth: data})
+    } 
+    else {
+      setError(data.message)
+    }
   }
 
   return (
-    <form class="loginRegisterForm" onSubmit={handleSubmit}>
-      <p class="title">{title}</p>
-      <div class="inputContainer">
+    <form className="loginRegisterForm" onSubmit={login}>
+      <p className="title">{title}</p>
+      <div className="inputContainer">
         <input type="text" value={username} onChange={(e)=>setUsername(e.target.value)} required/>
         <label>Username</label>
       </div>
-      <div class="inputContainer">
-        <input type="text" value={password} onChange={(e)=>setPassword(e.target.value)} required/>
+      <div className="inputContainer">
+        <input type="password" value={password} onChange={(e)=>setPassword(e.target.value)} required/>
         <label>Password</label>
       </div>
-      <div class="redirectMessage">
+      <div className="redirectMessage">
         {redirectMessage} &nbsp;
-        <Link class="redirectLink" to={`${redirectPage}`} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>{action}</Link>
+        <Link className="redirectLink" to={`${redirectPage}`} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>{action}</Link>
       </div>
-      <Link to={'/'} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
-        <button class="submitBtn" type="submit">{submitBtnMessage}</button>
-      </Link>
+      {/* show error message on unsuccessful login*/}
+      {error&&<div>{error}</div>}
+      <button className="submitBtn" type="submit">{submitBtnMessage}</button>
     </form>
   )
 }
