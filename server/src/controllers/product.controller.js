@@ -87,57 +87,32 @@ controller.search = async (req, res) => {
       var setlimit = 5;
   }
   const resultlist = [];
-  console.log(setoffset)
-  console.log(setlimit)
-  if(orderby=="avgrating"){
-    await Comment.findAll({
-      attributes: ['productId', [sequelize.fn('AVG', sequelize.col('rating')), 'avgrating']],
-      group: 'productId',
-      include: [{
-        model: Product,
-        attributes: ['name', 'category', 'price', 'discount'],
-        where:{
-          [Op.or]: [{name: {[Op.like]: name_key}},
-                    {id: {[Op.like]: name_key}}],
-          category: {[Op.like]: category_key},
-          price: {[Op.between]: [minprice, maxprice]}
-        }
-      }],
-      having: { 'avgrating': {[Op.between]: [minrating, maxrating]}},
-      order: [['avgrating', order]],
-      offset: setoffset,
-      limit: setlimit
-        }).then(async (data) => {
-          data.forEach(element => {
-            resultlist.push(element.productId);
-          });
-            res.send(resultlist)
-        }).catch((err) => res.status(500).send(err))
-    }else{
-    await Comment.findAll({
-      attributes: ['productId', [sequelize.fn('AVG', sequelize.col('rating')), 'avgrating']],
-      group: 'productId',
-      include: [{
-        model: Product,
-        attributes: ['name', 'category', 'price', 'discount'],
-        where:{
-          [Op.or]: [{name: {[Op.like]: name_key}},
-                  {id: {[Op.like]: name_key}}],
-          category: {[Op.like]: category_key},
-          price: {[Op.between]: [minprice, maxprice]}
-        }
-      }],
-      having: { 'avgrating': {[Op.between]: [minrating, maxrating]}},
-      order: [[Product, 'price', order]],
-      offset: setoffset,
-      limit: setlimit
-        }).then(async (data) => {
-          data.forEach(element => {
-            resultlist.push(element.productId);
-          });
-            res.send(resultlist)
-        }).catch((err) => res.status(500).send(err))
-      }
+  const search = await Product.findAll({
+    attributes: [
+      'id', 
+      'price',
+      [sequelize.literal(`(
+        SELECT COALESCE(AVG(rating), 0.0)
+        FROM Comments
+        WHERE
+            productId = Product.id
+      )`), 'avgrating']
+  ],
+    where:{
+      [Op.or]: [{name: {[Op.like]: name_key}},
+                {id: {[Op.like]: name_key}}],
+      category: {[Op.like]: category_key},
+      price: {[Op.between]: [minprice, maxprice]},
+    },
+    having: { 'avgrating': {[Op.between]: [minrating, maxrating]}},
+    offset: setoffset,
+    limit: setlimit,
+    order: [[orderby, order]]
+  })
+  search.forEach(element => {
+    resultlist.push(element.id)
+  })
+  res.send(resultlist)
 }
 
 
