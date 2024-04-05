@@ -42,7 +42,7 @@ export const LoginRegisterForm = ({apiEndPoint, title, redirectMessage, redirect
         <label>Username</label>
       </div>
       <div className="inputContainer">
-        <input type="text" value={password} onChange={(e)=>setPassword(e.target.value)} required/>
+        <input type="password" value={password} onChange={(e)=>setPassword(e.target.value)} required/>
         <label>Password</label>
       </div>
       <div className="redirectMessage">
