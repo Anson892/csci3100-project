@@ -12,7 +12,7 @@ const fileFilter = (req, file, cb) => {
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__basedir, '..', 'client', 'src', 'Assets', 'Images'));
+    cb(null, __imageDir);
   },
   filename: (req, file, cb) => {
     cb(null, `${Date.now()}-product-${file.originalname}`);

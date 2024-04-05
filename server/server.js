@@ -1,15 +1,19 @@
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 const corsOptions = {
   origin: "http://localhost:3000"
 };
 
 const app = express();
-global.__basedir = __dirname;
+global.__imageDir = path.join(__dirname, '..', 'client/src/Assets/Images');
 
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+
+// static
+app.use('/images', express.static(__imageDir));
 
 // connecting to the database
 const db = require("./src/models");
