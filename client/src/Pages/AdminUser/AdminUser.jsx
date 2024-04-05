@@ -17,32 +17,6 @@ export const AdminUser = () => {
         dispatch({type:'LOGOUT'})
     }
 
-    const [dataSource, setDataSource] = useState(
-        Array(10).fill({
-            username: "ethan_smith",
-            firstName: "Ethan", 
-            lastName: "Smith",
-            phoneNumber: "12345678",
-            address: "Room 3, 26 Floor, Random Building, Random Street, Random Town, Random City, Random Country "
-        })
-    )
-
-    const fetchMoreData = () => {
-        setTimeout(() => {
-            setDataSource(dataSource.concat(
-                Array(10).fill({
-                    username: "ethan_smith",
-                    firstName: "Ethan", 
-                    lastName: "Smith",
-                    phoneNumber: "12345678",
-                    address: "Room 3, 26 Floor, Random Building, Random Street, Random Town, Random City, Random Country "
-                })
-            ))
-        }, 1500);
-    }
-
-    const [hasMore, setHasMore] = useState(true)
-
     const [isShowAddUserForm, setIsShowAddUserForm] = useState(false)
 
     const navigate = useNavigate();

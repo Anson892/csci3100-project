@@ -44,18 +44,17 @@
         min-height: 100vh;
         background-color: #e7e7e7;
         display: flex;
-        justify-content: center;
+        align-items: center;
 
         .submit-button {
             position: absolute;
-            top: 190px;
+            top: 100px;
             right: calc(20% - 120px);
             z-index: 1;
         }
 
         .user-table {
             position: relative;
-            top: 200px;
             width: 80%;
             
             table {
