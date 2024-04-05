@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import './AdminUser.css'
 import logo from '../../Assets/logo.svg'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -7,8 +7,15 @@ import close_icon from '../../Assets/Icons/close_icon.svg'
 import {SubmitButton} from '../../Components/Forms/SubmitButton/SubmitButton'
 import { AddUserForm } from '../../Components/Forms/AddUserForm/AddUserForm'
 import { useNavigate } from 'react-router-dom'
+import { AuthContext } from '../../Context/AuthContext';
 
 export const AdminUser = () => {
+
+    const { dispatch } = useContext(AuthContext)
+    const logout = () => {
+        localStorage.removeItem('userAuth')
+        dispatch({type:'LOGOUT'})
+    }
 
     const [dataSource, setDataSource] = useState(
         Array(10).fill({
@@ -58,7 +65,7 @@ export const AdminUser = () => {
                     <li>User</li>
                     <li onClick={handleProduct} style={{cursor: 'pointer'}}>Product</li>
                 </ul>
-                <SubmitButton>Logout</SubmitButton>
+                <SubmitButton onClick={logout}>Logout</SubmitButton>
             </div>
             <div className="right-panel">
                 <SubmitButton onClick={()=>{setIsShowAddUserForm(true)}}>Add User</SubmitButton>

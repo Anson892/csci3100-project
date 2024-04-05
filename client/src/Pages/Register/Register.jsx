@@ -6,7 +6,13 @@ import '../Login/Login.css'
 export const Register = () => {
   return (
     <div class="loginPage">
-      <LoginRegisterForm title="Create account" redirectMessage="Already have an account?" redirectPage="/login" action="Sign in" submitBtnMessage="Sign Up"/>
+      <LoginRegisterForm 
+        apiEndPoint = "register"
+        title="Create account" 
+        redirectMessage="Already have an account?" 
+        redirectPage="/login" 
+        action="Sign in" 
+        submitBtnMessage="Sign Up"/>
       <img class="loginImage" src={registerImage} alt='register img'></img>
     </div>
   )

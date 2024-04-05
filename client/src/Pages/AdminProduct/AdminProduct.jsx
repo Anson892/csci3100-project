@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { useNavigate } from 'react-router-dom';
 import './AdminProduct.css'
 import logo from '../../Assets/logo.svg'
@@ -10,8 +10,15 @@ import search_icon_gray from '../../Assets/Icons/search_icon_gray.svg'
 import {SubmitButton} from '../../Components/Forms/SubmitButton/SubmitButton'
 import { AddProductForm } from '../../Components/Forms/AddProductForm/AddProductForm'
 import { EditProductForm } from '../../Components/Forms/EditProductForm/EditProductForm'
+import { AuthContext } from '../../Context/AuthContext';
 
 export const AdminProduct = () => {
+
+    const { dispatch } = useContext(AuthContext)
+    const logout = () => {
+        localStorage.removeItem('userAuth')
+        dispatch({type:'LOGOUT'})
+    }
 
     const [dataSource, setDataSource] = useState(
         Array(10).fill({
@@ -77,7 +84,7 @@ export const AdminProduct = () => {
                     <li onClick={handleUser} style={{cursor: 'pointer'}}>User</li>
                     <li>Product</li>
                 </ul>
-                <SubmitButton>Logout</SubmitButton>
+                <SubmitButton onClick={logout}>Logout</SubmitButton>
             </div>
             <div className="right-panel">
                 <div className="search-bar">
