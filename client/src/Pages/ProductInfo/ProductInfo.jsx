@@ -266,6 +266,14 @@ const CommentContainer = ({id}) => {
 }
 
 const InfoContainer = ({name,price,discount,stock,description,id}) => {
+    const [UserAuth,SetAuth] = useState ( [] )
+    useEffect(() => {
+        const UserAuth = JSON.parse(localStorage.getItem('userAuth'));
+        if (UserAuth) {
+            SetAuth(UserAuth);
+        }
+    }, []);
+    const userid = UserAuth.id;
     const AddToCart = () => {
         const url5 = "http://localhost:8080/api/cart/add";
         fetch(url5, {
@@ -274,7 +282,7 @@ const InfoContainer = ({name,price,discount,stock,description,id}) => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                "userId": 1, // !!!! to be filled after login system !!!!
+                "userId": userid, // !!!! to be filled after login system !!!!
                 "productId": id,
                 "quantity": count
             }) 
@@ -388,6 +396,7 @@ const Product = ({name,price,discount,stock,description,id}) => {
         })
     },[])
 
+    
     return(
         <div className='ProductContainer'>
             <div className='ImgContainer'>
@@ -439,9 +448,6 @@ export const ProductInfo = () => {
     const [FetchedProductstock,SetFetchedProductstock] =useState([])
     const [FetchedProductdescription,SetFetchedProductdescription] =useState([])
     const url1 = 'http://localhost:8080/api/product/'+ productId;
-
-    const [UserAuth,SetAuth] = useState ( localStorage.getItem("UserAuth") )
-    console.log (JSON.stringify(UserAuth))
 
     fetch(url1,{method : 'GET'})
         .then((res) => {
