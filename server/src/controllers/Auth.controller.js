@@ -15,7 +15,7 @@ controller.login = async (req, res) => {
         return;
     }
     await User.findOne({
-      attributes: ['username', 'password', 'userType'],
+      attributes: ['id', 'username', 'password', 'userType'],
       where:{
             username: username
       }
@@ -23,6 +23,7 @@ controller.login = async (req, res) => {
     .then( data => {
       if(data != null){
         const user = {
+          id: data.id,
           username: data.username,
           password: data.password,
           userType: data.userType
@@ -35,6 +36,7 @@ controller.login = async (req, res) => {
           const token = generateToken(user);
           res.status(200).send(
               {
+                  id: user.id,
                   username: user.username,
                   userType: user.userType,
                   accesstoken: token
