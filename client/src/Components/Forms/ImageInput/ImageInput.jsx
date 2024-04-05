@@ -16,7 +16,6 @@ export const ImageInput = ({ image, setImage, children }) => {
                     className="image-input"
                     id="image-input"
                     type="file"
-                    multiple="multiple"
                     onChange={(e)=> {setImage(e.target.files[0]);}}
                 />
                 <label for="image-input" className="image-upload-btn">Upload {children}</label>
