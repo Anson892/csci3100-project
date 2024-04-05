@@ -6,7 +6,7 @@ import { SubmitButton } from '../SubmitButton/SubmitButton'
 import { DropDownMenu } from '../DropDownMenu/DropDownMenu'
 
 
-export const AddUserForm = () => {
+export const AddUserForm = ({ reloadFunc }) => {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -47,11 +47,12 @@ export const AddUserForm = () => {
                     setIsUsernameExist(false);
                     setIsUsernameEmpty(false);
                     setIsPasswordEmpty(false);
+                    reloadFunc();
                     alert(data.message);
                 }
                 else if (data.error != undefined) {
                     if (data.error == "username already in use!") {
-                    setIsUsernameExist(true);
+                        setIsUsernameExist(true);
                     }
                     else {
                         alert("Unknow error occurrs!")

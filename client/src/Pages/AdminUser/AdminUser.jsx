@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './AdminUser.css'
 import logo from '../../Assets/logo.svg'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -10,32 +10,6 @@ import { useNavigate } from 'react-router-dom'
 
 export const AdminUser = () => {
 
-    const [dataSource, setDataSource] = useState(
-        Array(10).fill({
-            username: "ethan_smith",
-            firstName: "Ethan", 
-            lastName: "Smith",
-            phoneNumber: "12345678",
-            address: "Room 3, 26 Floor, Random Building, Random Street, Random Town, Random City, Random Country "
-        })
-    )
-
-    const fetchMoreData = () => {
-        setTimeout(() => {
-            setDataSource(dataSource.concat(
-                Array(10).fill({
-                    username: "ethan_smith",
-                    firstName: "Ethan", 
-                    lastName: "Smith",
-                    phoneNumber: "12345678",
-                    address: "Room 3, 26 Floor, Random Building, Random Street, Random Town, Random City, Random Country "
-                })
-            ))
-        }, 1500);
-    }
-
-    const [hasMore, setHasMore] = useState(true)
-
     const [isShowAddUserForm, setIsShowAddUserForm] = useState(false)
 
     const navigate = useNavigate();
@@ -46,9 +20,43 @@ export const AdminUser = () => {
     }
 
     const handleDeleteUser = (username) => {
-        return
+        fetch("http://localhost:8080/api/users/" + username, {
+            method: 'DELETE',
+        })
+        .then((res) => {
+            return res.json();
+        })
+        .then((data) => {
+            if (data.message != undefined) {
+                alert(data.message);
+                reloadUsers();
+            }
+            else if (data.error != undefined) {
+                alert(data.error);
+            }
+        })
     }
 
+    const [users, setUsers] = useState([]);
+   
+    const reloadUsers = () => {
+        fetch("http://localhost:8080/api/users/", {
+            method: "GET"
+        })
+        .then((res) => {
+            return res.json()
+        })
+        .then((data) => {
+            setUsers(data)
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+    }
+
+    useEffect(() => {
+        reloadUsers();
+    }, [])
     
     return (
         <div className="admin-user">
@@ -63,57 +71,49 @@ export const AdminUser = () => {
             <div className="right-panel">
                 <SubmitButton onClick={()=>{setIsShowAddUserForm(true)}}>Add User</SubmitButton>
                 <div className="user-table">
-                    <InfiniteScroll
-                        dataLength={dataSource.length}
-                        next={fetchMoreData}
-                        hasMore={hasMore}
-                        loader={<div className='loader'>Loading ...</div>}
-                        endMessage={<div className='end-message'>- End -</div>}
-                        >
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Username</th>
-                                    <th>FirstName</th>
-                                    <th>LastName</th>
-                                    <th>PhoneNumber</th>
-                                    <th>Address</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {dataSource.map((item, index)=>{
-                                    return (
-                                        <tr>
-                                            <th>{item.username}</th>
-                                            <th>{item.firstName}</th>
-                                            <th>{item.lastName}</th>
-                                            <th>{item.phoneNumber}</th>
-                                            <th>{item.address}</th>
-                                            <th><img
-                                                onClick={handleDeleteUser(item.username)}
-                                                className='remove-button'
-                                                src={remove_icon}
-                                                alt=""
-                                            /></th>
-                                        </tr>
-                                    )
-                                })}
-                            </tbody>
-                        </table>
-                    </InfiniteScroll>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>UserType</th>
+                                <th>Username</th>
+                                <th>CreatedAt</th>
+                                <th>UpdatedAt</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {users.map((item, index)=>{
+                                return (
+                                    <tr>
+                                        <th>{item.id}</th>
+                                        <th>{item.userType}</th>
+                                        <th>{item.username}</th>
+                                        <th>{item.createdAt}</th>
+                                        <th>{item.updatedAt}</th>
+                                        <th><img
+                                            onClick={()=>{handleDeleteUser(item.username)}}
+                                            className='remove-button'
+                                            src={remove_icon}
+                                            alt=""
+                                        /></th>
+                                    </tr>
+                                )
+                            })}
+                        </tbody>
+                    </table>
                 </div>
             </div>
             {isShowAddUserForm ?
             (
                 <div className="add-user-form-container">
                     <img
-                        onClick={()=>{setIsShowAddUserForm(false)}} 
+                        onClick={()=>{setIsShowAddUserForm(false)}}
                         className="close-button"
                         src={close_icon}
                         alt=""
                     />
-                    <AddUserForm/>
+                    <AddUserForm reloadFunc={reloadUsers}/>
                 </div>
             )
             :

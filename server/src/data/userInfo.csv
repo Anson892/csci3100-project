@@ -1,5 +1,6 @@
 firstName,lastName,address,city,country,zipCode,phoneNumber,userId
 STRING,STRING,STRING,STRING,STRING,STRING,STRING,INT
-Tom,Wan,AB1,HK,HK,852,12345678,1
-John,Wake,AB2,HK,HK,852,23212312,2
-Ivan,Kock,AB3,HK,HK,852,23381313,3
+Tom,Wan,LT1 Mong Man-Wai Building The Chinese University of Hong Kong Sha Tin N.T. HongKong SAR,,,852,12345678,1
+John,Wake,Room607 Mong Man-Wai Engineering Building The Chinese University of Hong Kong Sha Tin N.T. HongKong SAR,,,852,23212312,2
+Ivan,Kock,Room1028 Ho Sin-Hang Engineering Building The Chinese University of Hong Kong Sha Tin N.T. HongKong SAR,,,852,23381313,3
+Chris,Wong,,,,,,4

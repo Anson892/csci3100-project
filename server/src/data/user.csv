@@ -1,7 +1,8 @@
 ﻿username,password,usertype
 STRING,STRING,STRING
-tom,123456,customer
-john,223456,customer
-ivan,123321,customer
+tom_wan,123456,customer
+john_wake,223456,customer
+ivan_kock,123321,customer
+chris_wong,123321,customer
 admin1,999,admin
 admin2,911,admin
