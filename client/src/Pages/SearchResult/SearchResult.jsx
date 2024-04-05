@@ -67,6 +67,7 @@ export const SearchResult = () => {
             return res.json();
         })
         .then( (response) => {
+            setHasMore(true)
             var text = JSON.stringify(response)
             var array1 = (JSON.parse(text))
             setItemsJS (array1);
