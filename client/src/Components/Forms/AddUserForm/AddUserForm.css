@@ -1,12 +1,41 @@
 .add-user-form {
     position: relative;
-    background-color: white;
-    padding: 100px 100px;
+    background: none;
+    padding: 80px 100px;
     padding-bottom: calc(100px + 40px + 20px);
 }
 
 .form-button {
-    position: absolute;
     right: 100px;
     padding-top: 20px;
+}
+
+.alert-text {
+    font-size: 12px;
+    color: red;
+}
+
+.drop-down-menu {
+    position: relative;
+    background: none;
+    height: 40px;
+    border-radius: 20px;
+    width: 300px;
+
+    hr {
+        position: absolute;
+        width: 260px;
+        top: 40px;
+    }
+
+    .current-item {
+        position: relative;
+        top: 5px;
+        
+    }
+
+    .drop-down-menu-button {
+        top: 10px;
+        height: 20px;
+    }
 }
