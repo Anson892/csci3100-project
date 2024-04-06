@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Navbar } from '../../Components/Navbar/Navbar';
 import { OrderHistoryItem } from '../../Components/OrderHistoryItem/OrderHistoryItem'
 import editIcon from '../../Assets/Icons/edit_icon.svg'
 import saveIcon from '../../Assets/Icons/save_icon.svg'
 import './AccountInfo.css'
+import { AuthContext } from '../../Context/AuthContext';
 
-const Profile = ({userID}) => {
+const Profile = () => {
 
   const [edit, setEdit] = useState(false);
 
@@ -15,9 +16,11 @@ const Profile = ({userID}) => {
   const [phoneNo, setPhoneNo] = useState('');
   const [address, setAddress] = useState(''); 
 
+  const { userAuth } = useContext(AuthContext);
+
   // fetch user info
   useEffect(() => {
-    fetch('http://localhost:8080/api/info/'+userID, {method:'GET'})
+    fetch('http://localhost:8080/api/info/'+userAuth.id, {method:'GET'})
     .then(res => {
       return res.json();
     })
@@ -34,11 +37,11 @@ const Profile = ({userID}) => {
   const updateProfile = (e) => {
     e.preventDefault();
     if (edit) {
-      fetch('http://localhost:8080/api/info/'+userID, {
+      fetch('http://localhost:8080/api/info/'+userAuth.id, {
         method:'PUT',
         headers:{"Content-type":"application/json"},
         body: JSON.stringify({
-          "InfoId": userID,
+          "InfoId": userAuth.id,
           "firstName": firstName,
           "lastName": lastName,
           "address": address,
@@ -114,7 +117,7 @@ export const AccountInfo = () => {
             <button onClick= {OrderHistoryButton_clicked} class={buttonState2}>Order History</button>
           </div>
           <div className='account-info-container'>
-            { AccountInfo ?  <Profile userID={3}/> : <OrderHistory/> }
+            { AccountInfo ?  <Profile /> : <OrderHistory/> }
           </div>
         </div>
     </div>

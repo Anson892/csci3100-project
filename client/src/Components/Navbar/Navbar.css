@@ -56,6 +56,12 @@
     cursor: pointer;
 }
 
+.nav-right button:hover{
+    background: #9c9484;
+    color: white;
+    border: 1px solid #9c9484;
+}
+
 .nav-right p {
     font-size: 20px;
     position: relative;
