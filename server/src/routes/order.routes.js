@@ -5,6 +5,7 @@ module.exports = app => {
     router.post('/create', orders.create);
     router.put('/placeorder', orders.PlaceOrder);
     router.delete('/remove', orders.removeOrderItem);
+    router.get('/history/:userid', orders.history);
     router.get('/', orders.findAll)
     router.get('/status/:status', orders.findbystatus)
     router.get('/name/:method', orders.findbymethod)

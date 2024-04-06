@@ -136,6 +136,64 @@ controller.removeOrderItem = async (req, res) => {
   });
 };
 
+//User order history http://localhost:8080/api/order/history/1
+controller.history = async (req, res) => {
+  const userid = req.params.userid;
+  const resultlist = [];
+  const orderlist = await Order.findAll({
+    where: {userId: userid}
+  })
+  var ordercount = 0;
+  try{
+    orderlist.forEach(async element => {
+      const productlsit = [];
+      var total = 0;
+      const itemlist = await OrderItem.findAll({
+        attributes: ['productId', 'price', 'quantity'],
+        where: {orderId: element.id}
+      })
+      itemlist.forEach(product => {
+        const info = {
+          productId: product.productId,
+          price: product.price,
+          quantity: product.quantity
+        }
+        productlsit.push(info)
+        var temp = product.price
+        var price = Number(temp)
+        total = total + price
+      })
+      const userinfo = await UserInfo.findOne({
+        attributes: ['firstName', 'lastName'],
+        where: { id: element.userInfoId }
+      })
+      const temp = element.createdAt
+      const deliverydate = new Date(temp)
+      deliverydate.setDate(deliverydate.getDate() + 7)
+      const order = {
+        id: element.id,
+        ordertime: element.createdAt,
+        firstName: userinfo.firstName,
+        lastName: userinfo.lastName,
+        ordertotal: total,
+        paymentMethod: element.paymentMethod,
+        deliverytime: deliverydate,
+        status: element.status,
+        orderitem: productlsit
+      }
+      resultlist.push(order)
+      ordercount+=1;
+      if(ordercount==orderlist.length){
+        res.send(resultlist)
+      }
+    })
+  }
+  catch(err){
+    res.status(500).send("error exist:" + err)
+  }
+  
+}
+
 //show all order
 controller.findAll = async (req, res) => {
   Order.findAll()
