@@ -1,0 +1,26 @@
+import React, { useContext, useEffect, useState } from 'react';
+import { Order } from './Order'
+import { AuthContext } from '../../../Context/AuthContext';
+import '../AccountInfo.css'
+
+export const OrderHistory = () => {
+
+  const { userAuth } = useContext(AuthContext)
+  const [orderHistory, setOrderHistory] = useState()
+
+  useEffect(() => {
+      fetch('http://localhost:8080/api/order/history/'+userAuth.id, {method:'GET'})
+      .then(res => {
+        return res.json();
+      })
+      .then(data => {
+          setOrderHistory(data)
+      })
+  },[])
+
+  return (
+    <div>
+      {orderHistory && orderHistory.map((i)=><Order key={i.id} order={i} />)}
+    </div>
+  )
+}
