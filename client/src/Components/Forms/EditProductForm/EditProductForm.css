@@ -3,7 +3,6 @@
     background-color: white;
     padding: 100px 100px;
     padding-bottom: calc(100px + 40px + 20px);
-    border: 1px solid black;
 
     .first-input-row {
         display: flex;

@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useContext } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import './AdminProduct.css'
 import logo from '../../Assets/logo.svg'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -12,49 +12,99 @@ import { AddProductForm } from '../../Components/Forms/AddProductForm/AddProduct
 import { EditProductForm } from '../../Components/Forms/EditProductForm/EditProductForm'
 import { AuthContext } from '../../Context/AuthContext';
 
+const ProductInfo = ({ id, handleEditProduct, handleDeleteProduct }) => {
+
+    const [name, setName] = useState("");
+    const [quantity, setQuantity] = useState(0);
+    const [category, setCategory] = useState("");
+    const [price, setPrice] = useState(0);
+    const [discount, setDiscount] = useState("");
+    const [imageScr, setImageScr] = useState("");
+    
+    useEffect(() => {
+        fetch('http://localhost:8080/api/product/'+ id, {
+            method: "GET"
+        })
+        .then((res) => {
+            return res.json();
+        })
+        .then((data) => {
+            setName(data.data.name);
+            setQuantity(data.data.stock);
+            setCategory(data.data.category);
+            setPrice("$" + String(data.data.price));
+            setDiscount(String(data.data.discount * 100) + "%");
+            // setImageScr("C:\Users\User\Documents\University\CSCI3100\Project\Git\csci3100-project\server/resources/static/assets/uploads/1712308873802-product-Admin.png")
+            setImageScr("../../../../server/resources/static/assets/uploads/1712308873802-product-Admin.png")
+            // if (data.data.product_images.length > 0) {
+            //     console.log();
+            //     console.log(data.data.product_images[0].path);
+            //     setImageScr(data.data.product_images[0].path);
+            //     setImageScr()
+            // }
+        })
+    }, [id])
+
+    return (
+        <tr>
+            <th><img src="" alt="" /></th>
+            <th>{name}</th>
+            <th>{quantity}</th>
+            <th>{category}</th>
+            <th>{price}</th>
+            <th>{discount}</th>
+            <th><img
+                onClick={()=>{handleEditProduct(id)}}
+                className='remove-button'
+                src={edit_icon}
+                alt=""
+            /></th>
+            <th><img
+                onClick={()=>{handleDeleteProduct(id)}}
+                className='remove-button'
+                src={remove_icon}
+                alt=""
+            /></th>
+        </tr>
+    )
+}
+
 export const AdminProduct = () => {
 
     const { dispatch } = useContext(AuthContext)
-    const logout = () => {
+
+    const handleLogout = () => {
         localStorage.removeItem('userAuth')
         dispatch({type:'LOGOUT'})
-    }
-
-    const [dataSource, setDataSource] = useState(
-        Array(10).fill({
-            username: "ethan_smith",
-            firstName: "Ethan", 
-            lastName: "Smith",
-            phoneNumber: "12345678",
-            address: "Room 3, 26 Floor, Random Building, Random Street, Random Town, Random City, Random Country "
+        navigate({
+            pathname: '/'
         })
-    )
-
-    const fetchMoreData = () => {
-        setTimeout(() => {
-            setDataSource(dataSource.concat(
-                Array(10).fill({
-                    username: "ethan_smith",
-                    firstName: "Ethan", 
-                    lastName: "Smith",
-                    phoneNumber: "12345678",
-                    address: "Room 3, 26 Floor, Random Building, Random Street, Random Town, Random City, Random Country "
-                })
-            ))
-        }, 1500);
     }
+
+    const [productIds, setProductIds] = useState();
 
     const [hasMore, setHasMore] = useState(true)
 
     const [isShowAddProductForm, setIsShowAddProductForm] = useState(false)
     const [isShowEditProductForm, setIsShowEditProductForm] = useState(false)
     const [editProductId, setEditProductId] = useState(-1)
+    const [pointer, setPointer] = useState(0)
 
     const navigate = useNavigate();
     const handleUser = () => {
         navigate({
             pathname: '/admin/user'
         })
+    }
+
+    const handleSearch = () => {
+        const date = new Date;
+        navigate({
+            pathname: '/admin/product',
+            search: '?keyword=' + keyword +
+                    '&category=' + category +
+                    '&time=' + date.getTime()
+        });
     }
 
     const handleEditProduct = (productId) => {
@@ -64,7 +114,26 @@ export const AdminProduct = () => {
     }
 
     const handleDeleteProduct = (productId) => {
-        return
+        setIsShowEditProductForm(false);
+        setIsShowAddProductForm(false);
+        fetch("http://localhost:8080/api/product/" + productId, {
+            method: "DELETE"
+        })
+        .then((res) => {
+            return res.json()
+        })
+        .then((data) => {
+            if (data.message != undefined) {
+                alert(data.message);
+                handleSearch();
+            }
+            else if (data.error != undefined) {
+                alert(data.error);
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+        })
     }
 
     const handleClose = () => {
@@ -72,10 +141,81 @@ export const AdminProduct = () => {
         setIsShowAddProductForm(false);
     }
 
-    const [keyword, setKeyword] = useState("")
-    const [status, setStatus] = useState("All")
-    const [category, setCategory] = useState("Category1")
+    // Search parameters
+    const [searchParams, setSearchParams]= useSearchParams();
+    const keywordParam = searchParams.get('keyword');
+    const categoryParam = searchParams.get('category');
+    const [keyword, setKeyword] = useState(keywordParam != "%" ? keywordParam : "")
+    const [category, setCategory] = useState(categoryParam)
+
+    // Initialize search
+    const initSearch = async () => {
+        setPointer(0);
+
+        await fetch("http://localhost:8080/api/product/search",{
+            method : 'POST',
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                "searchpointer": pointer,
+                "name": keywordParam,
+                "category": categoryParam,
+                "orderby": 'price',
+                "order": 'DESC',
+                "minprice": 1,
+                "maxprice": 1000000,
+                "minrating": 0,
+                "maxrating": 5
+            })
+        })
+        .then((res) => {
+            return res.json();
+        })
+        .then((data) => {
+            setProductIds(data)
+            setPointer(pointer + 1)
+            if (data.length < 15) setHasMore(false)
+        })
+        .catch((error) => {
+            console.error(error);
+        })
+    }
     
+    // Fetch more data
+    const fetchMoreData = () => {
+        setTimeout(() => {
+            fetch("http://localhost:8080/api/product/search" ,{
+                method : 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    "searchpointer": pointer,
+                    "name": keywordParam == "" ? "%" : keywordParam,
+                    "category": categoryParam,
+                    "orderby": 'price',
+                    "order": 'DESC',
+                    "minprice": 1,
+                    "maxprice": 1000000,
+                    "minrating": 0,
+                    "maxrating": 5
+                })
+            })
+            .then((res) => {
+                return res.json();
+            })
+            .then((data) => {
+                setProductIds(productIds.concat(data));    
+                setPointer(pointer + 1)  
+                if (data.length < 5) setHasMore(false)
+            })
+        }, 10);
+    }
+
+    // When Start
+    useEffect(() => {
+        initSearch();
+    }, [])
+
     return (
         <div className="admin-user">
             <div className="left-panel">
@@ -84,21 +224,16 @@ export const AdminProduct = () => {
                     <li onClick={handleUser} style={{cursor: 'pointer'}}>User</li>
                     <li>Product</li>
                 </ul>
-                <SubmitButton onClick={logout}>Logout</SubmitButton>
+                <SubmitButton onClick={handleLogout}>Logout</SubmitButton>
             </div>
             <div className="right-panel">
                 <div className="search-bar">
-                    <img src={search_icon_gray} alt="" />
-                    <input onChange={(e)=>{setKeyword(e.target.value)}} type="text"/>
+                    <img onClick={()=>{handleSearch()}} src={search_icon_gray} alt="" />
+                    <input onChange={(e)=>{setKeyword(e.target.value)}} type="text" value={keyword}/>
                 </div>
                 <div className="filter">
-                    <select onChange={(e)=>{setStatus(e.target.status)} }name="status">
-                        <option value="All">All</option>
-                        <option value="New">New</option>
-                        <option value="On Sales">On Sales</option>
-                        <option value="Availble">Available</option>
-                    </select>
-                    <select onChange={(e)=>{setCategory(e.target.value)}} name="category">
+                    <select onChange={(e)=>{setCategory(e.target.value)}} name="category" value={category}>
+                        <option value="%">All</option>
                         <option value="Category1">Category1</option>
                         <option value="Category2">Category2</option>
                         <option value="Category3">Category3</option>
@@ -114,54 +249,47 @@ export const AdminProduct = () => {
                     Add Product
                 </SubmitButton>
                 <div className="user-table">
-                    <InfiniteScroll
-                        dataLength={dataSource.length}
-                        next={fetchMoreData}
-                        hasMore={hasMore}
-                        loader={<div className='loader'>Loading ...</div>}
-                        endMessage={<div className='end-message'>- End -</div>}
-                        >
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>MainImage</th>
-                                    <th>Name</th>
-                                    <th>Quantity</th>
-                                    <th>Catergory</th>
-                                    <th>Price</th>
-                                    <th>Discount</th>
-                                    <th></th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {dataSource.map((item, index)=>{
-                                    return (
+                    {productIds != undefined?
+                        (
+                            <InfiniteScroll
+                                dataLength={productIds.length}
+                                next={fetchMoreData}
+                                hasMore={hasMore}
+                                loader={<div className='loader'>Loading ...</div>}
+                                endMessage={<div className='end-message'>- End -</div>}
+                            >
+                                <table>
+                                    <thead>
                                         <tr>
-                                            <th>{item.main_iamge}</th>
-                                            <th>{item.name}</th>
-                                            <th>{item.quantity}</th>
-                                            <th>{item.catergory}</th>
-                                            <th>{item.price}</th>
-                                            <th>{item.discount}</th>
-                                            <th><img
-                                                onClick={()=>{handleEditProduct(item.id)}}
-                                                className='remove-button'
-                                                src={edit_icon}
-                                                alt=""
-                                            /></th>
-                                            <th><img
-                                                onClick={handleDeleteProduct(item.id)}
-                                                className='remove-button'
-                                                src={remove_icon}
-                                                alt=""
-                                            /></th>
+                                            <th>MainImage</th>
+                                            <th>Name</th>
+                                            <th>Quantity</th>
+                                            <th>Category</th>
+                                            <th>Price</th>
+                                            <th>Discount</th>
+                                            <th></th>
+                                            <th></th>
                                         </tr>
-                                    )
-                                })}
-                            </tbody>
-                        </table>
-                    </InfiniteScroll>
+                                    </thead>
+                                    <tbody>
+                                        {productIds.map((item, index)=>{
+                                            return (
+                                                <ProductInfo
+                                                id={item}
+                                                handleEditProduct={handleEditProduct}
+                                                handleDeleteProduct={handleDeleteProduct}
+                                                />
+                                            )
+                                        })}
+                                    </tbody>
+                                </table>
+                            </InfiniteScroll>
+                        )
+                        :
+                        (
+                            null
+                        )
+                    }
                 </div>
             </div>
             {isShowAddProductForm ?
@@ -190,7 +318,7 @@ export const AdminProduct = () => {
                         src={close_icon}
                         alt=""
                     />
-                    <EditProductForm productId={editProductId}/>
+                    <EditProductForm productId={editProductId} reloadFunc={handleSearch}/>
                 </div>
             )
             :

@@ -15,15 +15,22 @@ export const AdminUser = () => {
     const logout = () => {
         localStorage.removeItem('userAuth')
         dispatch({type:'LOGOUT'})
+        navigate({
+            pathname: '/'
+        })
     }
 
     const [isShowAddUserForm, setIsShowAddUserForm] = useState(false)
 
     const navigate = useNavigate();
     const handleProduct = (username) => {
+        const date = new Date;
         navigate({
-            pathname: '/admin/product'
-        })
+            pathname: '/admin/product',
+            search: '?keyword=%' +
+                    '&category=%' +
+                    '&time=' + date.getTime()
+        });
     }
 
     const handleDeleteUser = (username) => {
