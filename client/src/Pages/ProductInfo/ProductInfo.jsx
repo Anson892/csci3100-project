@@ -258,7 +258,7 @@ const CommentContainer = ({id}) => {
             height = {279}
             >
                 {itemsjs.map((itemsjs,index)=>
-                        <div key= {itemsjs.id} ><CommentBox username={itemsjs.username} star={itemsjs.rating} content={itemsjs.content} index = {index}  /></div>
+                        <div key= {itemsjs.id} ><CommentBox username={itemsjs.user.username} star={itemsjs.rating} content={itemsjs.content} index = {index}  /></div>
                 )}  
             </InfiniteScroll>
         </div> 
