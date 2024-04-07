@@ -10,9 +10,9 @@ export const AddUserForm = ({ reloadFunc }) => {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [userType, setUserType] = useState("user");
+    const [userType, setUserType] = useState("customer");
     const [isUsernameEmpty, setIsUsernameEmpty] = useState(false);
-    const [isUsernameExist, setIsUsernameExist] = useState(true);
+    const [isUsernameExist, setIsUsernameExist] = useState(false);
     const [isPasswordEmpty, setIsPasswordEmpty] = useState(false);
     const [data, setData] = useState([])
 
@@ -27,6 +27,9 @@ export const AddUserForm = ({ reloadFunc }) => {
             setIsPasswordEmpty(false)
         
         if (!isUsernameEmpty && !isPasswordEmpty) {
+            console.log("username: ", username);
+            console.log("password: ", password);
+            console.log("userType: ", userType);
             fetch("http://localhost:8080/api/users/create", {
                 method: "POST",
                 headers: {
@@ -35,7 +38,7 @@ export const AddUserForm = ({ reloadFunc }) => {
                 body: JSON.stringify({
                     "username": username,
                     "password": password,
-                    "userTpye": userType
+                    "userType": userType
                 })
             }
             )
@@ -43,6 +46,7 @@ export const AddUserForm = ({ reloadFunc }) => {
                 return res.json()
             })
             .then((data) => {
+                console.log(data);
                 if (data.message != undefined) {
                     setIsUsernameExist(false);
                     setIsUsernameEmpty(false);
@@ -71,7 +75,7 @@ export const AddUserForm = ({ reloadFunc }) => {
             <h1>Add User</h1>
             <TextInput type="text" onChange={(e)=>{setUsername(e.target.value)}}>Username</TextInput>
             {isUsernameEmpty ? <p className="alert-text">* Username is empty.</p> : null}
-            {isUsernameExist ? <p className="alert-text">* Username alreadt exist.</p> : null}
+            {isUsernameExist ? <p className="alert-text">* Username already exist.</p> : null}
             <TextInput type="password" onChange={(e)=>{setPassword(e.target.value)}}>Password</TextInput>
             {isPasswordEmpty ? <p className="alert-text">* Password is empty.</p> : null}
             <p>User Type</p>
