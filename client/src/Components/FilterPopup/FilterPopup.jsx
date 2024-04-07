@@ -3,8 +3,7 @@ import './FilterPopup.css'
 import { DropDownMenu } from '../Forms/DropDownMenu/DropDownMenu'
 import { motion, AnimatePresence } from 'framer-motion'
 
-export const FilterPopup = ({ status, setStatus,
-                              category, setCategory, 
+export const FilterPopup = ({ category, setCategory, 
                               minPrice, setMinPrice,
                               maxPrice, setMaxPrice, 
                               minRating, setMinRating, 
@@ -39,19 +38,11 @@ export const FilterPopup = ({ status, setStatus,
         }
     }
 
-    const statusList = ["All", "New", "On Sales", "Available"]
-    const categoryList = ["Category1", "Category2", "Category3", "Category4", "Category5", "Category6"]
+    const categoryList = ["All", "Category1", "Category2", "Category3", "Category4", "Category5", "Category6"]
 
     return (
         <motion.div {...popupAnim} className="filter-popup">
             <div className="filter-title">Filter Settings</div>
-            <div className="sub-title">Status</div>
-            <DropDownMenu
-                items={statusList}
-                initial={Math.max(0, statusList.indexOf(status))}
-                setFucn={setStatus}
-            />
-            <div className="space"></div>
             <div className="sub-title">Category</div>
             <DropDownMenu
                 items={categoryList}
