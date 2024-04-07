@@ -1,3 +1,4 @@
+const { where } = require("sequelize");
 const db = require("../models");
 const Order = db.Order;
 const OrderItem = db.OrderItem;
@@ -152,9 +153,14 @@ controller.history = async (req, res) => {
         attributes: ['productId', 'price', 'quantity'],
         where: {orderId: element.id}
       })
-      itemlist.forEach(product => {
+      itemlist.forEach(async product => {
+        const productname = await Product.findOne({
+          attributes: ['name'],
+          where: { id: product.productId }
+        })
         const info = {
           productId: product.productId,
+          productname: productname.name,
           price: product.price,
           quantity: product.quantity
         }
