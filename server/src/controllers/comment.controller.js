@@ -9,42 +9,49 @@ const controller = {};
 
 //add comment and rating
 controller.addcomment = async (req, res) => {
-    const { username, rating, content, productId, orderId } = req.body;
+    const { userId, rating, content, productId, orderId } = req.body;
+    try{
+    //search whether comment exist
     const findcomment = await Comment.findOne({
-        where: { username: username,
+        where: { userId: userId,
                  orderId: orderId,
                  productId: productId
     }})
+    //check the order item exist
     const findorder = await OrderItem.findOne({
         attributes: ['orderId', 'productId'],
         include: [{
             model: Order,
-            attributes: ['userId']
+            attributes: ['userId'],
+            where: {userId: userId}
         }],
         where: { orderId: orderId,
                  productId: productId
     }})
-    await User.findOne({ attributes: ['id'],
-           where: { username: username }})
-    .then(async (data) => {
-        if((findcomment==null)&&(findorder!=null)&&(findorder.order.userId==data.id)){
-            const view = {
-                username: username,
-                rating: rating,
-                content: content,
-                userId: data.id,
-                productId: productId,
-                orderId: orderId
-            }
-            console.log("go")
-            await Comment.create(view)
-                .then(() => {
-                    res.send("Add comment success.")
-                }).catch((err) => res.status(500).send(err))
-        }else{
-            res.status(400).json("fail to add comment")
+    if((findcomment==null)&&(findorder!=null)){
+        const view = {
+            rating: rating,
+            content: content,
+            userId: userId,
+            productId: productId,
+            orderId: orderId
         }
-    }).catch((err) => res.status(500).send(err))
+        console.log("go")
+        await Comment.create(view)
+            .then(() => {
+                res.send("Add comment success.")
+            }).catch((err) => res.status(500).send(err))
+    }else{
+        if((findcomment!=null)){
+            res.status(500).json("Comment already exist.")
+        }else{
+            res.status(500).json("Order doesn't exist.")
+        }
+        
+    }}
+    catch(err){
+        res.status(500).send(err)
+    }
 }
 
 
@@ -109,10 +116,14 @@ controller.commentlist = (req, res) => {
         var setlimit = 1;
     }
     Comment.findAll({
-        attributes: ['username', 'rating', 'content'],
+        attributes: ['rating', 'content'],
         where: {
             productId: id
         },
+        include: [{
+            model: User,
+            attributes: ['username']
+        }],
         offset: setoffset,
         limit: setlimit
     }).then((data) => {

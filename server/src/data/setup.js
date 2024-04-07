@@ -223,12 +223,11 @@ async function import_Comment() {
     console.log(dataLines);
     const columns = dataLines.split(",");
     let comment = {
-      username: columns[0],
-      rating: columns[1],
-      content: columns[2],
-      userId: columns[3],
-      productId: columns[4],
-      orderId: columns[5],
+      rating: columns[0],
+      content: columns[1],
+      userId: columns[2],
+      productId: columns[3],
+      orderId: columns[4],
     };
     Commentlist.push(comment);
   });

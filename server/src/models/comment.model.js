@@ -5,13 +5,6 @@ module.exports = (sequelize, Sequelize) => {
       primaryKey: true,
       autoIncrement: true,
     },
-    username: {
-      type: Sequelize.STRING,
-      references: {
-        model: "users",
-        key: "username",
-      },
-    },
     rating: {
       type: Sequelize.ENUM("1", "2", "3", "4", "5"),
       allowNull: false,
