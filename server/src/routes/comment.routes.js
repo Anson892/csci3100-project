@@ -3,7 +3,7 @@ const router = require('express').Router();
 
 module.exports = app => {
     router.post('/add', comment.addcomment);
-
+    router.post('/check', comment.checkcomment);
     router.post('/list', comment.commentlist);
     router.get('/id/:pid', comment.status);
 
