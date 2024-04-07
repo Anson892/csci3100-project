@@ -9,8 +9,6 @@ module.exports = (sequelize, Sequelize) => {
     },
     username: {
       type: Sequelize.STRING,
-      unique: true,
-      allowNull: false
     },
     password: {
       type: Sequelize.STRING,

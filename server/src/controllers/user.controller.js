@@ -131,32 +131,28 @@ controller.update = (req, res) => {
 };
 
 // delete user by username
-controller.delete = (req, res) => {
+controller.delete = async (req, res) => {
   const username = req.params.username;
 
-  // delete user
-  User.destroy({ where: { username: username } })
-    .then((num) => {
-      if (num == 1) {
-        // delete successful
-        res.status(200).json({
-          message: `User deleted successfully!`,
+  try {
+    // find user
+    const user = await User.findOne({ where: { username: username } });
 
-        });
-      } else {
-        // delete not successful
-        res.status(404).json({
-          message: `User not found!`,
-        });
-      }
-    })
-    .catch((err) => {
-      res.status(500).json({
-        error:
-          err.message ||
-          "Some error occurred while deleting user.",
-      });
+    const newUsername = "deleted user";
+    user.username = newUsername;
+    await user.save();
+    console.log(user.username);
+
+    await User.destroy({
+      where: { username: newUsername },
     });
+
+    res.status(200).json({ message: "User was deleted successfully!" });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message || "Some error occurred while deleting user.",
+    });
+  }
 };
 
 // delete all users
@@ -166,7 +162,9 @@ controller.deleteAll = (req, res) => {
     truncate: false,
   })
     .then((num) => {
-      res.status(200).json({ message: `${num} users were deleted successfully!` });
+      res
+        .status(200)
+        .json({ message: `${num} users were deleted successfully!` });
     })
     .catch((err) => {
       res.status(500).json({
