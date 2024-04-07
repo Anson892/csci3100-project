@@ -27,7 +27,7 @@ function App() {
 
         return (
             <AnimatePresence mode='wait'>
-                <Routes location={location} key={location.pathname}>
+                <Routes location={location} key={location.pathname + location.search}>
                     
                     {/* visible to all users, does not require authentification */}
                     <Route path='/' exact element={<PageTransition><Home/></PageTransition>}/>

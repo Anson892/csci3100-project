@@ -19,6 +19,7 @@ export const SearchBar = () => {
 
     const navigate = useNavigate();
     const handleSearch = () => {
+        const date = new Date;
         navigate({
             pathname: '/search',
             search: '?keywords=' + keywords +
@@ -27,9 +28,9 @@ export const SearchBar = () => {
                     '&min_price=' + minPrice +
                     '&max_price=' + maxPrice +
                     '&min_rating=' + minRating +
-                    '&max_rating=' + maxRating
+                    '&max_rating=' + maxRating +
+                    '&time=' + date.getTime()
         });
-        window.location.reload(false);
     }
 
     const handelOnKeyDown = (e) => {
