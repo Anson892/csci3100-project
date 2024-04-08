@@ -7,32 +7,36 @@ const Op = db.Sequelize.Op;
 const controller = {};
 
 // Create a new cart for user
-controller.createCart = (req, res) => {
+controller.createCart = async (req, res) => {
   const { userId } = req.params;
-  // Find existing cart
-  Cart.findOne({ where: { userId: userId } }).then((data) => {
-    if (data === null) {
+  console.log("Creating cart for user: " + userId);
+  try {
+    // Find existing cart
+    const cart = await Cart.findOne({ where: { userId: userId } });
+    if (cart === null) {
       // Create a Cart for user
       const cart = {
         userId: userId,
       };
 
       // Save new Cart in the database
-      Cart.create(cart)
-        .then((data) => {
-          res.json({success: true, message: "Cart created successfully!"});
-        })
-        .catch((err) => {
-          res.status(500).json({
-            success: false,
-            error:
-              err.message || "Some error occurred while creating the cart.",
-          });
-        });
+      Cart.create(cart);
+
+      res.status(200).json({
+        success: true,
+        message: "Cart created successfully!",
+      });
     } else {
-      res.status(400).json({ success: true, message: "user already has a cart!" });
+      res.status(200).json({
+        success: true,
+        message: "Cart already exists!",
+      });
     }
-  });
+  } catch (err) {
+    res.status(500).json({
+      error: err.message || "Some error occurred while creating the cart.",
+    });
+  }
 };
 
 // Get user cart
@@ -50,7 +54,10 @@ controller.getUserCart = (req, res) => {
   Cart.findOne({ where: { userId: userId } })
     .then((cart) => {
       // Get cart items
-      CartItem.findAll({ where: { cartId: cart.id }, attributes: ["productId", "quantity"]})
+      CartItem.findAll({
+        where: { cartId: cart.id },
+        attributes: ["productId", "quantity"],
+      })
         .then((cartItems) => {
           res.json(cartItems);
         })
@@ -68,7 +75,7 @@ controller.getUserCart = (req, res) => {
     });
 };
 
-controller.addToCart = (req, res) => {
+controller.addToCart = async (req, res) => {
   const { userId, productId, quantity } = req.body;
 
   // validate request
@@ -82,6 +89,17 @@ controller.addToCart = (req, res) => {
   if (quantity <= 0) {
     res.status(400).json({
       error: "quantity must be greater than 0!",
+    });
+    return;
+  }
+
+  // validate requested quantity and stock
+  const product = await Product.findOne({ where: { id: productId } });
+  console.log(product.stock);
+  if (quantity > product.stock) {
+    res.status(200).json({
+      success: false,
+      message: "Not enough stock available!",
     });
     return;
   }
@@ -108,7 +126,9 @@ controller.addToCart = (req, res) => {
 
           CartItem.create(cartItem)
             .then((data) => {
-              res.status(200).json({ message: "Product added to cart" });
+              res
+                .status(200)
+                .json({ success: true, message: "Product added to cart" });
             })
             .catch((err) => {
               res.status(500).json({
@@ -124,7 +144,9 @@ controller.addToCart = (req, res) => {
           cartItem
             .save()
             .then((data) => {
-              res.status(200).json({ message: "Product updated in cart" });
+              res
+                .status(200)
+                .json({ success: true, message: "Product updated in cart" });
             })
             .catch((err) => {
               res.status(500).json({
@@ -275,18 +297,18 @@ controller.updateCartItem = (req, res) => {
           });
         } else {
           // Update quantity
-            cartItem
-              .save()
-              .then((data) => {
-                res.status(200).json({message: "Product updated in cart"});
-              })
-              .catch((err) => {
-                res.status(500).json({
-                  error:
-                    err.message ||
-                    "Some error occurred while updating product in cart.",
-                });
+          cartItem
+            .save()
+            .then((data) => {
+              res.status(200).json({ message: "Product updated in cart" });
+            })
+            .catch((err) => {
+              res.status(500).json({
+                error:
+                  err.message ||
+                  "Some error occurred while updating product in cart.",
               });
+            });
         }
       });
     }

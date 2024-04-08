@@ -11,6 +11,21 @@ export const LoginRegisterForm = ({apiEndPoint, title, redirectMessage, redirect
   const [error, setError] = useState('');
   const { dispatch } = useContext(AuthContext)
 
+  const checkUserCart = async (userId) => {
+    const url = 'http://localhost:8080/api/cart/create/' + userId;
+    const res = await fetch(url, { method: 'POST' });
+    const data = await res.json();
+
+    if (res.ok) {
+      console.log(data.message)
+      return;
+    }
+    else {
+      setError(data.message)
+      return;
+    }
+  }
+
   const login = async (e) => {
     e.preventDefault();
 
@@ -27,6 +42,9 @@ export const LoginRegisterForm = ({apiEndPoint, title, redirectMessage, redirect
     
     if (res.ok) {
       localStorage.setItem('userAuth', JSON.stringify(data))  // store username, usertype & JWT token in browser
+      if (data.usertype === 'customer') {
+        checkUserCart(data.id)
+      }
       dispatch({type: 'LOGIN', userAuth: data})
     } 
     else {
