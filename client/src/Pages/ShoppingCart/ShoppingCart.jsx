@@ -3,12 +3,14 @@ import { Navbar } from '../../Components/Navbar/Navbar';
 import { CartItem } from '../../Components/CartItem/CartItem'
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../Context/AuthContext';
+import { CartContext } from '../../Context/CartContext';
 import './ShoppingCart.css'
 
 
 
 export const ShoppingCart = () => {
   const { userAuth } = useContext(AuthContext)
+  const { setCartSize } = useContext(CartContext)
   const [cartItem, setCartItem] = useState([])
 
   useEffect(() => {
@@ -21,6 +23,10 @@ export const ShoppingCart = () => {
       data.map((i)=>console.log(i.productId))
     })
   }, []);
+
+  useEffect(()=>{
+    setCartSize(cartItem.length)
+  }, [cartItem])
 
   return (
     <div class="shopping-cart">
