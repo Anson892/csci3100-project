@@ -14,7 +14,7 @@ import { SearchResult } from './Pages/SearchResult/SearchResult';
 import { ProductInfo } from './Pages/ProductInfo/ProductInfo';
 import { NotFound } from './Pages/NotFound/NotFound';
 import { PageTransition } from './Components/Animations/PageTransition/PageTransition';
-import { useContext } from 'react';
+import { useEffect, useContext } from 'react';
 
 
 function App() {
@@ -24,6 +24,16 @@ function App() {
         const location = useLocation();
         const { userAuth } = useContext(AuthContext)
         const userType = userAuth ? userAuth.userType : null
+
+        useEffect(() => {
+            console.log(location.pathname)
+            if (location.pathname === "/admin/product") {
+                document.body.style.backgroundColor = "#e7e7e7"
+            }
+            else {
+                document.body.style.backgroundColor = "#F6F6E9"
+            }
+        }, [location])
 
         return (
             <AnimatePresence mode='wait'>
