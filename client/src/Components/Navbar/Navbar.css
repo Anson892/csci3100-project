@@ -70,3 +70,23 @@
     width: 100px;
     text-align: center;
 }
+
+.shopping-cart-icon{
+    text-decoration: none;
+}
+
+.cart-size-indicator{
+    background: #6377e5;
+    height: 25px;
+    width: 25px;
+    border-radius: 50%;
+    color: white;
+    font-weight: 800;
+    font-size: 17px;
+    line-height: 22px;
+    text-align: center;
+    position: relative;
+    right: -20px;
+    top: -45px;
+    opacity: 90%;
+}

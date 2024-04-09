@@ -11,7 +11,7 @@ import star_empty from '../../Assets/Icons/star_empty.svg'
 import small_star_filled from '../../Assets/Icons/small_star_filled.svg'
 import small_star_empty from '../../Assets/Icons/small_star_empty.svg'
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { useContext,createContext } from 'react';
 
 
@@ -258,7 +258,7 @@ const CommentContainer = ({id}) => {
             height = {279}
             >
                 {itemsjs.map((itemsjs,index)=>
-                        <div key= {itemsjs.id} ><CommentBox username={itemsjs.username} star={itemsjs.rating} content={itemsjs.content} index = {index}  /></div>
+                        <div key= {itemsjs.id} ><CommentBox username={itemsjs.user.username} star={itemsjs.rating} content={itemsjs.content} index = {index}  /></div>
                 )}  
             </InfiniteScroll>
         </div> 
@@ -267,6 +267,7 @@ const CommentContainer = ({id}) => {
 
 const InfoContainer = ({name,price,discount,stock,description,id}) => {
     const [UserAuth,SetAuth] = useState ( [] )
+    const [redirect, setRedirect] = useState(false);
     useEffect(() => {
         const UserAuth = JSON.parse(localStorage.getItem('userAuth'));
         if (UserAuth) {
@@ -290,9 +291,17 @@ const InfoContainer = ({name,price,discount,stock,description,id}) => {
         .then((res) => {
             return res.json();
         })
-        // .then((response) => {
-        //     console.log( JSON.stringify(response));
-        // })
+        .then((response) => {
+            var text = JSON.stringify(response);
+            var array1 = (JSON.parse(text));
+            if (array1.success == true) {
+                // redirect to cart page
+                setRedirect(true);
+            }
+            else {
+                alert(array1.message);
+            }
+        })
     }
     const [count, setCount]=useState(1);
     const decrement = () => {
@@ -337,11 +346,10 @@ const InfoContainer = ({name,price,discount,stock,description,id}) => {
                     <p className='ProductAmountText'>{count}</p>
             </div>
             <div>
-                <Link to ={'/shopping-cart'}>
-                    <button onClick={AddToCart} className='AddToCartButton' >
-                        <p> Add To Cart </p>
-                    </button>
-                </Link>
+                <button onClick={AddToCart} className='AddToCartButton' >
+                    <p> Add To Cart </p>
+                </button>
+                {redirect && <Navigate to="/shopping-cart" />}
             </div>
         </div>
     )

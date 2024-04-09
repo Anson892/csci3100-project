@@ -21,6 +21,7 @@ export const OrderHistory = () => {
   return (
     <div>
       {orderHistory && orderHistory.map((i)=><Order key={i.id} order={i} />)}
+      {!orderHistory && <div>You have not placed any order in the past.</div>}
     </div>
   )
 }

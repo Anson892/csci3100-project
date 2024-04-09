@@ -6,9 +6,12 @@ import logo from '../../Assets/logo.svg';
 import shopping_cart_icon from '../../Assets/Icons/shopping_cart_icon.svg'
 import profile_icon from '../../Assets/Icons/profile_icon.svg'
 import { AuthContext } from '../../Context/AuthContext';
+import { CartContext } from '../../Context/CartContext';
 
 export const Navbar = () => {
     const { userAuth, dispatch } = useContext(AuthContext)
+    const { cartSize } = useContext(CartContext)
+
     const logout = () => {
         localStorage.removeItem('userAuth')
         dispatch({type:'LOGOUT'})
@@ -25,8 +28,9 @@ export const Navbar = () => {
                 <SearchBar/>
             </div>
             <div className="nav-right">
-                <Link to={'/shopping-cart'} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
+                <Link className="shopping-cart-icon" to={'/shopping-cart'} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
                     <img src={shopping_cart_icon} alt="" />
+                    {cartSize>0 && <div className="cart-size-indicator">{cartSize}</div>}
                 </Link>
                 <Link to={'/account'} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
                     <img src={profile_icon} alt="" />

@@ -7,7 +7,7 @@ import { OrderHistory } from './OrderHistory/OrderHistory';
 
 export const AccountInfo = () => {
   
-  const [AccountInfo, setAccounInfo]=useState(false /*true*/);
+  const [AccountInfo, setAccounInfo]=useState(true);
   const ProfileButton_clicked = () =>{
     setAccounInfo(true);
   }
