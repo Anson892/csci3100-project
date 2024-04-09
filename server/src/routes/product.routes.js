@@ -6,6 +6,7 @@ module.exports = (app) => {
   router.post("/", upload.array("files", 5), product.create);
   router.get("/", product.findAll);
   router.get("/category/:cate", product.findbycategory);
+  router.get("/category", product.getCategories);
   router.get("/:productID", product.findbyid);
   router.get("/name/:productname", product.findbyname);
   router.put("/update", product.update);

@@ -3,7 +3,7 @@ import './ProductInfo.css'
 import { Navbar } from '../../Components/Navbar/Navbar';
 import { useParams } from 'react-router-dom';
 import { ProductCard } from '../../Components/ProductCard/ProductCard';
-import ProductImage from '../../Assets/Images/ProductImage.jpg'
+import ProductImage from '../../Assets/Images/ProductIcon.jpg'
 import add_icon from '../../Assets/Icons/add-icon.svg'
 import minus_icon from '../../Assets/Icons/minus-icon.svg'
 import star_filled from '../../Assets/Icons/star_filled.svg'
@@ -167,7 +167,7 @@ const CommentContainer = ({id}) => {
     const Star = ({requirement}) => {
         return(
             <div>
-            { StarNum > requirement  ?  <StarFilled/> : <StarEmpty/>}
+            { StarNum >= requirement  ?  <StarFilled/> : <StarEmpty/>}
             </div>
         )
     }
@@ -234,11 +234,11 @@ const CommentContainer = ({id}) => {
         <div className='CommentContainer'>
             <p className='StarText'>{StarNum}</p>
             <div className='StarContainer'>
-                <Star requirement = '0.0'/>
                 <Star requirement = '1.0'/>
                 <Star requirement = '2.0'/>
                 <Star requirement = '3.0'/>
                 <Star requirement = '4.0'/>
+                <Star requirement = '5.0'/>
             </div>
             <div className='CommentSummaryContainer'>
                 <StarProgressBar number = '5' count = {Count1} percent = {Count1/total*100}/>
@@ -258,7 +258,7 @@ const CommentContainer = ({id}) => {
             height = {279}
             >
                 {itemsjs.map((itemsjs,index)=>
-                        <div key= {itemsjs.id} ><CommentBox username={itemsjs.user.username} star={itemsjs.rating} content={itemsjs.content} index = {index}  /></div>
+                        <div key= {itemsjs.id} ><CommentBox username={itemsjs.user ? itemsjs.user.username : "Deleted User"} star={itemsjs.rating} content={itemsjs.content} index = {index}  /></div>
                 )}  
             </InfiniteScroll>
         </div> 
@@ -363,7 +363,7 @@ const Product = ({name,price,discount,stock,description,id}) => {
     const CommentButton_clicked = () =>{
         setRightContent(false);
     }
-    const [photo0,setPhoto0] = useState('-1')
+    const [photo0,setPhoto0] = useState(ProductImage)
     const [photo1,setPhoto1] = useState('-1')
     const [photo2,setPhoto2] = useState('-1')
     const [photo3,setPhoto3] = useState('-1')

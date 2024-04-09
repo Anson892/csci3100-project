@@ -12,6 +12,12 @@ export const DropDownMenu = ({ items, initial, setFucn }) => {
     const [onClick, setOnClick] = useState(false);
     
     const[scope, animate] = useAnimate();
+
+    useEffect(() => {
+        setCurrentItem(items[initial]);
+        setCurrentAnimateItem(items[initial]);
+    }, [initial]);
+
     useEffect(() => {
         const h = (6 + 24 + 13 + 24 * items.length + 13).toString() + "px";
         if (isOpen && onClick) {

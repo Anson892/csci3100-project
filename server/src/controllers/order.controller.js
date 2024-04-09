@@ -142,7 +142,8 @@ controller.history = async (req, res) => {
   const userid = req.params.userid;
   const resultlist = [];
   const orderlist = await Order.findAll({
-    where: {userId: userid}
+    where: {userId: userid},
+    order: [['id', 'DESC']]
   })
   var ordercount = 0;
   try{

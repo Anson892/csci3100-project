@@ -2,21 +2,18 @@
     position: relative;
     top: 0px;
     left: 0px;
-    width: 200px;
-    height: 30px;
     font-size: 16px;
     border: 1px solid black;
     border-radius: 15px;
     margin: 0px;
     display: flex;
     justify-content: center;
+    text-align: center;
     background-color: #F6F6E9;
     overflow: hidden;
     z-index: 2;
 
     .drop-down-menu-button {
-        width: 16px;
-        height: 16px;
         position: absolute;
         top: 7px;
         left: 10px;
@@ -45,12 +42,15 @@
 
         .current-item {
             width:fit-content;
-            margin: 0px 0px 13px 0px;
+            margin: 0 auto;
+            margin-bottom: 13px;
             
         }
 
         .item-container {
             width: fit-content;
+            text-align: center;
+            margin: 0 auto;
             cursor: pointer;
         }
 

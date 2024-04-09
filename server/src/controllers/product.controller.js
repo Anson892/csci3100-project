@@ -216,6 +216,23 @@ controller.delete = (req, res) => {
     });
 };
 
+// get all product categories: GET /api/product/category
+controller.getCategories = (req, res) => {
+  Product.findAll({
+    attributes: [
+      [sequelize.fn("DISTINCT", sequelize.col("category")), "category"],
+    ],
+  })
+    .then((data) => {
+      resultlist = [];
+      data.forEach(element => {
+        resultlist.push(element.dataValues.category)
+      })
+      res.status(200).json(resultlist);
+    })
+    .catch((err) => res.status(500).json(err));
+};
+
 /*delete all product(not for use?)
 controller.deleteAll = (req, res) => {
     Product.destroyAll().then(() => {
