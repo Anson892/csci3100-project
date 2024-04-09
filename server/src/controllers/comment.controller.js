@@ -145,6 +145,7 @@ controller.commentlist = (req, res) => {
     ],
     offset: setoffset,
     limit: setlimit,
+    order: [["createdAt", "DESC"]]
   })
     .then((data) => {
       res.send(data);
