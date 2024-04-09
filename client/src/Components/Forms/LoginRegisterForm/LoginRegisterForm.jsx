@@ -52,7 +52,7 @@ export const LoginRegisterForm = ({
         setRegistered(true);
         return;
       }
-      if (data.usertype === "customer") {
+      if (data.userType === "customer") {
         checkUserCart(data.id);
       }
       localStorage.setItem("userAuth", JSON.stringify(data)); // store username, usertype & JWT token in browser
