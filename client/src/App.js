@@ -30,7 +30,9 @@ function App() {
                 <Routes location={location} key={location.pathname + location.search}>
                     
                     {/* visible to all users, does not require authentification */}
-                    <Route path='/' exact element={<PageTransition><Home/></PageTransition>}/>
+                    <Route path='/' exact element={
+                        userType == "admin" ? <PageTransition><Navigate to='/admin/user'/></PageTransition> :
+                        <PageTransition><Home/></PageTransition>}/>
                     <Route path='/product/:productId' element={<PageTransition><ProductInfo/></PageTransition>}/>
                     <Route path='/search' element={<PageTransition><SearchResult/></PageTransition>}/>
 
@@ -39,28 +41,31 @@ function App() {
 
                     {/* redirect customer to home page, admin to admin user panel after successful login */}
                     <Route path='/login' element={
-                        userType == "admin" ? <PageTransition><AdminUser/></PageTransition> :
-                        userType == "customer" ? <PageTransition><Home/></PageTransition> :
+                        userType == "admin" ? <PageTransition><Navigate to='/admin/user'/></PageTransition> :
+                        userType == "customer" ? <PageTransition><Navigate to='/'/></PageTransition> :
                         <PageTransition><Login/></PageTransition>}/>
                     
                     {/* redirect customer to home page, admin to admin user panel after successful login */}
                     <Route path='/register' element={
-                        userType == "admin" ? <PageTransition><AdminUser/></PageTransition> :
-                        userType == "customer" ? <PageTransition><Home/></PageTransition> :
+                        userType == "admin" ? <PageTransition><Navigate to='/admin/user'/></PageTransition> :
+                        userType == "customer" ? <PageTransition><Navigate to='/'/></PageTransition> :
                         <PageTransition><Register/></PageTransition>}/>
 
                     {/* redirect customer to login if not loggin in */}
                     <Route path='/shopping-cart' element={
-                        userType == "customer" ? <PageTransition><ShoppingCart/></PageTransition>:
+                        userType == "admin" ? <PageTransition><Navigate to='/admin/user'/></PageTransition> :
+                        userType == "customer" ? <PageTransition><ShoppingCart/></PageTransition> :
                         <PageTransition><Navigate to='/login'/></PageTransition>}/>
 
                     {/* redirect customer to login if not loggin in */}
                     <Route path='/checkout' element={
+                        userType == "admin" ? <PageTransition><Navigate to='/admin/user'/></PageTransition> :
                         userType == "customer" ? <PageTransition><Checkout/></PageTransition>:
                         <PageTransition><Navigate to='/login'/></PageTransition>}/>
                     
                     {/*  redirect customer to login if not loggin in */}
                     <Route path='/account' element={
+                        userType == "admin" ? <PageTransition><Navigate to='/admin/user'/></PageTransition> :
                         userType == "customer" ? <PageTransition><AccountInfo/></PageTransition>:
                         <PageTransition><Navigate to='/login'/></PageTransition>}/>
 
