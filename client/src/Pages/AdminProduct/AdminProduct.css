@@ -1,3 +1,9 @@
+.main-image {
+    width: 90px;
+    height: 75px;
+    object-fit: cover;
+}
+
 .admin-user {
     position: relative;
     width: 100%;
@@ -113,7 +119,7 @@
                             text-align: left;
                             padding-bottom: 16px;
                             padding-left: 30px;
-                            padding-right: 30px;
+                            padding-right: 30px; 
 
                             .remove-button {
                                 cursor: pointer;

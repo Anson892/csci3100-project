@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import './AdminProduct.css'
 import logo from '../../Assets/logo.svg'
 import InfiniteScroll from 'react-infinite-scroll-component'
@@ -34,20 +34,15 @@ const ProductInfo = ({ id, handleEditProduct, handleDeleteProduct }) => {
             setCategory(data.data.category);
             setPrice("$" + String(data.data.price));
             setDiscount(String(data.data.discount * 100) + "%");
-            // setImageScr("C:\Users\User\Documents\University\CSCI3100\Project\Git\csci3100-project\server/resources/static/assets/uploads/1712308873802-product-Admin.png")
-            setImageScr("../../../../server/resources/static/assets/uploads/1712308873802-product-Admin.png")
-            // if (data.data.product_images.length > 0) {
-            //     console.log();
-            //     console.log(data.data.product_images[0].path);
-            //     setImageScr(data.data.product_images[0].path);
-            //     setImageScr()
-            // }
+            if (data.data.product_images.length > 0) {
+                setImageScr('http://localhost:8080/images/' + data.data.product_images[0].path);
+            }
         })
     }, [id])
 
     return (
         <tr>
-            <th><img src="" alt="" /></th>
+            <th><img className='main-image' src={imageScr} alt="" /></th>
             <th>{name}</th>
             <th>{quantity}</th>
             <th>{category}</th>
@@ -208,7 +203,7 @@ export const AdminProduct = () => {
                 setPointer(pointer + 1)  
                 if (data.length < 5) setHasMore(false)
             })
-        }, 10);
+        }, 500);
     }
 
     // When Start

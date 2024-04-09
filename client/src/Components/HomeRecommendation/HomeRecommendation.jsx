@@ -36,6 +36,7 @@ const ProductItemLeft = ({id}) => {
 
     const [name, setName] = useState()
     const [description, setDescription] = useState()
+    const [imageScr, setImageScr] = useState()
     useEffect(()=> {
         fetch(
             'http://localhost:8080/api/product/'+ id,
@@ -47,9 +48,13 @@ const ProductItemLeft = ({id}) => {
             .then((data) => {
                 setName(data.data.name);
                 setDescription(data.data.description);
+                if(data.data.product_images[0] != undefined)
+                    setImageScr('http://localhost:8080/images/'+ (data.data.product_images[0].path));
+                else
+                    setImageScr(product_image_test)
             })
             .catch((error) => {
-                return
+                console.error(error);
             } )
     }, [id])
 
@@ -64,7 +69,7 @@ const ProductItemLeft = ({id}) => {
                 style={{ y: leftLineOffset }}    
             />
             <motion.img
-                src={ product_image_test }
+                src={ imageScr }
                 alt=""
                 style={{
                     width: productImageExpand,
@@ -124,6 +129,7 @@ const ProductItemRight = ({id}) => {
 
     const [name, setName] = useState()
     const [description, setDescription] = useState()
+    const [imageScr, setImageScr] = useState()
     useEffect(()=> {
         fetch(
             'http://localhost:8080/api/product/'+ id,
@@ -135,9 +141,13 @@ const ProductItemRight = ({id}) => {
             .then((data) => {
                 setName(data.data.name);
                 setDescription(data.data.description);
+                if(data.data.product_images[0] != undefined)
+                    setImageScr('http://localhost:8080/images/'+ (data.data.product_images[0].path));
+                else
+                    setImageScr(product_image_test)
             })
             .catch((error) => {
-                return
+                console.error(error);
             } )
     }, [id])
 
@@ -152,7 +162,7 @@ const ProductItemRight = ({id}) => {
                 style={{ y: rightLineOffset }}    
             />
             <motion.img
-                src={ product_image_test }
+                src={ imageScr }
                 alt=""
                 style={{
                     width: productImageExpand,
@@ -168,7 +178,6 @@ const ProductItemRight = ({id}) => {
             >
                 <div className="product-text" >
                     <h1 className="product-name">{name}</h1>
-                    {/* Lorem ipsum dolor sit amet consectetur. Risus sed lacinia aliquet pulvinar nascetur netus molestie nisi. Duis habitant cursus arcu turpis. Viverra enim malesuada eget dictumst lacus sed enim volutpat ante. At quis velit neque enim elementum nullam purus ipsum risus. Sit nunc orci dictumst habitasse. Quis potenti senectus lacus nisl massa sit orci potenti vulputate. Aliquet lobortis sit diam dui duis id lectus sed pellentesque. */}
                     <p className="product-description">{description}</p>
                 </div>
             </motion.div>
