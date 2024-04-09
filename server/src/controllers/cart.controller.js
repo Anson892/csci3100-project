@@ -297,6 +297,7 @@ controller.updateCartItem = (req, res) => {
           });
         } else {
           // Update quantity
+          cartItem.quantity = quantity;
           cartItem
             .save()
             .then((data) => {
