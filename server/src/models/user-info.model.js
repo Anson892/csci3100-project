@@ -7,31 +7,23 @@ module.exports = (sequelize, Sequelize) => {
     },
     firstName: {
       type: Sequelize.STRING(50),
-      allowNull: false
+      defaultValue: "",
     },
     lastName: {
       type: Sequelize.STRING(50),
-      allowNull: false
+      defaultValue: "",
     },
     address: {
       type: Sequelize.STRING(200),
-      allowNull: false
-    },
-    city: {
-      type: Sequelize.STRING(50),
-      allowNull: false
-    },
-    country: {
-      type: Sequelize.STRING(50),
-      allowNull: false
+      defaultValue: "",
     },
     zipCode: {
       type: Sequelize.STRING(10),
-      allowNull: false
+      defaultValue: "",
     },
     phoneNumber: {
       type: Sequelize.STRING,
-      allowNull: false
+      defaultValue: "",
     },
   });
 

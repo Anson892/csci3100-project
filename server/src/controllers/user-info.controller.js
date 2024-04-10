@@ -7,7 +7,7 @@ const controller = {};
 // create user info: POST /api/info
 controller.createUserInfo = async (req, res) => {
   const userInfo = {
-    userId: req.body.userId,
+    userId: req.params.id,
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     address: req.body.address,
@@ -27,6 +27,22 @@ controller.createUserInfo = async (req, res) => {
       res.status(500).json({
         error:
           err.message || "Some error occurred while retrieving user with id=" + userInfo.userId,
+      });
+    });
+  
+  // check if user info already exists
+  UserInfo.findOne({ where: { userId: userInfo.userId } })
+    .then((data) => {
+      if (data !== null) {
+        res.status(200).json({
+          message: "User info already exists!",
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error:
+          err.message || "Some error occurred while checking if user info exists for user with id=" + userInfo.userId,
       });
     });
 
@@ -50,7 +66,7 @@ controller.getUserInfo = async (req, res) => {
   const id = req.params.id;
 
   UserInfo.findAll({
-    where: {id: id},
+    where: {userId: id},
     include: [{ model: User,
                 attribute: ['id', 'username']}]})
     .then((data) => {

@@ -31,6 +31,18 @@ export const LoginRegisterForm = ({
     }
   };
 
+  const checkUserProfile = async (userId) => {
+    const url = "http://localhost:8080/api/info/" + userId;
+    const res = await fetch(url, { method: "POST" });
+    const data = await res.json();
+
+    if (res.ok) {
+      console.log(data.message);
+      return;
+    }
+    setError(data.message);
+  }
+
   const login = async (e) => {
     e.preventDefault();
 
@@ -54,6 +66,7 @@ export const LoginRegisterForm = ({
       }
       if (data.userType === "customer") {
         checkUserCart(data.id);
+        checkUserProfile(data.id);
       }
       localStorage.setItem("userAuth", JSON.stringify(data)); // store username, usertype & JWT token in browser
       dispatch({ type: "LOGIN", userAuth: data });
