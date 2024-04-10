@@ -54,7 +54,7 @@ export const SearchResult = () => {
             body: JSON.stringify({
                 "searchpointer": pointer,
                 "name": keywords,
-                "category": "", //! to be modified
+                "category": category, //! to be modified
                 "orderby": orderByfetch,
                 "order": orderfetch,
                 "minprice": +minPrice,

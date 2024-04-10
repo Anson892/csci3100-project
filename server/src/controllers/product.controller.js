@@ -67,7 +67,7 @@ controller.create = async (req, res, next) => {
 controller.search = async (req, res) => {
   const { searchpointer, name, category, orderby, order, minprice, maxprice, minrating, maxrating} = req.body;
   const name_key = "%" + name + "%";
-  const category_key = "%" + category + "%";
+  // const category_key = "%" + category + "%";
   var setoffset = 0;
   var setlimit = 15;
   if(searchpointer>0){
@@ -75,6 +75,13 @@ controller.search = async (req, res) => {
       var setlimit = 5;
   }
   const resultlist = [];
+  where_clause = {
+    name: {[Op.like]: name_key},
+    price: {[Op.between]: [minprice, maxprice]},
+  }
+  if (category!="All"){
+    where_clause.category = {[Op.eq]: category}
+  }
   const search = await Product.findAll({
     attributes: [
       'id', 
@@ -86,12 +93,7 @@ controller.search = async (req, res) => {
             productId = Product.id
       )`), 'avgrating']
   ],
-    where:{
-      [Op.or]: [{name: {[Op.like]: name_key}},
-                {id: {[Op.like]: name_key}}],
-      category: {[Op.like]: category_key},
-      price: {[Op.between]: [minprice, maxprice]},
-    },
+    where: where_clause,
     having: { 'avgrating': {[Op.between]: [minrating, maxrating]}},
     offset: setoffset,
     limit: setlimit,

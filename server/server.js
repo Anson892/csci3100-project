@@ -20,7 +20,7 @@ app.use('/images', express.static(__imageDir));
 
 // connecting to the database
 const db = require("./src/models");
-db.sequelize.sync({ force: true })//
+db.sequelize.sync()//{ force: true }
   .then(() => {
     console.log("[LOG] database connected successfully.");
 
