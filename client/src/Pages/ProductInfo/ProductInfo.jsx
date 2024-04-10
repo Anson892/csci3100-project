@@ -51,12 +51,14 @@ const Recommendation = () => {
 
     return (
             <div className='RecommendationContainer'>
-                <p className='RecommendationText'>Recommendation</p>
-                <div><ProductCard id = {recommend0_id} /></div>
-                <div><ProductCard id = {recommend1_id}/></div>
-                <div><ProductCard id = {recommend2_id}/></div>
-                <div><ProductCard id = {recommend3_id}/></div>
-                <div><ProductCard id = {recommend4_id}/></div>
+                <div className='RecommendationText'>Recommendation</div>
+                <div className='RecommendationItems'>
+                    <div><ProductCard id = {recommend0_id} /></div>
+                    <div><ProductCard id = {recommend1_id}/></div>
+                    <div><ProductCard id = {recommend2_id}/></div>
+                    <div><ProductCard id = {recommend3_id}/></div>
+                    <div><ProductCard id = {recommend4_id}/></div>
+                </div>
             </div>
     )
 }
@@ -314,27 +316,29 @@ const InfoContainer = ({name,price,discount,stock,description,id}) => {
 
     return(
         <div className='InfoContainer'  >
+            <div className='product-status'>
                 { (stock == 0 )
-                    ? (<div className='ProductTag1'> <p> Out of Stock</p> </div> )
+                    ? (<div className='out-of-stock'> <p> Out of Stock</p> </div> )
                     :   [   ( discount < 1)
-                            ?<div className='ProductTag'> <p> On Sale</p> </div>
+                            ?<div className='on-sale'> <p> On Sale</p> </div>
                             : <div> </div>
                         ]
                 }
-            <div><p className='ProductName'>{name}</p></div>
-            <div className='PriceContainer'>
-            <p className='ProductIDText'>ProductID#{id}</p>
-                <div>
-                <p className='PriceText'>${price*discount}</p>
-                { (discount<1)
-                    ? (<p className='DiscountText'>${price} </p> )
-                    : (<div> </div> )
-                }
-                </div>
             </div>
-            <p className='ProductDetail'>
+            <div className="ProductNameID">
+                <p className='ProductName'>{name}</p>
+                <p className='ProductIDText'>ProductID#{id}</p>
+            </div>
+            <div className='PriceContainer'>
+                <div className='PriceText'>${price*discount}</div>
+                { (discount<1)
+                    ? (<div className='DiscountText'>${price} </div> )
+                    : (<div></div> )
+                }
+            </div>
+            <div className='ProductDetail'>
                 {description}
-            </p>
+            </div>
             <div className='ProductAmountContainer'>
 
                 <button>
@@ -439,9 +443,7 @@ const Product = ({name,price,discount,stock,description,id}) => {
                 <button onClick= {CommentButton_clicked} className='CommentButton'>
                     <p> Comment </p>
                 </button>
-                <div>
                 { RightContent ?  <InfoContainer name={name} price={price} discount={discount} stock={stock} description={description} id = {id}></InfoContainer> : <CommentContainer id = {id} ></CommentContainer>}
-                </div>
             </div>
         </div>
     )
@@ -479,16 +481,16 @@ export const ProductInfo = () => {
         <div>
             <Navbar/>
             <div className='MainContainer'>
-            <Product
-                name = {FetchedProductName}
-                price = {FetchedProductPrice}
-                discount = {FetchedProductDiscount}
-                stock = {FetchedProductstock}
-                description = {FetchedProductdescription}
-                id = {productId}
-            ></Product>
-            <div className="horizon"></div>
-            <Recommendation/>
+                <Product
+                    name = {FetchedProductName}
+                    price = {FetchedProductPrice}
+                    discount = {FetchedProductDiscount}
+                    stock = {FetchedProductstock}
+                    description = {FetchedProductdescription}
+                    id = {productId}
+                ></Product>
+                <div className="horizon"></div>
+                <Recommendation/>
             </div>
             <data></data>
         </div>

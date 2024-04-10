@@ -87,20 +87,23 @@
 
 .item-price{
     display: flex;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 
 
 .cart-item-price{
     color: #7F7F7F;
-    padding-left: 5%;
+    margin-left: 5px;
+    font-size: 14px;
     text-decoration-line: line-through;
-    font-weight: 700;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
 }
 
 .subtotal{
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .cart-cancel-button{
