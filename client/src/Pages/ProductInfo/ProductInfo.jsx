@@ -53,11 +53,11 @@ const Recommendation = () => {
             <div className='RecommendationContainer'>
                 <div className='RecommendationText'>Recommendation</div>
                 <div className='RecommendationItems'>
-                    <div><ProductCard id = {recommend0_id} /></div>
-                    <div><ProductCard id = {recommend1_id}/></div>
-                    <div><ProductCard id = {recommend2_id}/></div>
-                    <div><ProductCard id = {recommend3_id}/></div>
-                    <div><ProductCard id = {recommend4_id}/></div>
+                    <ProductCard id = {recommend0_id} />
+                    <ProductCard id = {recommend1_id}/>
+                    <ProductCard id = {recommend2_id}/>
+                    <ProductCard id = {recommend3_id}/>
+                    <ProductCard id = {recommend4_id}/>
                 </div>
             </div>
     )

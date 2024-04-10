@@ -4,6 +4,32 @@ import ProductIcon from "../../Assets/Images/ProductIcon.jpg";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useParams } from "react-router-dom";
+import star_filled from '../../Assets/Icons/star_filled.svg'
+import star_empty from '../../Assets/Icons/star_empty.svg'
+
+const Star = ({progress}) => {
+  return (
+    <div className="CardStar" percent={Math.min(1.0, progress)}>
+      <img src={star_empty} />
+      <img src={star_filled} style={{clipPath: `inset(0 ${100 - progress * 100}% 0 0)`}}/>
+    </div>
+  )
+}
+
+const RatingStars = ({rating}) => {
+  return (
+    <div className="RatingStars">
+      <div className="Rating">{rating.toFixed(1)}</div>
+      <div className="Stars">
+        <Star progress={rating}/>
+        <Star progress={rating-1}/>
+        <Star progress={rating-2}/>
+        <Star progress={rating-3}/>
+        <Star progress={rating-4}/>
+      </div>
+    </div>
+  )
+};
 
 export const ProductCard = ({ id }) => {
   const cardAnim = {
@@ -32,7 +58,15 @@ export const ProductCard = ({ id }) => {
   const [FetchedProductPrice, SetFetchedProductPrice] = useState([]);
   const [FetchedProductDiscount, SetFetchedProductDiscount] = useState([]);
   const [FetchedProductstock, SetFetchedProductstock] = useState(0);
+  const [FetchedProductRating, SetFetchedProductRating] = useState(0);
   const [photo0, setPhoto0] = useState("-1");
+
+  const fetchRating = async () => {
+      const respose = await fetch("http://localhost:8080/api/comment/id/" + id, { method: "GET" });
+      const data = await respose.json();
+
+      SetFetchedProductRating(+data.average);
+  }
 
   useEffect(() => {
     if (id != -1) {
@@ -51,6 +85,7 @@ export const ProductCard = ({ id }) => {
                 response.data.product_images[0].path
             );
         });
+      fetchRating(); 
     }
   }, [id]);
 
@@ -84,6 +119,7 @@ export const ProductCard = ({ id }) => {
                     <p className="CardDiscountText">${FetchedProductPrice} </p>
                   ) : ( <p></p>)}
                 </div>
+                <RatingStars rating={FetchedProductRating}/>
               </div>
               {FetchedProductstock == 0 ? (
                 <div className="ProductTagCard">

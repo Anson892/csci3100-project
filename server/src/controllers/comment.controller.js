@@ -109,8 +109,13 @@ controller.status = async (req, res) => {
       },
     });
 
+    // average
+    const total = five_star + four_star + three_star + two_star + one_star;
+    const avg = (5 * five_star + 4 * four_star + 3 * three_star + 2 * two_star + 1 * one_star) / Math.max(1, total);
+
     const status = {
       id: req.params.pid,
+      average: avg.toFixed(1),
       five_star: JSON.stringify(five_star),
       four_star: JSON.stringify(four_star),
       three_star: JSON.stringify(three_star),
