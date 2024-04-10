@@ -19,6 +19,7 @@ export const Order = ({order}) => {
                 {orderItems && orderItems.map((i)=>
                 <OrderItem 
                     key={order.id} 
+                    status={order.status}
                     orderid = {order.id}
                     productid={i.productId} 
                     productname={i.productname} 
@@ -51,14 +52,14 @@ const OrderInfo = ({order}) => {
             <div class="order-info-delivery-status">
                 <p>{order.status}</p>
                 &nbsp;
-                {order.status == "in delivery" && <img src={deliveringIcon} alt="delivering_icon"></img>}
+                {order.status !== "completed" && <img src={deliveringIcon} alt="delivering_icon"></img>}
                 {order.status == "completed" && <img src={arrivedIcon} alt="arrived_icon"></img>}
             </div>
         </div>
     )
 }
 
-const OrderItem = ({orderid, productid, productname, price, quantity}) => {
+const OrderItem = ({status, orderid, productid, productname, price, quantity}) => {
     const { userAuth } = useContext(AuthContext)
     const [writeReview, setWriteReview] = useState();
     const [submitted, setSubmitted] = useState();
@@ -117,11 +118,11 @@ const OrderItem = ({orderid, productid, productname, price, quantity}) => {
                 <p>{price}</p>
                 <p>{quantity}</p>
                 { /* disable add review function after submission*/
-                submitted ? 
+                status == "completed" ? submitted ? 
                 <img src={submittedCommentIcon} alt="add_comment_icon"></img> :
                 <button class="add-comment-button" onClick={()=>setWriteReview(true)}>
                     <img src={addCommentIcon} alt="add_comment_icon"></img>
-                </button>
+                </button> : <div></div>
                 }
             </div>
 
