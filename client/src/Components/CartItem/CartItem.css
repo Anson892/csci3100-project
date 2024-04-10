@@ -6,11 +6,12 @@
     padding-top: 1vh;
     padding-bottom: 1vh;
     border-bottom: 2px dotted black;
+
 }
 
 .cart-product-box{
     display: flex;
-    width: 30%;
+    width: 100%;
 }
 
 .cart-product-description{
@@ -24,6 +25,15 @@
 .cart-product-name {
     font-family: 'Literata';
     font-weight: 700;
+    font-size: 16px;
+}
+
+.cart-item a {
+    text-decoration: none;
+    text-decoration-line: none;
+    color: #000000;
+    width: 30%;
+    cursor: pointer;
 }
 
 .cart-product-status{

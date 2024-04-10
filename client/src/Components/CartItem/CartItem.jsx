@@ -86,23 +86,25 @@ export const CartItem = ({ id, quantity }) => {
 
   return (
     <div class="cart-item">
-      <div class="cart-product-box">
-        <img
-          class="cart-product-img"
-          src={photo}
-          alt="product img"
-        ></img>
-        <div class="cart-product-description">
-          <div class="cart-product-status">
-            {stock == 0 ? (
-              <p class="out-of-stock"> Out of Stock</p>
-            ) : (
-              [discount < 1 ? <p class="on-sale"> On Sale</p> : <p></p>]
-            )}
+      <Link to={'/product/' + id} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
+        <div class="cart-product-box">
+          <img
+            class="cart-product-img"
+            src={photo}
+            alt="product img"
+          ></img>
+          <div class="cart-product-description">
+            <div class="cart-product-status">
+              {stock == 0 ? (
+                <p class="out-of-stock"> Out of Stock</p>
+              ) : (
+                [discount < 1 ? <p class="on-sale"> On Sale</p> : <p></p>]
+              )}
+            </div>
+            <div class="cart-product-name">{name}</div>
           </div>
-          <div class="cart-product-name">{name}</div>
         </div>
-      </div>
+      </Link>
       <div class="CartItemAmountBox">
         <button onClick={decrement}>
           <img
