@@ -18,6 +18,7 @@ const ProductImage = db.ProductImage;
 const Order = db.Order;
 const OrderItem = db.OrderItem;
 const Comment = db.Comment;
+const Cart = db.Cart
 
 //insert data
 //User
@@ -166,7 +167,8 @@ async function import_Order() {
       status: columns[0],
       paymentMethod: columns[1],
       userId: columns[2],
-      userInfoId: columns[3],
+      receiver: columns[3],
+      address: columns[4]
     };
     Orders.push(order);
   });
@@ -240,9 +242,37 @@ async function import_Comment() {
   }
 }
 
+//cart
+async function import_Cart() {
+  const fileContent = fs.readFileSync("./cart.csv", "utf8");
+  var lines = fileContent.split("\r\n");
+  if (lines.length == 1) {
+    lines = fileContent.split("\n");
+  }
+
+  const dataLines = lines.slice(2, lines.length); //remover headers
+  const Cartlist = [];
+  dataLines.forEach((dataLines) => {
+    console.log(dataLines);
+    const columns = dataLines.split(",");
+    let cart = {
+      userId: columns[0],
+    };
+    Cartlist.push(cart);
+  });
+  try {
+    let result = await Cart.bulkCreate(Cartlist);
+    let generatedIds = result.map((el) => el.dataValues.id);
+    console.log("generatedIds", generatedIds);
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 import_user();
 import_userInfo();
 import_Product();
 import_Order();
 import_OrderItem();
 import_Comment();
+import_Cart();

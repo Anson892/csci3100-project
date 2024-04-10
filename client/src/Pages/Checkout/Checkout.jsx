@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useState } from 'react';
 import './Checkout.css'
 import { Link } from 'react-router-dom';
 import { TextInput } from '../../Components/Forms/TextInput/TextInput'
 import { SubmitButton } from '../../Components/Forms/SubmitButton/SubmitButton'
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../Context/AuthContext';
 
 
 export const Checkout = () => {
@@ -16,6 +17,31 @@ export const Checkout = () => {
   const [CVC, setCVC] = useState('');
   const [PostalCode, setPostalCode] = useState('');
   const [orderId, setorderId] = useState(1) // !!!!!! To be set by global or useparams !!!!!!
+
+  const { userAuth } = useContext(AuthContext);
+  
+  //fetch user info
+  useEffect(() => {
+    fetch('http://localhost:8080/api/info/checkout/'+userAuth.id, {method:'GET'})
+    .then(res => {
+      return res.json();
+    })
+    .then(data => {
+      setReceiver(data.Receiver);
+      setAddress(data.Address);
+    })
+  },[])
+
+  const handelchangeaddress = (e) => {
+    e.preventDefault();
+    setAddress(e.target.value)
+  }
+
+  const handlechangereceiver = (e) => {
+    e.preventDefault();
+    setReceiver(e.target.value)
+  }
+
   const handleSubmit = () => {
     if ((Address != '')&&(Receiver != '')&&(CardNum != '')&&(ExpireDate != '')&&(CVC != '')&&(PostalCode != '')){
       const CheckoutUrl = "http://localhost:8080/api/order/placeorder"
@@ -26,7 +52,9 @@ export const Checkout = () => {
                 },
                 body: JSON.stringify({
                   "orderId": orderId,
-                  "paymentMethod": "Credit Card"
+                  "paymentMethod": "Credit Card",
+                  "receiver": Receiver,
+                  "address": Address
                 })
       })
       .then((res)=>{
@@ -71,14 +99,14 @@ export const Checkout = () => {
       <div className='DeliveryContainer'>
         <p className='DeliveryText'>Delivery</p>
         <div className='DeliverAddressContainer'>
-          <TextInput type="text" onChange={(e)=>{setAddress(e.target.value)}}>Deliver Address</TextInput>
-          <TextInput type="text" onChange={(e)=>{setReceiver(e.target.value)}}>Receiver Name</TextInput>
+          <TextInput type="text" defaultText={Address} onChange={handelchangeaddress}>Deliver Address</TextInput>
+          <TextInput type="text" defaultText={Receiver} onChange={handlechangereceiver}>Receiver Name</TextInput>
         </div>
       </div>
       <div className='CreditCardContainer'>
           <p className='CreditCardText'>Credit Card</p>
           <TextInput type="text" onChange={(e)=>{setCardNum(e.target.value)}}>Card Number</TextInput>
-          <TextInput type="text" onChange={(e)=>{setExpireDate(e.target.value)}}>Expiration Date (MM/YYY)</TextInput>
+          <TextInput type="text" onChange={(e)=>{setExpireDate(e.target.value)}}>Expiration Date (MM/YYYY)</TextInput>
           <TextInput type="text" onChange={(e)=>{setCVC(e.target.value)}}>CVC/CVV</TextInput>
           <TextInput type="text" onChange={(e)=>{setPostalCode(e.target.value)}}>Postal Code</TextInput>
             <SubmitButton onClick={handleSubmit} children="Place Order">

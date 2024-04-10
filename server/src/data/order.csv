@@ -1,18 +1,18 @@
-﻿status,paymentMethod,userId,userInfoId
-STRING,STRING,INT,INT
-completed,VISA,1,1
-completed,Master,1,1
-completed,Paypal,1,1
-completed,Alipay,1,1
-completed,VISA,1,1
-completed,Master,2,2
-completed,Paypal,2,2
-completed,Alipay,2,2
-completed,VISA,2,2
-completed,Master,2,2
-completed,Paypal,2,2
-completed,Alipay,3,3
-completed,VISA,3,3
-completed,Master,3,3
-completed,Paypal,3,3
-completed,Alipay,3,3
+﻿status,paymentMethod,userId,reciver,address
+STRING,STRING,INT,STRING,STRING
+completed,VISA,1,Tom Kwan,LT1 Mong Man-Wai Building The Chinese University of Hong Kong Sha Tin N.T. HongKong SAR
+completed,Master,1,Tom Kwan,LT1 Mong Man-Wai Building The Chinese University of Hong Kong Sha Tin N.T. HongKong SAR
+completed,Paypal,1,Tom Kwan,LT1 Mong Man-Wai Building The Chinese University of Hong Kong Sha Tin N.T. HongKong SAR
+completed,Alipay,1,Tom Kwan,LT1 Mong Man-Wai Building The Chinese University of Hong Kong Sha Tin N.T. HongKong SAR
+completed,VISA,1,Tom Kwan,LT1 Mong Man-Wai Building The Chinese University of Hong Kong Sha Tin N.T. HongKong SAR
+completed,Master,2,John Wake,Room607 Mong Man-Wai Engineering Building The Chinese University of Hong Kong Sha Tin N.T. HongKong SAR
+completed,Paypal,2,John Wake,Room607 Mong Man-Wai Engineering Building The Chinese University of Hong Kong Sha Tin N.T. HongKong SAR
+completed,Alipay,2,John Wake,Room607 Mong Man-Wai Engineering Building The Chinese University of Hong Kong Sha Tin N.T. HongKong SAR
+completed,VISA,2,John Wake,Room607 Mong Man-Wai Engineering Building The Chinese University of Hong Kong Sha Tin N.T. HongKong SAR
+completed,Master,2,John Wake,Room607 Mong Man-Wai Engineering Building The Chinese University of Hong Kong Sha Tin N.T. HongKong SAR
+completed,Paypal,2,John Wake,Room607 Mong Man-Wai Engineering Building The Chinese University of Hong Kong Sha Tin N.T. HongKong SAR
+completed,Alipay,3,Ivan Kock,Room1028 Ho Sin-Hang Engineering Building The Chinese University of Hong Kong Sha Tin N.T. HongKong SAR
+completed,VISA,3,Ivan Kock,Room1028 Ho Sin-Hang Engineering Building The Chinese University of Hong Kong Sha Tin N.T. HongKong SAR
+completed,Master,3,Ivan Kock,Room1028 Ho Sin-Hang Engineering Building The Chinese University of Hong Kong Sha Tin N.T. HongKong SAR
+completed,Paypal,3,Ivan Kock,Room1028 Ho Sin-Hang Engineering Building The Chinese University of Hong Kong Sha Tin N.T. HongKong SAR
+completed,Alipay,3,Ivan Kock,Room1028 Ho Sin-Hang Engineering Building The Chinese University of Hong Kong Sha Tin N.T. HongKong SAR

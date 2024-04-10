@@ -73,6 +73,23 @@ controller.getUserInfo = async (req, res) => {
     });
 }
 
+//fetch userinfo for checkout
+controller.recive = async (req, res) => {
+  const id = req.params.id;
+  UserInfo.findOne({
+    attribute: ['firstName', 'lastName', 'address'],
+    where: { userId: id }
+  }).then((data) => {
+    const receiver = data.firstName + " " + data.lastName;
+    const result = {
+      Receiver: receiver,
+      Address: data.address
+    }
+    res.send(result)
+    
+  })
+}
+
 // update user info: PUT /api/info/:id
 controller.updateUserInfo = async (req, res) => {
   const id = req.params.id;

@@ -15,14 +15,12 @@ controller.create = async (req, res) => {
   const updatelist = [];
   //create new order record
   await Order.create({
-    userId: userId,
-    userInfoId: infoId
-  }).then(async (data) => {
+    userId: userId
+  }).then(async () => {
     //get the created order id
     await Order.findOne({
       attributes: ['id'],
-      where: { userId: userId,
-               userInfoId: infoId },
+      where: { userId: userId },
       order: [ [ 'createdAt', 'DESC' ]]
     }).then(async (data) => {
       console.log(data.id)
@@ -86,11 +84,13 @@ controller.create = async (req, res) => {
 
 // add products to order
 controller.PlaceOrder = async (req, res) => {
-  const { orderId, paymentMethod } = req.body;
+  const { orderId, paymentMethod, receiver, address } = req.body;
   Order.update(
     {
       status: "pending",
-      paymentMethod: paymentMethod
+      paymentMethod: paymentMethod,
+      receiver: receiver,
+      address: address
     },
     { where: {id: orderId} }
   )
@@ -170,19 +170,15 @@ controller.history = async (req, res) => {
         var price = Number(temp)
         total = total + price
       })
-      const userinfo = await UserInfo.findOne({
-        attributes: ['firstName', 'lastName'],
-        where: { id: element.userInfoId }
-      })
       const temp = element.createdAt
       const deliverydate = new Date(temp)
       deliverydate.setDate(deliverydate.getDate() + 7)
       const order = {
         id: element.id,
         ordertime: element.createdAt,
-        firstName: userinfo.firstName,
-        lastName: userinfo.lastName,
         ordertotal: total,
+        receiver: element.receiver,
+        address: element.address,
         paymentMethod: element.paymentMethod,
         deliverytime: deliverydate,
         status: element.status,
@@ -253,7 +249,7 @@ controller.findbyid = async (req, res) => {
 
 //update order status
 controller.update = async (req, res) => {
-  const { id, status } = req.body;
+  const { id, receiver, address, status } = req.body;
   Order.findOne({
     where: {
       id: id,

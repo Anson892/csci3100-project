@@ -15,6 +15,16 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false,
         defaultValue: "pending"
       },
+      receiver: {
+        type: Sequelize.STRING(100),
+        allowNull: false,
+        defaultValue: "pending"
+      },
+      address: {
+        type: Sequelize.STRING(200),
+        allowNull: false,
+        defaultValue: "pending"
+      },
     });
 
     // foreign keys to
@@ -23,7 +33,6 @@ module.exports = (sequelize, Sequelize) => {
     // Product: an order has many product items
     Order.link = function (models) {
       Order.belongsTo(models.User);
-      Order.belongsTo(models.UserInfo);
       Order.belongsToMany(models.Product, { through: models.OrderItem });
     }
   

@@ -41,7 +41,8 @@ const OrderInfo = ({order}) => {
         <div class="order-info">
             <p class="order-info-field">ORDER ID</p><p>{order.id}</p>
             <p class="order-info-field">ORDER TIME</p><p>{formatTime(order.ordertime)}</p>
-            <p class="order-info-field">RECEIVER NAME</p><p>{order.firstName} {order.lastName}</p>
+            <p class="order-info-field">RECEIVER NAME</p><p>{order.receiver}</p>
+            <p class="order-info-field">ADDRESS</p><p>{order.address}</p>
             <p class="order-info-field">ORDER TOTAl</p><p>{order.ordertotal}</p>
             <p class="order-info-field">PAYMENT METHOD</p><p>{order.paymentMethod}</p>
             <p class="order-info-field">EXPECTED ARRIVAL</p><p>{formatTime(order.deliverytime)}</p>
