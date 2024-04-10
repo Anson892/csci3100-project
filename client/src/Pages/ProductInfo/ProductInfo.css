@@ -499,13 +499,16 @@ color: #000000;
     box-sizing: border-box;
     flex-direction: column;
     align-items: center;
+    justify-content: flex-start;
     gap: 10px;
 
     position: absolute;
-    top: -3%;
-    left: -10%;
     width: 100%;
-    height: 607px;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    padding: 0;
+    margin-left: 1%;
 
     display: flex;
     flex: none;
@@ -513,12 +516,19 @@ color: #000000;
     flex-grow: 0;
 }
 
+.StarRatingSummary {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 15%;
+
+}
+
 .StarText {
-    position: absolute;
-    width: 85px;
-    height: 95px;
-    left: 93px;
-    top: 27px;
+    width: fit-content;
+    flex: 1 0 10%;
 
     font-family: 'Literata';
     font-style: normal;
@@ -526,9 +536,7 @@ color: #000000;
     font-size: 64px;
     line-height: 95px;
     /* identical to box height */
-    display: flex;
-    align-items: center;
-    text-align: center;
+    text-align: left;
     letter-spacing: -0.04em;
     text-transform: uppercase;
 
@@ -557,10 +565,8 @@ color: #000000;
     gap: 8px;
 
     position: absolute;
-    width: 291px;
-    height: 152px;
-    left: 93px;
-    top: 128px;
+    left: 0px;
+    top: 20%;
 }
 
 .CommentProgressBarContainer {
@@ -660,6 +666,7 @@ background: #000000;
 border-radius: 13px;
 }
 
+
 .CommentListContainer {
     display: flex;
     flex-direction: column;
@@ -673,7 +680,8 @@ border-radius: 13px;
     position: absolute;
     width: 95%;
     height: 279px;
-    left: 93px;
+    /* left: 93px; */
+    left: 0;
     top: 326px;
     background-color: #9bc78b00;
 }
@@ -686,7 +694,7 @@ border-radius: 13px;
     position: absolute;
     width: 300px;
     height: 24px;
-    left: 93px;
+    left: 0px;
     top: 291px;
 
     font-family: 'Literata';

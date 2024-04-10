@@ -111,34 +111,42 @@ color: #000000;
 .RatingStars {
     display: flex;
     flex-direction: row;
-    justify-content: center;
     align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 50%;
+
 }
 
+
 .Rating {
-    width: fit-content;
     font-size: 16px;
     font-family: 'Literata';
     font-weight: 600;
+    width: fit-content;
 }
 
 .Stars {
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     padding-left: 2%;
+    height: 100%;
+    flex: 1 0 70%;
+
 
     .CardStar {
+        display: flex;
         position: relative;
-        width: 1.1em;
-        height: 1.1em;
+        width: 10%;
+        aspect-ratio: 1/1;
+        padding: 0;
     }
     .CardStar img {
+        position: absolute;
         width: 100%;
         height: 100%;
-
-        position: absolute;
         top: 0px;
         left: 0px;
     }
