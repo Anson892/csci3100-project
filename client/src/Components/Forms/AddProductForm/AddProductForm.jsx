@@ -12,7 +12,7 @@ export const AddProductForm = () => {
 
     const [name, setName] = useState("");
     const [quantity, setQuantity] = useState();
-    const [category, setCategory] = useState("Category1");
+    const [category, setCategory] = useState("");
     const [price, setPrice] = useState("");
     const [discount, setDiscount] = useState();
     const [description, setDescription] = useState();
@@ -20,6 +20,7 @@ export const AddProductForm = () => {
     const [subImages, setSubImages] = useState([]);
 
     const [isNameEmpty, setIsNameEmpty] = useState(false);
+    const [isCategoryEmpty, setIsCategoryEmpty] = useState(false);
     const [isPriceEmpty, setIsPriceEmpty] = useState(false);
     const [isMainImageEmpty, setIsMainImageEmpty] = useState(false);
 
@@ -28,6 +29,10 @@ export const AddProductForm = () => {
             setIsNameEmpty(true)
         :
             setIsNameEmpty(false)
+        category == "" ?
+            setIsCategoryEmpty(true)
+        :
+            setIsCategoryEmpty(false)
         price == "" ?
             setIsPriceEmpty(true)
         :
@@ -37,7 +42,7 @@ export const AddProductForm = () => {
         :
             setIsMainImageEmpty(false)
 
-        if (!isNameEmpty && !isPriceEmpty && !isMainImageEmpty) {
+        if (!isNameEmpty && !isPriceEmpty && !isMainImageEmpty && !isCategoryEmpty) {
             const formData = new FormData();
             const files = [mainImage].concat(subImages.slice(0, 4))
             for (let file of files) {
@@ -73,19 +78,18 @@ export const AddProductForm = () => {
     return (
         <div className="add-product-form">
             <h1>Add Product</h1>
-            <p>Category</p>
-            <DropDownMenu
-                items={["Category1", "Category2", "Category3", "Category4", "Category5"]}
-                initial={0}
-                setFucn={setCategory}
-                menuHeight={"40px"}
-            />
-            <div className="first-input-row">
-                <TextInput type="text" onChange={(e)=>{setName(e.target.value)}}>Name</TextInput>
-                <TextInput type="text" onChange={(e)=>{setQuantity(e.target.value)}}>Quantity</TextInput>
-            </div>
+            <TextInput type="text" onChange={(e)=>{setName(e.target.value)}}>Name</TextInput>
             {isNameEmpty?
                 <p className="alert-text">* Name is empty.</p>
+            :
+                null
+            }
+            <div className="first-input-row">
+                <TextInput type="text" onChange={(e)=>{setCategory(e.target.value)}}>Category</TextInput>
+                <TextInput type="text" onChange={(e)=>{setQuantity(e.target.value)}}>Quantity</TextInput>
+            </div>
+            {isCategoryEmpty?
+                <p className="alert-text">* isCategoryEmpty is empty.</p>
             :
                 null
             }

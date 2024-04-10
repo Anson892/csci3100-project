@@ -11,7 +11,7 @@ export const EditProductForm = ({ productId, reloadFunc }) => {
     const [id, setId] = useState(productId);
     const [name, setName] = useState();
     const [quantity, setQuantity] = useState();
-    const [category, setCategory] = useState("Category1");
+    const [category, setCategory] = useState();
     const [price, setPrice] = useState();
     const [discount, setDiscount] = useState();
     const [description, setDescription] = useState();
@@ -69,15 +69,9 @@ export const EditProductForm = ({ productId, reloadFunc }) => {
     return (
         <div className="edit-product-form">
             <h1>Edit Product</h1>
-            <p>Category</p>
-            <DropDownMenu
-                items={["Category1", "Category2", "Category3", "Category4", "Category5"]}
-                initial={0}
-                setFucn={setCategory}
-                menuHeight={"40px"}
-            />
+            <TextInput type="text" onChange={(e)=>{setName(e.target.value)}} defaultText={name}>Name</TextInput>
             <div className="first-input-row">
-                <TextInput type="text" onChange={(e)=>{setName(e.target.value)}} defaultText={name}>Name</TextInput>
+                <TextInput type="text" onChange={(e)=>{setCategory(e.target.value)}} defaultText={category}>Category</TextInput>
                 <TextInput type="text" onChange={(e)=>{setQuantity(e.target.value)}} defaultText={quantity}>Quantity</TextInput>
             </div>
             <div className="second-input-row">
