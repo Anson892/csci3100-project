@@ -165,6 +165,7 @@ export const SearchResult = () => {
             <Topic/>
             <SortOrder set = {setoption}/>
                 <div className="ResultContainer">
+                    {itemsjs.length === 0 && <p className='no-result-message'>No result found</p>}
                     {itemsjs.map((itemsjs,index)=>{
                         return (
                             <div key= {itemsjs.id}>

@@ -65,7 +65,7 @@
     position: absolute;
     width: 235px;
     height: 17px;
-    right:14vw;
+    right:16vw;
     top: 17vh;
 
     font-family: 'Literata';
@@ -80,4 +80,14 @@
     color: #000000;
 
 
+}
+
+.no-result-message {
+    position: absolute;
+    width: 100%;
+    top: 0px;
+    left: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
