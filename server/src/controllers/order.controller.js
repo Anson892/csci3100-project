@@ -9,7 +9,7 @@ const controller = {};
 
 //create order
 controller.create = async (req, res) => {
-  const { userId, infoId, products } = req.body;
+  const { userId,  products } = req.body;
   const productlist = [];
   const productidlist = [];
   const updatelist = [];
