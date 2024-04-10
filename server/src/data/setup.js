@@ -269,10 +269,14 @@ async function import_Cart() {
   }
 }
 
-import_user();
-import_userInfo();
-import_Product();
-import_Order();
-import_OrderItem();
-import_Comment();
-import_Cart();
+const init = async () => {
+await import_user();
+await import_userInfo();
+await import_Product();
+await import_Order();
+await import_OrderItem();
+await import_Comment();
+await import_Cart();
+}
+
+init();

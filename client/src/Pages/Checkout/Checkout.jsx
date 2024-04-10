@@ -16,7 +16,7 @@ export const Checkout = () => {
   const [ExpireDate, setExpireDate] = useState('');
   const [CVC, setCVC] = useState('');
   const [PostalCode, setPostalCode] = useState('');
-  const [orderId, setorderId] = useState(1) // !!!!!! To be set by global or useparams !!!!!!
+  const [orderId, setorderId] = useState(localStorage.getItem('orderId')) // !!!!!! To be set by global or useparams !!!!!!
 
   const { userAuth } = useContext(AuthContext);
   
@@ -42,6 +42,25 @@ export const Checkout = () => {
     setReceiver(e.target.value)
   }
 
+  const clearCart = async () => {
+    const url = "http://localhost:8080/api/cart/clear/"
+    fetch(url, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        "userId": userAuth.id
+      })
+    })
+    .then((res)=>{
+      return res.json()
+    })
+    .then((response)=>{
+      console.log(JSON.stringify(response.message))
+    })
+  }
+
   const handleSubmit = () => {
     if ((Address != '')&&(Receiver != '')&&(CardNum != '')&&(ExpireDate != '')&&(CVC != '')&&(PostalCode != '')){
       const CheckoutUrl = "http://localhost:8080/api/order/placeorder"
@@ -51,10 +70,10 @@ export const Checkout = () => {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  "orderId": orderId,
-                  "paymentMethod": "Credit Card",
-                  "receiver": Receiver,
-                  "address": Address
+                  orderId: orderId,
+                  paymentMethod: "Credit Card",
+                  receiver: Receiver,
+                  address: Address
                 })
       })
       .then((res)=>{
@@ -62,10 +81,17 @@ export const Checkout = () => {
       })
       .then((response)=>{
         console.log(JSON.stringify(response))
+        alert(JSON.stringify(response.message))
       })
 
 
       alert ("Ordered!")
+
+      // clear local storage
+      localStorage.removeItem('orderId')
+      // clear cart
+      clearCart();
+
       navigate({
         pathname: '/',
      });

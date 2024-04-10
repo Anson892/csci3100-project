@@ -154,7 +154,7 @@ controller.history = async (req, res) => {
         attributes: ['productId', 'price', 'quantity'],
         where: {orderId: element.id}
       })
-      itemlist.forEach(async product => {
+      for (const product of itemlist) {
         const productname = await Product.findOne({
           attributes: ['name'],
           where: { id: product.productId }
@@ -169,9 +169,9 @@ controller.history = async (req, res) => {
         var temp = product.price
         var price = Number(temp)
         total = total + price
-      })
-      const temp = element.createdAt
-      const deliverydate = new Date(temp)
+      }
+      const createTime = element.createdAt
+      const deliverydate = new Date(createTime)
       deliverydate.setDate(deliverydate.getDate() + 7)
       const order = {
         id: element.id,
@@ -184,6 +184,7 @@ controller.history = async (req, res) => {
         status: element.status,
         orderitem: productlsit
       }
+      console.log(order)
       resultlist.push(order)
       ordercount+=1;
       if(ordercount==orderlist.length){

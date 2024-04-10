@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Navbar } from '../../Components/Navbar/Navbar';
 import { CartItem } from '../../Components/CartItem/CartItem'
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { AuthContext } from '../../Context/AuthContext';
 import { CartContext } from '../../Context/CartContext';
 import './ShoppingCart.css'
@@ -10,8 +10,9 @@ import './ShoppingCart.css'
 
 export const ShoppingCart = () => {
   const { userAuth } = useContext(AuthContext)
-  const { setCartSize } = useContext(CartContext)
+  // const { setCartSize } = useContext(CartContext)
   const [cartItem, setCartItem] = useState([])
+  const [redirect, setRedirect] = useState(false)
 
   useEffect(() => {
     fetch('http://localhost:8080/api/cart/'+userAuth.id, {method:'GET'})
@@ -25,8 +26,68 @@ export const ShoppingCart = () => {
   }, []);
 
   useEffect(()=>{
-    setCartSize(cartItem.length)
+    // setCartSize(cartItem.length)
   }, [cartItem])
+
+  const checkStock = async (productId, quantity) => {
+    console.log("Checking stock for product: ", productId, " with quantity: ", quantity)
+    const res = await fetch('http://localhost:8080/api/product/'+productId, {method:'GET'});
+    const data = await res.json();
+
+
+    if (data.data.stock < quantity) {
+      return [false, data.data.name, data.data.price * data.data.discount];
+    }
+    else {
+      return [true, data.data.name, data.data.price * data.data.discount];
+    }
+  }
+
+  const handleCheckout = async () => {
+    // check stock and get real time price
+    let checkoutItems = []
+    let outOfStockItems = []
+    await Promise.all(cartItem.map(async (i)=>{
+      let [instock, name, price] = await checkStock(i.productId, i.quantity);
+      console.log(instock, name, price)
+      if (instock) {
+        checkoutItems.push({
+          productId: i.productId,
+          quantity: i.quantity,
+          price: price
+        })
+      }
+      else {
+        outOfStockItems.push(name)
+      }
+    }))
+
+    if (outOfStockItems.length > 0) {
+      alert("Some items are out of stock: "+outOfStockItems.join(", "))
+      return;
+    }
+    console.log(checkoutItems)
+
+    fetch('http://localhost:8080/api/order/create', {
+      method:'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        userId: userAuth.id,
+        products: checkoutItems
+      })
+    })
+    .then(res => {
+      return res.json();
+    })
+    .then(data => {
+      console.log(data);
+      // set local storage for order id
+      localStorage.setItem('orderId', data.id)
+      setRedirect(true)
+    })
+  }
 
   return (
     <div class="shopping-cart">
@@ -40,10 +101,9 @@ export const ShoppingCart = () => {
           {cartItem.length ? cartItem.map((i)=><CartItem id={i.productId} quantity={i.quantity} />) : <p>Cart is empty</p>}
         </div>
         <div class="cart-footer">
-          <Link to={'/checkout'} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
-            <button class="check-out-button">CHECKOUT</button>
-          </Link>
+            <button onClick={handleCheckout} class="check-out-button">CHECKOUT</button>
         </div>
+        {redirect && <Navigate to="/checkout" />}
       </div>
     </div>
   )
