@@ -84,6 +84,7 @@ export const AdminProduct = () => {
     const [isShowEditProductForm, setIsShowEditProductForm] = useState(false)
     const [editProductId, setEditProductId] = useState(-1)
     const [pointer, setPointer] = useState(0)
+    const [categoryList, setCategoryList] = useState([]);
 
     const navigate = useNavigate();
     const handleUser = () => {
@@ -146,7 +147,6 @@ export const AdminProduct = () => {
     // Initialize search
     const initSearch = async () => {
         setPointer(0);
-
         await fetch("http://localhost:8080/api/product/search",{
             method : 'POST',
             headers: {"Content-Type": "application/json"},
@@ -206,9 +206,20 @@ export const AdminProduct = () => {
         }, 500);
     }
 
+    // Init category list
+    const initCategoryList = () => {
+        fetch("http://localhost:8080/api/product/category")
+        .then((res) => res.json())
+        .then((data) => {
+            setCategoryList(data);
+        })
+        .catch((err) => console.log(err));
+    }
+
     // When Start
     useEffect(() => {
         initSearch();
+        initCategoryList();
     }, [])
 
     return (
@@ -229,12 +240,10 @@ export const AdminProduct = () => {
                 <div className="filter">
                     <select onChange={(e)=>{setCategory(e.target.value)}} name="category" value={category}>
                         <option value="%">All</option>
-                        <option value="Category1">Category1</option>
-                        <option value="Category2">Category2</option>
-                        <option value="Category3">Category3</option>
-                        <option value="Category4">Category4</option>
-                        <option value="Category5">Category5</option>
-                        <option value="Category6">Category6</option>
+                        {categoryList.map((item, index) => {
+                                return <option value={item}>{item}</option>
+                            })
+                        }
                     </select>
                 </div>
                 <SubmitButton onClick={()=>{

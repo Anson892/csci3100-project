@@ -52,10 +52,8 @@ export const FilterPopup = ({
       await fetch("http://localhost:8080/api/product/category")
         .then((res) => res.json())
         .then((data) => {
-          console.log(data);
           data.unshift("All");
           setCategoryList(data);
-          console.log(categoryList);
         })
         .catch((err) => console.log(err));
     };
