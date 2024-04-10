@@ -79,7 +79,7 @@ controller.search = async (req, res) => {
     name: {[Op.like]: name_key},
     price: {[Op.between]: [minprice, maxprice]},
   }
-  if (category!="All"){
+  if (category!="All" && category!=""){
     where_clause.category = {[Op.eq]: category}
   }
   const search = await Product.findAll({
