@@ -15,6 +15,8 @@ export const Navbar = () => {
     const logout = () => {
         localStorage.removeItem('userAuth')
         dispatch({type:'LOGOUT'})
+        // reloading the page
+        window.location.reload();
     }
 
     useEffect(() => {
