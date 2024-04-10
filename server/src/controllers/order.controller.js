@@ -268,20 +268,23 @@ controller.update = async (req, res) => {
 
 // Delete an order entry: DELETE /api/order/delete/:orderID
 controller.delete = async (req, res) => {
-  Order.findOne({
-    where: {
-      id: req.params.orderID,
-    },
-  })
-    .then((data) => {
-      data.destroy().then(() => {
-        res.status(200).json({
-          message: "Order deleted successfully!",
-        });
-        console.log("deleted!");
-      });
+  const updatelist = [];
+
+  //find order item list
+  await OrderItem.findAll({
+    where: { orderId: req.params.orderID }
+  }).then(async (item) => {
+    item.forEach(async item => {
+      const product = await Product.findByPk(item.productId)
+      const stock = product.stock + item.quantity
+      await Product.update({ stock: stock },{ where: { id: product.id } })
     })
-    .catch((err) => res.status(500).json({ error: err.message }));
+    await OrderItem.destroy({where: { orderId: req.params.orderID }})
+    await Order.destroy({where: { id: req.params.orderID }})
+  }).then(() => {
+    res.send("order deleted.")
+  })
+  .catch((err) => res.status(500).send(err));
 };
 /*
 controller.deleteAll = async (req, res) => {
