@@ -89,6 +89,7 @@ color: #000000;
 .ProductTagCard{
     display: flex;
     justify-self: end;
+    align-items: center;
     overflow: hidden;
     margin-left: auto;
     margin-top: 5px;
@@ -96,6 +97,7 @@ color: #000000;
     font-family: 'Literata';
     font-weight: 700;
     font-size: 12px;
+    
 
     .on-sale{
         background: #9bc78b;

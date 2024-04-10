@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect , useState } from 'react';
 import './Navbar.css';
 import { Link } from 'react-router-dom';
 import { SearchBar } from '../SearchBar/SearchBar'
@@ -10,7 +10,8 @@ import { CartContext } from '../../Context/CartContext';
 
 export const Navbar = () => {
     const { userAuth, dispatch } = useContext(AuthContext)
-    const { cartSize, setCartSize } = useContext(CartContext)
+    const [cartSize, setCartSize] = useState(0);
+    const { cartItems } = useContext(CartContext)
 
     const logout = () => {
         localStorage.removeItem('userAuth')
@@ -29,7 +30,7 @@ export const Navbar = () => {
         if (userAuth) {
             getCartSize();
         } 
-    }, [userAuth, setCartSize])
+    }, [userAuth, cartItems])
 
     return (
         <div className="navbar">

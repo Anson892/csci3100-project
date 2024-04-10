@@ -328,7 +328,7 @@ color: #000000;
     position: absolute;
     width: 158px;
     height: 46px;
-    left: 9vh;
+    /* left: 9vh; */
     top: 440px;
 
     border: 1px solid #000000;
@@ -340,6 +340,7 @@ color: #000000;
     height: 1px;
     background: transparent;
     border: 1px transparent;
+    cursor: pointer;
 }
 
 .ProductAmountText{
@@ -391,12 +392,13 @@ bottom: 24px;
     position: absolute;
     width: 305px;
     height: 72px;
-    left: 9vh;
+    /* left: 9vh; */
     top: 500.5px;
     border: 1px transparent;
 
     background: #9A9480;
     border-radius: 41px;
+    cursor: pointer;
 }
 
 .AddToCartButton p{
@@ -786,5 +788,17 @@ border-radius: 13px;
     color: #7F7F7F;
 
 
+}
+
+.add-to-cart {
+    display: flex;
+    flex-direction: column;
+}
+
+.add-to-cart-error {
+    position: relative;
+    left: 2vw;
+    top: 46vh;
+    color: red;
 }
 

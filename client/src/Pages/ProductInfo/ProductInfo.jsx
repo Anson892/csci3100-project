@@ -13,6 +13,7 @@ import small_star_empty from "../../Assets/Icons/small_star_empty.svg";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Link, Navigate } from "react-router-dom";
 import { useContext, createContext } from "react";
+import { CartContext } from "../../Context/CartContext";
 
 const Recommendation = () => {
   const [recommend0_id, setrecommend0_id] = useState(-1);
@@ -242,7 +243,7 @@ const CommentContainer = ({ id }) => {
   return (
     <div className="CommentContainer">
       <div className="StarRatingSummary">
-        <div className="StarText">{StarNum}</div>
+        <div className="StarText">{StarNum.toFixed(1)}</div>
           <div className="Stars">
             <Star progress={rating} />
             <Star progress={rating - 1} />
@@ -306,6 +307,8 @@ const CommentContainer = ({ id }) => {
 const InfoContainer = ({ name, price, discount, stock, description, id }) => {
   const [UserAuth, SetAuth] = useState([]);
   const [redirect, setRedirect] = useState(false);
+  const [error, setError] = useState("");
+  const {addToCart} = useContext(CartContext);
   useEffect(() => {
     const UserAuth = JSON.parse(localStorage.getItem("userAuth"));
     if (UserAuth) {
@@ -313,33 +316,9 @@ const InfoContainer = ({ name, price, discount, stock, description, id }) => {
     }
   }, []);
   const userid = UserAuth.id;
-  const AddToCart = () => {
-    const url5 = "http://localhost:8080/api/cart/add";
-    fetch(url5, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        userId: userid, // !!!! to be filled after login system !!!!
-        productId: id,
-        quantity: count,
-      }),
-    })
-      .then((res) => {
-        return res.json();
-      })
-      .then((response) => {
-        var text = JSON.stringify(response);
-        var array1 = JSON.parse(text);
-        if (array1.success == true) {
-          // redirect to cart page
-          setRedirect(true);
-        } else {
-          alert(array1.message);
-        }
-      });
-  };
+  const handleAddToCart = async () => {
+    await addToCart({userid, id, count});
+  }
   const [count, setCount] = useState(1);
   const decrement = () => {
     if (count > 1) setCount(count - 1);
@@ -401,11 +380,12 @@ const InfoContainer = ({ name, price, discount, stock, description, id }) => {
         </button>
         <p className="ProductAmountText">{count}</p>
       </div>
-      <div>
-        <button onClick={AddToCart} className="AddToCartButton">
+      <div className="add-to-cart">
+        <button onClick={handleAddToCart} className="AddToCartButton">
           <p> Add To Cart </p>
         </button>
-        {redirect && <Navigate to="/shopping-cart" />}
+        <p className="add-to-cart-error">{error}</p>
+        {/* {redirect && <Navigate to="/shopping-cart" />} */}
       </div>
     </div>
   );
