@@ -142,12 +142,13 @@ controller.history = async (req, res) => {
   const userid = req.params.userid;
   const resultlist = [];
   const orderlist = await Order.findAll({
-    where: {userId: userid},
+    where: {userId: userid,
+    status: {[Op.ne]: 'payment'}},
     order: [['id', 'DESC']]
   })
   var ordercount = 0;
   try{
-    orderlist.forEach(async element => {
+    for (const element of orderlist) {
       const productlsit = [];
       var total = 0;
       const itemlist = await OrderItem.findAll({
@@ -190,7 +191,7 @@ controller.history = async (req, res) => {
       if(ordercount==orderlist.length){
         res.send(resultlist)
       }
-    })
+    }
   }
   catch(err){
     res.status(500).send("error exist:" + err)

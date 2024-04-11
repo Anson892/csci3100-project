@@ -49,7 +49,7 @@ const OrderInfo = ({order}) => {
             <p class="order-info-field">ORDER TIME</p><p>{formatTime(order.ordertime)}</p>
             <p class="order-info-field">RECEIVER NAME</p><p>{order.receiver}</p>
             <p class="order-info-field">ADDRESS</p><p>{order.address}</p>
-            <p class="order-info-field">ORDER TOTAL</p><p>{order.ordertotal}</p>
+            <p class="order-info-field">ORDER TOTAL</p><p>${order.ordertotal}</p>
             <p class="order-info-field">PAYMENT METHOD</p><p>{order.paymentMethod}</p>
             <p class="order-info-field">EXPECTED ARRIVAL</p><p>{formatDate(order.deliverytime)}</p>
 
