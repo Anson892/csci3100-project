@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./ProductInfo.css";
 import { Navbar } from "../../Components/Navbar/Navbar";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { ProductCard } from "../../Components/ProductCard/ProductCard";
 import ProductImage from "../../Assets/Images/ProductIcon.jpg";
 import add_icon from "../../Assets/Icons/add-icon.svg";
@@ -309,6 +309,7 @@ const InfoContainer = ({ name, price, discount, stock, description, id }) => {
   const [redirect, setRedirect] = useState(false);
   const [error, setError] = useState("");
   const {addToCart} = useContext(CartContext);
+  const navigate = useNavigate();
   useEffect(() => {
     const UserAuth = JSON.parse(localStorage.getItem("userAuth"));
     if (UserAuth) {
@@ -317,6 +318,14 @@ const InfoContainer = ({ name, price, discount, stock, description, id }) => {
   }, []);
   const userid = UserAuth.id;
   const handleAddToCart = async () => {
+    if (stock == 0) {
+      alert("Out of Stock");
+      return;
+    }
+    if (userid == undefined) {
+      navigate("/login");
+      return;
+    }
     await addToCart({userid, id, count});
   }
   const [count, setCount] = useState(1);
@@ -384,7 +393,7 @@ const InfoContainer = ({ name, price, discount, stock, description, id }) => {
         <button onClick={handleAddToCart} className="AddToCartButton">
           <p> Add To Cart </p>
         </button>
-        <p className="add-to-cart-error">{error}</p>
+    {error ? <p className="add-to-cart-error">*{error}</p> : null}
         {/* {redirect && <Navigate to="/shopping-cart" />} */}
       </div>
     </div>
