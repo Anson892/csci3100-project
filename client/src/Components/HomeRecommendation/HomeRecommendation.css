@@ -8,7 +8,7 @@
         width: 30vw;
         height: 25vw;
         object-fit: cover;
-
+        cursor: pointer;
     }
 
     .product-text-container {
@@ -58,6 +58,7 @@
         width: 30vw;
         height: 25vw;
         object-fit: cover;
+        cursor: pointer;
     }
     
     .product-text-container {

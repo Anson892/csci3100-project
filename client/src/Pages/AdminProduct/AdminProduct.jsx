@@ -74,6 +74,7 @@ export const AdminProduct = () => {
         navigate({
             pathname: '/'
         })
+        window.scrollTo({ top: (0, 0), behavior: "instant" });
     }
 
     const [productIds, setProductIds] = useState();

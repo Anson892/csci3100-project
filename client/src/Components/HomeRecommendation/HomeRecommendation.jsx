@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import scrolling_circles from '../../Assets/UI/scrolling_circles.svg'
 import recommend_title from '../../Assets/UI/recommend_title.svg'
 import product_image_test from '../../Assets/Images/product_image_test.png'
+import { useNavigate } from 'react-router-dom';
 import './HomeRecommendation.css'
 import { motion, useScroll, useTransform  } from 'framer-motion'
 
@@ -37,6 +38,15 @@ const ProductItemLeft = ({id}) => {
     const [name, setName] = useState()
     const [description, setDescription] = useState()
     const [imageScr, setImageScr] = useState()
+
+    const navigate = useNavigate();
+    const handleImageClick = () => {
+        navigate({
+            pathname: '/product/' + id
+        });
+        window.scrollTo({ top: (0, 0), behavior: "instant" });
+    }
+
     useEffect(()=> {
         fetch(
             'http://localhost:8080/api/product/'+ id,
@@ -69,6 +79,7 @@ const ProductItemLeft = ({id}) => {
                 style={{ y: leftLineOffset }}    
             />
             <motion.img
+                onClick={()=>{handleImageClick()}}
                 src={ imageScr }
                 alt=""
                 style={{
@@ -130,6 +141,15 @@ const ProductItemRight = ({id}) => {
     const [name, setName] = useState()
     const [description, setDescription] = useState()
     const [imageScr, setImageScr] = useState()
+
+    const navigate = useNavigate();
+    const handleImageClick = () => {
+        navigate({
+            pathname: '/product/' + id
+        });
+        window.scrollTo({ top: (0, 0), behavior: "instant" });
+    }
+
     useEffect(()=> {
         fetch(
             'http://localhost:8080/api/product/'+ id,
@@ -162,6 +182,7 @@ const ProductItemRight = ({id}) => {
                 style={{ y: rightLineOffset }}    
             />
             <motion.img
+                onClick={()=>{handleImageClick()}}
                 src={ imageScr }
                 alt=""
                 style={{

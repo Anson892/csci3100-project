@@ -18,6 +18,7 @@ export const AdminUser = () => {
         navigate({
             pathname: '/'
         })
+        window.scrollTo({ top: (0, 0), behavior: "instant" });
     }
 
     const [isShowAddUserForm, setIsShowAddUserForm] = useState(false)

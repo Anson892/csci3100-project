@@ -26,13 +26,30 @@ function App() {
         const userType = userAuth ? userAuth.userType : null
 
         useEffect(() => {
-            console.log(location.pathname)
             if (location.pathname === "/admin/product") {
                 document.body.style.backgroundColor = "#e7e7e7"
             }
             else {
                 document.body.style.backgroundColor = "#F6F6E9"
             }
+
+            // if (location.pathname === "/admin/user" || location.pathname === "/admin/product") {
+            //     const elements = document.getElementsByClassName(".drop-down-menu")
+            //     for (const ele of elements) {
+            //         ele.style.width = "300px";
+            //         ele.style.height = "40px";
+            //         ele.style.backgroundColor = "white"
+            //     }
+            // }
+            // else {
+            //     const elements = document.getElementsByClassName(".drop-down-menu")
+            //     console.log(elements)
+            //     for (const ele of elements) {
+            //         ele.style.width = "200px";
+            //         ele.style.height = "30px";
+            //         ele.style.backgroundColor = "f6f6e9"
+            //     }
+            // }
         }, [location])
 
         return (
