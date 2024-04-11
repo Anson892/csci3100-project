@@ -15,6 +15,7 @@ module.exports = (sequelize, Sequelize) => {
     },
     description: {
       type: Sequelize.STRING(500),
+      defaultValue: "No description available",
     },
     price: {
       type: Sequelize.DECIMAL(10, 2),

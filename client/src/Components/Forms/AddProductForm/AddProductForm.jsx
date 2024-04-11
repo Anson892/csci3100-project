@@ -1,6 +1,7 @@
 import React from 'react'
 import './AddProductForm.css'
 import { useState } from 'react'
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { TextInput } from '../TextInput/TextInput'
 import { TextAreaInput } from '../TextAreaInput/TextAreaInput'
 import { SubmitButton } from '../SubmitButton/SubmitButton'
@@ -24,6 +25,8 @@ export const AddProductForm = () => {
     const [isPriceEmpty, setIsPriceEmpty] = useState(false);
     const [isMainImageEmpty, setIsMainImageEmpty] = useState(false);
 
+    const navigate = useNavigate();
+
     const handleSubmit = () => {
         name == "" ?
             setIsNameEmpty(true)
@@ -42,9 +45,10 @@ export const AddProductForm = () => {
         :
             setIsMainImageEmpty(false)
 
-        if (!isNameEmpty && !isPriceEmpty && !isMainImageEmpty && !isCategoryEmpty) {
+        if (!isNameEmpty && !isPriceEmpty && !isCategoryEmpty) {
             const formData = new FormData();
             const files = [mainImage].concat(subImages.slice(0, 4))
+            console.log(files)
             for (let file of files) {
                 formData.append('files', file);
             }
@@ -72,6 +76,13 @@ export const AddProductForm = () => {
             .catch((error) => {
                 console.error(error);
             })
+            const date = new Date;
+            navigate({
+                pathname: '/admin/product',
+                search: '?keyword=%' +
+                        '&category=' +
+                        '&time=' + date.getTime()
+            });
         }
     }
 
@@ -108,11 +119,6 @@ export const AddProductForm = () => {
             >
                 Main Image
             </ImageInput>
-            {isMainImageEmpty?
-                <p className="alert-text">* Main Image is empty.</p>
-            :
-                null
-            }
             <MultipleImagesInput
                 images={subImages}
                 setImages={setSubImages}

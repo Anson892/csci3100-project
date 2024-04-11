@@ -28,7 +28,7 @@ export const AdminUser = () => {
         navigate({
             pathname: '/admin/product',
             search: '?keyword=%' +
-                    '&category=%' +
+                    '&category=' +
                     '&time=' + date.getTime()
         });
     }

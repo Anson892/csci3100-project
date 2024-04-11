@@ -7,6 +7,7 @@ import edit_icon from '../../Assets/Icons/edit_icon.svg'
 import remove_icon from '../../Assets/Icons/remove_icon.svg'
 import close_icon from '../../Assets/Icons/close_icon.svg'
 import search_icon_gray from '../../Assets/Icons/search_icon_gray.svg'
+import ProductImage from '../../Assets/Images/ProductIcon.jpg'
 import {SubmitButton} from '../../Components/Forms/SubmitButton/SubmitButton'
 import { AddProductForm } from '../../Components/Forms/AddProductForm/AddProductForm'
 import { EditProductForm } from '../../Components/Forms/EditProductForm/EditProductForm'
@@ -19,7 +20,7 @@ const ProductInfo = ({ id, handleEditProduct, handleDeleteProduct }) => {
     const [category, setCategory] = useState("");
     const [price, setPrice] = useState(0);
     const [discount, setDiscount] = useState("");
-    const [imageScr, setImageScr] = useState("");
+    const [imageScr, setImageScr] = useState(ProductImage);
     
     useEffect(() => {
         fetch('http://localhost:8080/api/product/'+ id, {
@@ -239,7 +240,7 @@ export const AdminProduct = () => {
                 </div>
                 <div className="filter">
                     <select onChange={(e)=>{setCategory(e.target.value)}} name="category" value={category}>
-                        <option value="%">All</option>
+                        <option value="">All</option>
                         {categoryList.map((item, index) => {
                                 return <option value={item}>{item}</option>
                             })
