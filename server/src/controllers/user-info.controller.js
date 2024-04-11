@@ -26,10 +26,12 @@ controller.createUserInfo = async (req, res) => {
     .catch((err) => {
       res.status(500).json({
         error:
-          err.message || "Some error occurred while retrieving user with id=" + userInfo.userId,
+          err.message ||
+          "Some error occurred while retrieving user with id=" +
+            userInfo.userId,
       });
     });
-  
+
   // check if user info already exists
   UserInfo.findOne({ where: { userId: userInfo.userId } })
     .then((data) => {
@@ -37,38 +39,42 @@ controller.createUserInfo = async (req, res) => {
         res.status(200).json({
           message: "User info already exists!",
         });
+      } else {
+        // create user info
+        UserInfo.create(userInfo)
+          .then((data) => {
+            res.status(200).json({
+              message: "User info created successfully!",
+              data: data,
+            });
+          })
+          .catch((err) => {
+            res.status(500).json({
+              error:
+                err.message ||
+                "Some error occurred while creating the user info.",
+            });
+          });
       }
     })
     .catch((err) => {
       res.status(500).json({
         error:
-          err.message || "Some error occurred while checking if user info exists for user with id=" + userInfo.userId,
+          err.message ||
+          "Some error occurred while checking if user info exists for user with id=" +
+            userInfo.userId,
       });
     });
-
-  // create user info
-  UserInfo.create(userInfo)
-    .then((data) => {
-      res.status(200).json({
-        message: "User info created successfully!",
-        data: data,
-      });
-    })
-    .catch((err) => {
-      res.status(500).json({
-        error: err.message || "Some error occurred while creating the user info.",
-      });
-    });
-}
+};
 
 // find user info by user id: GET /api/info/:id
 controller.getUserInfo = async (req, res) => {
   const id = req.params.id;
 
   UserInfo.findAll({
-    where: {userId: id},
-    include: [{ model: User,
-                attribute: ['id', 'username']}]})
+    where: { userId: id },
+    include: [{ model: User, attribute: ["id", "username"] }],
+  })
     .then((data) => {
       if (data === null) {
         res.status(404).json({
@@ -84,32 +90,41 @@ controller.getUserInfo = async (req, res) => {
     .catch((err) => {
       res.status(500).json({
         error:
-          err.message || "Some error occurred while retrieving user info with id=" + id,
+          err.message ||
+          "Some error occurred while retrieving user info with id=" + id,
       });
     });
-}
+};
 
 //fetch userinfo for checkout
 controller.recive = async (req, res) => {
   const id = req.params.id;
   UserInfo.findOne({
-    attribute: ['firstName', 'lastName', 'address'],
-    where: { userId: id }
+    attribute: ["firstName", "lastName", "address"],
+    where: { userId: id },
   }).then((data) => {
     const receiver = data.firstName + " " + data.lastName;
     const result = {
       Receiver: receiver,
-      Address: data.address
-    }
-    res.send(result)
-    
-  })
-}
+      Address: data.address,
+    };
+    res.send(result);
+  });
+};
 
 // update user info: PUT /api/info/:id
 controller.updateUserInfo = async (req, res) => {
   const id = req.params.id;
-  const { InfoId, firstName, lastName, address, city, country, zipCode, phoneNumber } = req.body
+  const {
+    InfoId,
+    firstName,
+    lastName,
+    address,
+    city,
+    country,
+    zipCode,
+    phoneNumber,
+  } = req.body;
   UserInfo.update(
     {
       firstName: firstName,
@@ -118,22 +133,23 @@ controller.updateUserInfo = async (req, res) => {
       city: city,
       country: country,
       zipCode: zipCode,
-      phoneNumber: phoneNumber
-    }, 
-    {where: { id: InfoId,
-             userId: id }
-  })
+      phoneNumber: phoneNumber,
+    },
+    { where: { id: InfoId, userId: id } }
+  )
     .then(async (num) => {
       if (num == 1) {
         // retrieve updated user info
         const updatedUserInfo = await UserInfo.findOne({
-          include: [{
-            model: User,
-            attribute: ['id', 'username']
-          }],
+          include: [
+            {
+              model: User,
+              attribute: ["id", "username"],
+            },
+          ],
           where: {
-            id: InfoId
-          }
+            id: InfoId,
+          },
         });
         res.status(200).json({
           message: "User info updated successfully.",
@@ -149,10 +165,12 @@ controller.updateUserInfo = async (req, res) => {
     })
     .catch((err) => {
       res.status(500).json({
-        error: err.message || "Some error occurred while updating user info with id=" + id,
+        error:
+          err.message ||
+          "Some error occurred while updating user info with id=" + id,
         success: false,
       });
     });
-}
+};
 
 module.exports = controller;

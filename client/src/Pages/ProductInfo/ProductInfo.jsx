@@ -238,7 +238,7 @@ const CommentContainer = ({ id }) => {
   let StarNum = (
     0 +
     (Count5 + Count4 * 2 + Count3 * 3 + Count2 * 4 + Count1 * 5) / total
-  ).toFixed(1);
+  );
   if (total == 0) StarNum = 0;
   return (
     <div className="CommentContainer">

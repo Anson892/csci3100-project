@@ -45,3 +45,9 @@
     background: #FFDF78;
     cursor: pointer;
 }
+
+.check-out-error {
+    color: red;
+    font-size: 1vw;
+    margin-top: 1vh;
+}

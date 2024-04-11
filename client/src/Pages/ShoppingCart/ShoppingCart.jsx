@@ -13,6 +13,7 @@ export const ShoppingCart = () => {
   // const { setCartSize } = useContext(CartContext)
   const [cartItem, setCartItem] = useState([])
   const [redirect, setRedirect] = useState(false)
+  const [error, setError] = useState('')
 
   useEffect(() => {
     fetch('http://localhost:8080/api/cart/'+userAuth.id, {method:'GET'})
@@ -47,6 +48,13 @@ export const ShoppingCart = () => {
     // check stock and get real time price
     let checkoutItems = []
     let outOfStockItems = []
+
+    setError('')
+    if (cartItem.length === 0) {
+      setError("Cart is empty")
+      return;
+    }
+
     await Promise.all(cartItem.map(async (i)=>{
       let [instock, name, price] = await checkStock(i.productId, i.quantity);
       console.log(instock, name, price)
@@ -103,6 +111,7 @@ export const ShoppingCart = () => {
         <div class="cart-footer">
             <button onClick={handleCheckout} class="check-out-button">CHECKOUT</button>
         </div>
+        {error && <p class="check-out-error">{error}</p>}
         {redirect && <Navigate to="/checkout" />}
       </div>
     </div>

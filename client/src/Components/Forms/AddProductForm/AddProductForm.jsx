@@ -100,7 +100,7 @@ export const AddProductForm = () => {
                 <TextInput type="text" onChange={(e)=>{setQuantity(e.target.value)}}>Quantity</TextInput>
             </div>
             {isCategoryEmpty?
-                <p className="alert-text">* isCategoryEmpty is empty.</p>
+                <p className="alert-text">* Category is empty.</p>
             :
                 null
             }
