@@ -113,10 +113,10 @@ export const ProductCard = ({ id }) => {
                 <p className="ProductNameCard">{FetchedProductName}</p>
                 <div className="ProductPriceCard">
                   <p className="CardPriceText">
-                    ${FetchedProductPrice * FetchedProductDiscount}
+                    ${(FetchedProductPrice * FetchedProductDiscount).toFixed(1)}
                   </p>
                   {FetchedProductDiscount < 1 ? (
-                    <p className="CardDiscountText">${FetchedProductPrice} </p>
+                    <p className="CardDiscountText">${(+FetchedProductPrice).toFixed(1)} </p>
                   ) : ( <p></p>)}
                 </div>
                 <RatingStars rating={FetchedProductRating}/>

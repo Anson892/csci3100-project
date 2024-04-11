@@ -362,9 +362,9 @@ const InfoContainer = ({ name, price, discount, stock, description, id }) => {
         <p className="ProductIDText">ProductID#{id}</p>
       </div>
       <div className="PriceContainer">
-        <div className="PriceText">${price * discount}</div>
+        <div className="PriceText">${(price * discount).toFixed(1)}</div>
         {discount < 1 ? (
-          <div className="DiscountText">${price} </div>
+          <div className="DiscountText">${(+price).toFixed(1)} </div>
         ) : (
           <div></div>
         )}

@@ -19,10 +19,10 @@ export const CartItem = ({ id, quantity }) => {
     const response = await fetch(`http://localhost:8080/api/product/${id}`);
     const data = await response.json();
     setName(data.data.name);
-    setPrice(data.data.price);
-    setDiscount(data.data.discount);
-    setStock(data.data.stock);
-    setCount(quantity);
+    setPrice(+data.data.price);
+    setDiscount(+data.data.discount);
+    setStock(+data.data.stock);
+    setCount(+quantity);
     if (data.data.product_images[0] != undefined) {
       setPhoto("http://localhost:8080/images/" + data.data.product_images[0].path);
     }
@@ -121,10 +121,10 @@ export const CartItem = ({ id, quantity }) => {
         </button>
       </div>
       <div class="item-price">
-        <p class="cart-discount-price">${(price * discount).toFixed(2)}</p>
+        <p class="cart-discount-price">${(price * discount).toFixed(1)}</p>
         {discount < 1 ? <p class="cart-item-price">${price} </p> : <div> </div>}
       </div>
-      <div class="subtotal">${(price * discount * count).toFixed(2)}</div>
+      <div class="subtotal">${(price * discount * count).toFixed(1)}</div>
       <button class="cart-cancel-button" onClick={handleRemoveCartItem}>
         <img src={remove_icon} />
       </button>
