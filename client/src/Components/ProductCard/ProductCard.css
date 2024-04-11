@@ -10,11 +10,11 @@
 }
 
 .ProductInfoContainer {
-    overflow: visible;
     position: relative;
     display: flex;
     flex-direction: row;
     box-sizing: border-box;
+    width: 100%;
 
     border-top: 0.3vh solid #000000;
     margin-top: 5px;
