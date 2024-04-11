@@ -18,19 +18,26 @@ export const SearchBar = () => {
 
     const navigate = useNavigate();
     const handleSearch = () => {
-        const date = new Date;
-        navigate({
-            pathname: '/search',
-            search: '?keywords=' + keywords +
-                    '&category=' + category +
-                    '&min_price=' + minPrice +
-                    '&max_price=' + maxPrice +
-                    '&min_rating=' + minRating +
-                    '&max_rating=' + maxRating +
-                    '&time=' + date.getTime()
-        });
+        if (keywords.charAt(0) === "#") {
+            navigate({
+                pathname: '/product/' + keywords.slice(1).replace(/ /g, '')
+            })
+        }
+        else {
+            const date = new Date;
+            navigate({
+                pathname: '/search',
+                search: '?keywords=' + keywords +
+                        '&category=' + category +
+                        '&min_price=' + minPrice +
+                        '&max_price=' + maxPrice +
+                        '&min_rating=' + minRating +
+                        '&max_rating=' + maxRating +
+                        '&time=' + date.getTime()
+            });
+        }
     }
-
+    
     const handelOnKeyDown = (e) => {
         if (e.key == 'Enter') {
             handleSearch();
