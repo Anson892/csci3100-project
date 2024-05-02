@@ -4,7 +4,12 @@ const UserInfo = db.UserInfo;
 const Op = db.Sequelize.Op;
 const controller = {};
 
-// create user info: POST /api/info
+/**
+ * Create a new user info
+ * API: POST http://localhost:8080/api/info/:id
+ * Request: {firstName, lastName, address, phoneNumber}
+ * Response: {message/error, data}
+ */
 controller.createUserInfo = async (req, res) => {
   const userInfo = {
     userId: req.params.id,
@@ -14,105 +19,116 @@ controller.createUserInfo = async (req, res) => {
     phoneNumber: req.body.phoneNumber,
   };
 
-  // validate user exists
-  User.findByPk(userInfo.userId)
-    .then((data) => {
-      if (data === null) {
-        res.status(404).json({
-          error: "Cannot find user with id=" + userInfo.userId,
-        });
-      }
-    })
-    .catch((err) => {
-      res.status(500).json({
-        error:
-          err.message ||
-          "Some error occurred while retrieving user with id=" +
-            userInfo.userId,
+  try {
+    // Check if user exists
+    const user = await User.findByPk(userInfo.userId);
+    if (user === null) {
+      res.status(404).json({
+        error: "Cannot find user with id=" + userInfo.userId,
       });
-    });
+      return;
+    }
 
-  // check if user info already exists
-  UserInfo.findOne({ where: { userId: userInfo.userId } })
-    .then((data) => {
-      if (data !== null) {
-        res.status(200).json({
-          message: "User info already exists!",
-        });
-      } else {
-        // create user info
-        UserInfo.create(userInfo)
-          .then((data) => {
-            res.status(200).json({
-              message: "User info created successfully!",
-              data: data,
-            });
-          })
-          .catch((err) => {
-            res.status(500).json({
-              error:
-                err.message ||
-                "Some error occurred while creating the user info.",
-            });
-          });
-      }
-    })
-    .catch((err) => {
-      res.status(500).json({
-        error:
-          err.message ||
-          "Some error occurred while checking if user info exists for user with id=" +
-            userInfo.userId,
-      });
+    // Check if user info already exists
+    const existingUserInfo = await UserInfo.findOne({
+      where: { userId: userInfo.userId },
     });
+    if (existingUserInfo !== null) {
+      res.status(200).json({
+        message: "User info already exists!",
+      });
+      return;
+    }
+
+    // Create user info
+    const data = await UserInfo.create(userInfo);
+    res.status(200).json({
+      message: "User info created successfully!",
+      data: data,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: err.message || "Some error occurred while creating the user info.",
+    });
+  }
 };
 
-// find user info by user id: GET /api/info/:id
+/**
+ * Retrieve user info by user id
+ * API: GET http://localhost:8080/api/info/:id
+ * Request: {}
+ * Response: {message/error, data}
+ **/
 controller.getUserInfo = async (req, res) => {
   const id = req.params.id;
 
-  UserInfo.findAll({
-    where: { userId: id },
-    include: [{ model: User, attribute: ["id", "username"] }],
-  })
-    .then((data) => {
-      if (data === null) {
-        res.status(404).json({
-          error: "Cannot find user info with id=" + id,
-        });
-      } else {
-        res.status(200).json({
-          message: "User info found!",
-          data: data,
-        });
-      }
-    })
-    .catch((err) => {
-      res.status(500).json({
-        error:
-          err.message ||
-          "Some error occurred while retrieving user info with id=" + id,
-      });
+  try {
+    const userInfos = await UserInfo.findAll({
+      where: { userId: id },
+      include: [{ model: User, attribute: ["id", "username"] }],
     });
+
+    if (userInfos === null) {
+      res.status(404).json({
+        error: "Cannot find user info with id=" + id,
+      });
+      return;
+    }
+    res.status(200).json({
+      message: "User info found!",
+      data: userInfos,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error:
+        err.message ||
+        "Some error occurred while retrieving user info with id=" + id,
+    });
+  }
 };
 
-//fetch userinfo for checkout
-controller.recive = async (req, res) => {
+/**
+ * Retrieve checkout info by user id
+ * API: GET http://localhost:8080/api/info/checkout/:id
+ * Request: {}
+ * Response: {Receiver, Address}
+ * */
+controller.getCheckoutInfo = async (req, res) => {
   const id = req.params.id;
-  UserInfo.findOne({
-    attribute: ["firstName", "lastName", "address"],
-    where: { userId: id },
-  }).then((data) => {
-    const receiver = data.firstName + " " + data.lastName;
+  try {
+    const userInfo = await UserInfo.findOne({
+      where: { userId: id },
+      attributes: ["firstName", "lastName", "address"],
+    });
+
+    if (userInfo === null) {
+      res.status(404).json({
+        error: "Cannot find user info with id=" + id,
+      });
+      return;
+    }
+
+    const receiver = userInfo.firstName + " " + userInfo.lastName;
     const result = {
       Receiver: receiver,
-      Address: data.address,
+      Address: userInfo.address,
     };
-    res.send(result);
-  });
+    res.status(200).json(result);
+  } catch (err) {
+    res.status(500).json({
+      error:
+        err.message ||
+        "Some error occurred while retrieving user info with id=" + id,
+    });
+  }
 };
 
-// update user info: PUT /api/info/:id
+/**
+ * Update user info by user id
+ * API: PUT http://localhost:8080/api/info/:id
+ * Request: {firstName, lastName, address, city, country, zipCode, phoneNumber}
+ * Response: {message/error}
+ */
 controller.updateUserInfo = async (req, res) => {
   const id = req.params.id;
   const {
@@ -125,52 +141,29 @@ controller.updateUserInfo = async (req, res) => {
     zipCode,
     phoneNumber,
   } = req.body;
-  UserInfo.update(
-    {
-      firstName: firstName,
-      lastName: lastName,
-      address: address,
-      city: city,
-      country: country,
-      zipCode: zipCode,
-      phoneNumber: phoneNumber,
-    },
-    { where: { id: InfoId, userId: id } }
-  )
-    .then(async (num) => {
-      if (num == 1) {
-        // retrieve updated user info
-        const updatedUserInfo = await UserInfo.findOne({
-          include: [
-            {
-              model: User,
-              attribute: ["id", "username"],
-            },
-          ],
-          where: {
-            id: InfoId,
-          },
-        });
-        res.status(200).json({
-          message: "User info updated successfully.",
-          data: updatedUserInfo,
-          success: true,
-        });
-      } else {
-        res.status(404).json({
-          error: "Cannot update user info with id=" + id,
-          success: false,
-        });
-      }
-    })
-    .catch((err) => {
-      res.status(500).json({
-        error:
-          err.message ||
-          "Some error occurred while updating user info with id=" + id,
-        success: false,
+
+  try {
+    const success = await UserInfo.update(
+      { firstName, lastName, address, city, country, zipCode, phoneNumber },
+      { where: { userId: id } }
+    );
+
+    if (success) {
+      res.status(200).json({
+        message: "User info updated successfully.",
       });
+    } else {
+      res.status(404).json({
+        error: "Cannot update user info with id=" + id,
+      });
+    }
+  } catch (err) {
+    res.status(500).json({
+      error:
+        err.message ||
+        "Some error occurred while updating user info with id=" + id,
     });
+  }
 };
 
 module.exports = controller;

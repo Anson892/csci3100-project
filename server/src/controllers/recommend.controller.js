@@ -70,7 +70,12 @@ const findCheapestProducts = async (category, ignorelist, limit) => {
   });
 };
 
-// Global recommendation
+/**
+ * Get general recommendations
+ * API: GET http://localhost:8080/api/recommend
+ * Request: {}
+ * Response: [{productId}]
+ * */
 controller.getRecommend = async (req, res) => {
   try {
     const resultlist = [];
@@ -105,7 +110,12 @@ controller.getRecommend = async (req, res) => {
   }
 };
 
-// User-based recommendation
+/** 
+ * Get user recommendations
+ * API: GET http://localhost:8080/api/recommend/user/:userId
+ * Request: {}
+ * Response: [{productId}]
+*/
 controller.getUserRecommend = async (req, res) => {
   const { userId } = req.params;
 
@@ -192,7 +202,12 @@ controller.getUserRecommend = async (req, res) => {
   }
 };
 
-// Product-based recommendation
+/**
+ * Get related products
+ * API: GET http://localhost:8080/api/recommend/product/:productId
+ * Request: {}
+ * Response: [{productId}]
+ */
 controller.relatedProduct = async (req, res) => {
   const { productId } = req.params;
 
