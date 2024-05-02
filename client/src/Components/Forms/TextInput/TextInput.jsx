@@ -1,7 +1,7 @@
 import React from 'react'
 import './TextInput.css'
 
-export const TextInput = ({ type, onChange, children, defaultText, value, maxLength}) => {
+export const TextInput = ({ type, onChange, children, defaultText, value, maxLength, ...props}) => {
     console.log(value, defaultText)
     return (
         <div className="text-input">
@@ -13,6 +13,7 @@ export const TextInput = ({ type, onChange, children, defaultText, value, maxLen
                     onChange={onChange}
                     placeholder={children}
                     maxLength={maxLength}
+                    {...props}
                 />
             </div>
         </div>
