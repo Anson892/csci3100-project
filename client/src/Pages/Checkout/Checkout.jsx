@@ -11,18 +11,17 @@ import { usePaymentInputs } from "react-payment-inputs";
 export const Checkout = () => {
   const navigate = useNavigate();
   const [Address, setAddress] = useState("");
-  const [isAddressEmpty, setIsAddressEmpty] = useState(false);
   const [Receiver, setReceiver] = useState("");
-  const [isReceiverEmpty, setIsReceiverEmpty] = useState(false);
   const [CardNum, setCardNum] = useState("");
   const [isCardNumLength, setIsCardNumLength] = useState(false);
   const [ExpireDate, setExpireDate] = useState("");
-  const [isExpireDateInvalid, setIsExpireDateInvalid] = useState(false);
   const [CVC, setCVC] = useState("");
-  const [isCVCInvalid, setIsCVCInvalid] = useState(false);
   const [PostalCode, setPostalCode] = useState("");
-  const [isPostalCodeInvalid, setIsPostalCodeInvalid] = useState(false);
   const [orderId, setorderId] = useState(localStorage.getItem("orderId")); // !!!!!! To be set by global or useparams !!!!!!
+
+  const [isAddressEmpty, setIsAddressEmpty] = useState(false);
+  const [isReceiverEmpty, setIsReceiverEmpty] = useState(false);
+  const [isPostalCodeInvalid, setIsPostalCodeInvalid] = useState(false);
   const { meta, getCardNumberProps, getExpiryDateProps, getCVCProps } =
     usePaymentInputs();
 
@@ -125,10 +124,10 @@ export const Checkout = () => {
 
     if (
       !(meta.isTouched && meta.error) &&
-      !isAddressEmpty &&
-      !isReceiverEmpty &&
-      !isCardNumLength &&
-      !isPostalCodeInvalid
+      !(Address == "") &&
+      !(Receiver == "") &&
+      !(CardNum.length != 19) &&
+      !(Number(PostalCode.length) != 5)
     ) {
       const CheckoutUrl = "http://localhost:8080/api/order/placeorder";
       fetch(CheckoutUrl, {
