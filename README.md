@@ -20,6 +20,9 @@ csci3100-project
 |       ├── App.js 
 |       ├── index.js
 |       └── ...
+│   ├── .env
+|   ├── package.json
+|   └── ...
 └── server
     ├── src
     │   ├── config
@@ -27,8 +30,7 @@ csci3100-project
     │   ├── data
     │   ├── models
     │   ├── routes
-    │   ├── services
-    │   ├── app.js
+    │   ├── middlewares
     │   └── server.js
     ├── .env
     ├── package.json
