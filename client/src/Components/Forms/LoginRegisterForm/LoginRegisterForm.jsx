@@ -18,7 +18,7 @@ export const LoginRegisterForm = ({
   const [registered, setRegistered] = useState(false);
 
   const checkUserCart = async (userId) => {
-    const url = "http://localhost:8080/api/cart/create/" + userId;
+    const url = process.env.REACT_APP_BACKEND_URL + "/api/cart/create/" + userId;
     const res = await fetch(url, { method: "POST" });
     const data = await res.json();
 
@@ -32,7 +32,7 @@ export const LoginRegisterForm = ({
   };
 
   const checkUserProfile = async (userId) => {
-    const url = "http://localhost:8080/api/info/" + userId;
+    const url = process.env.REACT_APP_BACKEND_URL + "/api/info/" + userId;
     const res = await fetch(url, { method: "POST" });
     const data = await res.json();
 
@@ -46,7 +46,7 @@ export const LoginRegisterForm = ({
   const login = async (e) => {
     e.preventDefault();
 
-    const url = "http://localhost:8080/api/auth/" + apiEndPoint; // "login" or "register"
+    const url = process.env.REACT_APP_BACKEND_URL + "/api/auth/" + apiEndPoint; // "login" or "register"
     const res = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },

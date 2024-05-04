@@ -24,7 +24,7 @@ const Recommendation = () => {
   const { productId } = useParams();
 
   useEffect(() => {
-    const url4 = "http://localhost:8080/api/recommend/product/" + productId;
+    const url4 = process.env.REACT_APP_BACKEND_URL + "/api/recommend/product/" + productId;
     fetch(url4, { method: "GET" })
       .then((res) => {
         return res.json();
@@ -123,7 +123,7 @@ const CommentBox = ({ username, star, content, index }) => {
 
 const CommentContainer = ({ id }) => {
   const { productId } = useParams();
-  const commentStatusUrl = "http://localhost:8080/api/comment/id/" + productId;
+  const commentStatusUrl = process.env.REACT_APP_BACKEND_URL + "/api/comment/id/" + productId;
   const [Count1, setCount1] = useState(0);
   const [Count2, setCount2] = useState(0);
   const [Count3, setCount3] = useState(0);
@@ -161,7 +161,7 @@ const CommentContainer = ({ id }) => {
   const [pointer, setpointer] = useState(0);
 
   useEffect(() => {
-    const commentsUrl = "http://localhost:8080/api/comment/list";
+    const commentsUrl = process.env.REACT_APP_BACKEND_URL + "/api/comment/list";
     fetch(commentsUrl, {
       method: "POST",
       headers: {
@@ -186,7 +186,7 @@ const CommentContainer = ({ id }) => {
 
   const fetchMoreData = () => {
     setTimeout(() => {
-      const commentsUrl = "http://localhost:8080/api/comment/list";
+      const commentsUrl = process.env.REACT_APP_BACKEND_URL + "/api/comment/list";
       fetch(commentsUrl, {
         method: "POST",
         headers: {
@@ -401,7 +401,7 @@ const Product = ({ name, price, discount, stock, description, id }) => {
   const { productId } = useParams();
   const [ProductImageSelected, setProductImageSelected] = useState(photo0);
   useEffect(() => {
-    const productInfoUrl = "http://localhost:8080/api/product/" + productId;
+    const productInfoUrl = process.env.REACT_APP_BACKEND_URL + "/api/product/" + productId;
     fetch(productInfoUrl, { method: "GET" })
       .then((res) => {
         return res.json();
@@ -409,32 +409,32 @@ const Product = ({ name, price, discount, stock, description, id }) => {
       .then((response) => {
         if (response.data.product_images[0] != undefined)
           setPhoto0(
-            "http://localhost:8080/images/" +
+            process.env.REACT_APP_BACKEND_URL + "/images/" +
               response.data.product_images[0].path
           );
         if (response.data.product_images[1] != undefined)
           setPhoto1(
-            "http://localhost:8080/images/" +
+            process.env.REACT_APP_BACKEND_URL + "/images/" +
               response.data.product_images[1].path
           );
         if (response.data.product_images[2] != undefined)
           setPhoto2(
-            "http://localhost:8080/images/" +
+            process.env.REACT_APP_BACKEND_URL + "/images/" +
               response.data.product_images[2].path
           );
         if (response.data.product_images[3] != undefined)
           setPhoto3(
-            "http://localhost:8080/images/" +
+            process.env.REACT_APP_BACKEND_URL + "/images/" +
               response.data.product_images[3].path
           );
         if (response.data.product_images[4] != undefined)
           setPhoto4(
-            "http://localhost:8080/images/" +
+            process.env.REACT_APP_BACKEND_URL + "/images/" +
               response.data.product_images[4].path
           );
         if (response.data.product_images[0] != undefined)
           setProductImageSelected(
-            "http://localhost:8080/images/" +
+            process.env.REACT_APP_BACKEND_URL + "/images/" +
               response.data.product_images[0].path
           );
       });
@@ -515,7 +515,7 @@ export const ProductInfo = () => {
   const [FetchedProductdescription, SetFetchedProductdescription] = useState(
     []
   );
-  const productInfoUrl = "http://localhost:8080/api/product/" + productId;
+  const productInfoUrl = process.env.REACT_APP_BACKEND_URL + "/api/product/" + productId;
 
   fetch(productInfoUrl, { method: "GET" })
     .then((res) => {

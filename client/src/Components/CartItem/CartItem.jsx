@@ -16,7 +16,7 @@ export const CartItem = ({ id, quantity }) => {
   const [photo, setPhoto] = useState(ProductImage);
 
   const loadCartItem = async () => {
-    const response = await fetch(`http://localhost:8080/api/product/${id}`);
+    const response = await fetch(process.env.REACT_APP_BACKEND_URL + `/api/product/${id}`);
     const data = await response.json();
     setName(data.data.name);
     setPrice(+data.data.price);
@@ -25,13 +25,13 @@ export const CartItem = ({ id, quantity }) => {
     setCount(+quantity);
     if (data.data.product_images[0] != undefined) {
       setPhoto(
-        "http://localhost:8080/images/" + data.data.product_images[0].path
+        process.env.REACT_APP_BACKEND_URL + "/images/" + data.data.product_images[0].path
       );
     }
   };
 
   const updateCart = async (userId, productId, quantity) => {
-    const updateCartItemQuantityUrl = `http://localhost:8080/api/cart/update/`;
+    const updateCartItemQuantityUrl = process.env.REACT_APP_BACKEND_URL + `/api/cart/update/`;
     const res = await fetch(updateCartItemQuantityUrl, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -64,7 +64,7 @@ export const CartItem = ({ id, quantity }) => {
   };
 
   const handleRemoveCartItem = async () => {
-    const removeCartItemUrl = `http://localhost:8080/api/cart/remove/`;
+    const removeCartItemUrl = process.env.REACT_APP_BACKEND_URL + `/api/cart/remove/`;
     const res = await fetch(removeCartItemUrl, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },

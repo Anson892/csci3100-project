@@ -45,7 +45,7 @@ export const SearchResult = () => {
     const [pointer, setpointer] = useState(0);
 
     useEffect (() => {
-        const Searchurl = "http://localhost:8080/api/product/search"
+        const Searchurl = process.env.REACT_APP_BACKEND_URL + "/api/product/search"
         fetch(Searchurl,{
             method : 'POST',
             headers: {
@@ -79,7 +79,7 @@ export const SearchResult = () => {
 
     const fetchMoreData = () =>{
         setTimeout(() => {
-            const Searchurl = "http://localhost:8080/api/product/search"
+            const Searchurl = process.env.REACT_APP_BACKEND_URL + "/api/product/search"
             fetch(Searchurl,{
                 method : 'POST',
                 headers: {

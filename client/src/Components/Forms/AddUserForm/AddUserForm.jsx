@@ -30,7 +30,7 @@ export const AddUserForm = ({ reloadFunc }) => {
             console.log("username: ", username);
             console.log("password: ", password);
             console.log("userType: ", userType);
-            fetch("http://localhost:8080/api/users/create", {
+            fetch(process.env.REACT_APP_BACKEND_URL + "/api/users/create", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

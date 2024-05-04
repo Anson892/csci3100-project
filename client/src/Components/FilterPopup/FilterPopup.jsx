@@ -49,7 +49,7 @@ export const FilterPopup = ({
 
   useEffect(() => {
     const getCategory = async () => {
-      await fetch("http://localhost:8080/api/product/category")
+      await fetch(process.env.REACT_APP_BACKEND_URL + "/api/product/category")
         .then((res) => res.json())
         .then((data) => {
           data.unshift("All");

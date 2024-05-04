@@ -114,7 +114,7 @@ export const AdminProduct = () => {
     const handleDeleteProduct = (productId) => {
         setIsShowEditProductForm(false);
         setIsShowAddProductForm(false);
-        fetch("http://localhost:8080/api/product/" + productId, {
+        fetch(process.env.REACT_APP_BACKEND_URL + "/api/product/" + productId, {
             method: "DELETE"
         })
         .then((res) => {
@@ -149,7 +149,7 @@ export const AdminProduct = () => {
     // Initialize search
     const initSearch = async () => {
         setPointer(0);
-        await fetch("http://localhost:8080/api/product/search",{
+        await fetch(process.env.REACT_APP_BACKEND_URL + "/api/product/search",{
             method : 'POST',
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify({
@@ -180,7 +180,7 @@ export const AdminProduct = () => {
     // Fetch more data
     const fetchMoreData = () => {
         setTimeout(() => {
-            fetch("http://localhost:8080/api/product/search" ,{
+            fetch(process.env.REACT_APP_BACKEND_URL + "/api/product/search" ,{
                 method : 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -210,7 +210,7 @@ export const AdminProduct = () => {
 
     // Init category list
     const initCategoryList = () => {
-        fetch("http://localhost:8080/api/product/category")
+        fetch(process.env.REACT_APP_BACKEND_URL + "/api/product/category")
         .then((res) => res.json())
         .then((data) => {
             setCategoryList(data);

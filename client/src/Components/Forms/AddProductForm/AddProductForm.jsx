@@ -44,7 +44,7 @@ export const AddProductForm = () => {
       formData.append("description", description);
 
       // Send form data to the server
-      fetch("http://localhost:8080/api/product/", {
+      fetch(process.env.REACT_APP_BACKEND_URL + "/api/product/", {
         method: "POST",
         body: formData,
       })

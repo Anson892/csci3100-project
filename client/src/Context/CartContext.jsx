@@ -6,7 +6,7 @@ export const CartContextProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
   const addToCart = (item) => {
-    const addToCartUrl = "http://localhost:8080/api/cart/add";
+    const addToCartUrl = process.env.REACT_APP_BACKEND_URL + "/api/cart/add";
     fetch(addToCartUrl, {
       method: "POST",
       headers: {

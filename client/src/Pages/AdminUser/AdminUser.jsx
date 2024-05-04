@@ -35,7 +35,7 @@ export const AdminUser = () => {
     }
 
     const handleDeleteUser = (username) => {
-        fetch("http://localhost:8080/api/users/" + username, {
+        fetch(process.env.REACT_APP_BACKEND_URL + "/api/users/" + username, {
             method: 'DELETE',
         })
         .then((res) => {
@@ -55,7 +55,7 @@ export const AdminUser = () => {
     const [users, setUsers] = useState([]);
    
     const reloadUsers = () => {
-        fetch("http://localhost:8080/api/users/", {
+        fetch(process.env.REACT_APP_BACKEND_URL + "/api/users/", {
             method: "GET"
         })
         .then((res) => {

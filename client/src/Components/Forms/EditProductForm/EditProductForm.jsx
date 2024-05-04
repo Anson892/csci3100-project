@@ -42,7 +42,7 @@ export const EditProductForm = ({ productId, reloadFunc }) => {
             formData.append('price', price);
             formData.append('discount', Number(discount) ? Number(discount) : 1);
             formData.append('description', description);
-            fetch("http://localhost:8080/api/product/update", {
+            fetch(process.env.REACT_APP_BACKEND_URL + "/api/product/update", {
                 method: "PUT",
                 headers: {"Content-Type": "application/json"},
                 body: JSON.stringify({

@@ -29,7 +29,7 @@ export const Checkout = () => {
 
   // fetch user profile for default address and receiver
   useEffect(() => {
-    fetch("http://localhost:8080/api/info/checkout/" + userAuth.id, {
+    fetch(process.env.REACT_APP_BACKEND_URL + "/api/info/checkout/" + userAuth.id, {
       method: "GET",
     })
       .then((res) => {
@@ -72,7 +72,7 @@ export const Checkout = () => {
 
   const clearCart = async () => {
     // submit clear cart request to backend
-    const url = "http://localhost:8080/api/cart/clear/";
+    const url = process.env.REACT_APP_BACKEND_URL + "/api/cart/clear/";
     fetch(url, {
       method: "DELETE",
       headers: {
@@ -109,7 +109,7 @@ export const Checkout = () => {
       setIsCardNumLength(false);
     }
 
-    if (Number(PostalCode.length) != 5) {
+    if (PostalCode.length != 5) {
       setIsPostalCodeInvalid(true);
     } else {
       setIsPostalCodeInvalid(false);
@@ -120,10 +120,10 @@ export const Checkout = () => {
       !(Address == "") &&
       !(Receiver == "") &&
       !(CardNum.length != 19) &&
-      !(Number(PostalCode.length) != 5)
+      !(PostalCode.length != 5)
     ) {
       // submit order request to backend
-      const checkoutUrl = "http://localhost:8080/api/order/placeorder";
+      const checkoutUrl = process.env.REACT_APP_BACKEND_URL + "/api/order/placeorder";
       fetch(checkoutUrl, {
         method: "PUT",
         headers: {
@@ -161,7 +161,7 @@ export const Checkout = () => {
 
   const handleCancelorder = () => {
     // subsmit delete order request to backend
-    const cancelUrl = "http://localhost:8080/api/order/delete/" + orderId;
+    const cancelUrl = process.env.REACT_APP_BACKEND_URL + "/api/order/delete/" + orderId;
     fetch(cancelUrl, {
       method: "DELETE",
     })

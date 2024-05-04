@@ -52,7 +52,7 @@ export const ProductCard = ({ id }) => {
       },
     },
   };
-  const url1 = "http://localhost:8080/api/product/" + id;
+  const url1 = process.env.REACT_APP_BACKEND_URL + "/api/product/" + id;
 
   const [FetchedProductName, SetFetchedProductName] = useState([]);
   const [FetchedProductPrice, SetFetchedProductPrice] = useState([]);
@@ -62,7 +62,7 @@ export const ProductCard = ({ id }) => {
   const [photo0, setPhoto0] = useState("-1");
 
   const fetchRating = async () => {
-      const respose = await fetch("http://localhost:8080/api/comment/id/" + id, { method: "GET" });
+      const respose = await fetch(process.env.REACT_APP_BACKEND_URL + "/api/comment/id/" + id, { method: "GET" });
       const data = await respose.json();
 
       SetFetchedProductRating(+data.average);
@@ -81,7 +81,7 @@ export const ProductCard = ({ id }) => {
           SetFetchedProductstock(response.data.stock);
           if (response.data.product_images[0] != undefined)
             setPhoto0(
-              "http://localhost:8080/images/" +
+              process.env.REACT_APP_BACKEND_URL + "/images/" +
                 response.data.product_images[0].path
             );
         });

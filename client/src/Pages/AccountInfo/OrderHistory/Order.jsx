@@ -74,7 +74,7 @@ const OrderItem = ({status, orderid, productid, productname, price, quantity}) =
     const [photo, setPhoto] = useState(ProductImage);
 
     const ReviewExist = async () => {
-        const url = "http://localhost:8080/api/comment/check/";
+        const url = process.env.REACT_APP_BACKEND_URL + "/api/comment/check/";
         const res = await fetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -89,7 +89,7 @@ const OrderItem = ({status, orderid, productid, productname, price, quantity}) =
     }
     
     const SubmitReview = async() => {
-        const url = "http://localhost:8080/api/comment/add/";
+        const url = process.env.REACT_APP_BACKEND_URL + "/api/comment/add/";
         const res = await fetch(url, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -106,10 +106,10 @@ const OrderItem = ({status, orderid, productid, productname, price, quantity}) =
     }
 
     const GetProductImg = async () => {
-        const res = await fetch(`http://localhost:8080/api/product/${productid}`);
+        const res = await fetch(process.env.REACT_APP_BACKEND_URL + `/api/product/${productid}`);
         const data = await res.json();
         if (data.data.product_images[0] != undefined) {
-            setPhoto("http://localhost:8080/images/" + data.data.product_images[0].path);
+            setPhoto(process.env.REACT_APP_BACKEND_URL + "/images/" + data.data.product_images[0].path);
         }
     }
 

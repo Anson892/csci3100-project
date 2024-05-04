@@ -56,9 +56,9 @@ controller.create = async (req, res) => {
       } else {
         for (const item of productlist) {
           if (product.id == item.productId) {
-            const updatestock = element.stock - listitem.quantity;
+            const updatestock = product.stock - item.quantity;
             const updateproduct = {
-              id: element.id,
+              id: element,
               stock: updatestock,
             };
             updatelist.push(updateproduct);
@@ -92,6 +92,7 @@ controller.create = async (req, res) => {
  */
 controller.PlaceOrder = async (req, res) => {
   const { orderId, paymentMethod, receiver, address } = req.body;
+  console.log(orderId, paymentMethod, receiver, address);
   try {
     await Order.update(
       {
