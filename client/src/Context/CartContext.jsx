@@ -6,14 +6,14 @@ export const CartContextProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
   const addToCart = (item) => {
-    const url5 = "http://localhost:8080/api/cart/add";
-    fetch(url5, {
+    const addToCartUrl = "http://localhost:8080/api/cart/add";
+    fetch(addToCartUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        userId: item.userid, // !!!! to be filled after login system !!!!
+        userId: item.userid,
         productId: item.id,
         quantity: item.count,
       }),
@@ -25,11 +25,12 @@ export const CartContextProvider = ({ children }) => {
         var text = JSON.stringify(response);
         var array1 = JSON.parse(text);
         if (array1.success == true) {
-          // redirect to cart page
           if (array1.message == "Product added to cart") {
+            // new product in cart
             setCartItems([...cartItems, item]);
           }
           else {
+            // product already in cart
             for (let i = 0; i < cartItems.length; i++) {
               if (cartItems[i].id === item.id) {
                 cartItems[i].count += item.count;
@@ -38,6 +39,13 @@ export const CartContextProvider = ({ children }) => {
             }
           }
         }
+        else {
+          // not enough stock available
+          alert(array1.message);
+        }
+      })
+      .catch((err) => {
+        alert(err);
       });
   };
 

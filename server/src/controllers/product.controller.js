@@ -10,9 +10,12 @@ const Op = db.Sequelize.Op;
 const uploadFiles = require("../middlewares/upload");
 const controller = {};
 
-//product image crud also done with same controller?
-
-// Add product: POST /api/product
+/**
+ * Create a new product
+ * API: POST http://localhost:8080/api/product
+ * Request: {name, category, description, price, discount, stock, files}
+ * Response: {message, data: {productId, name, category, description, price, discount, stock, product_images:[{path}]}
+ */
 controller.create = async (req, res, next) => {
   console.log("[LOG] Creating product with data =", req.body);
   // product information
@@ -63,50 +66,70 @@ controller.create = async (req, res, next) => {
     .catch((err) => res.status(500).json({ error: err.message }));
 };
 
-//search product system
+/**
+ * Search products (15 products on first page, 5 products on next pages)
+ * API: POST http://localhost:8080/api/product/search
+ * Request: {searchpointer, name, category, orderby, order, minprice, maxprice, minrating, maxrating}
+ * Response: [productId]
+ */
 controller.search = async (req, res) => {
-  const { searchpointer, name, category, orderby, order, minprice, maxprice, minrating, maxrating} = req.body;
+  const {
+    searchpointer,
+    name,
+    category,
+    orderby,
+    order,
+    minprice,
+    maxprice,
+    minrating,
+    maxrating,
+  } = req.body;
   const name_key = "%" + name + "%";
-  // const category_key = "%" + category + "%";
   var setoffset = 0;
   var setlimit = 15;
-  if(searchpointer>0){
-      var setoffset = 15 + 5*(searchpointer-1);
-      var setlimit = 5;
+  if (searchpointer > 0) {
+    var setoffset = 15 + 5 * (searchpointer - 1);
+    var setlimit = 5;
   }
   const resultlist = [];
   where_clause = {
-    name: {[Op.like]: name_key},
-    price: {[Op.between]: [minprice, maxprice]},
-  }
-  if (category!="All" && category!=""){
-    where_clause.category = {[Op.eq]: category}
+    name: { [Op.like]: name_key },
+    price: { [Op.between]: [minprice, maxprice] },
+  };
+  if (category != "All" && category != "") {
+    where_clause.category = { [Op.eq]: category };
   }
   const search = await Product.findAll({
     attributes: [
-      'id', 
-      'price',
-      [sequelize.literal(`(
+      "id",
+      "price",
+      [
+        sequelize.literal(`(
         SELECT COALESCE(AVG(rating), 0.0)
         FROM Comments
         WHERE
             productId = Product.id
-      )`), 'avgrating']
-  ],
+      )`),
+        "avgrating",
+      ],
+    ],
     where: where_clause,
-    having: { 'avgrating': {[Op.between]: [minrating, maxrating]}},
+    having: { avgrating: { [Op.between]: [minrating, maxrating] } },
     offset: setoffset,
     limit: setlimit,
-    order: [[orderby, order]]
-  })
-  search.forEach(element => {
-    resultlist.push(element.id)
-  })
-  res.send(resultlist)
-}
+    order: [[orderby, order]],
+  });
+  search.forEach((element) => {
+    resultlist.push(element.id);
+  });
+  res.send(resultlist);
+};
 
-
-// Get all product information with images: GET /api/product
+/**
+ * Find all products (with images)
+ * API: GET http://localhost:8080/api/product
+ * Response: [{productId, name, category, description, price, discount, stock, product_images:[{path}]
+ */
 controller.findAll = async (req, res) => {
   await Product.findAll({ include: ProductImage })
     .then((data) => {
@@ -115,7 +138,11 @@ controller.findAll = async (req, res) => {
     .catch((err) => res.status(500).send({ error: err.message }));
 };
 
-//Show by category
+/**
+ * Find products by category
+ * API: GET http://localhost:8080/api/product/category/:cate
+ * Response: [{productId, name, category, description, price, discount, stock, product_images:[{path}]
+ * */
 controller.findbycategory = async (req, res) => {
   Product.findAll({
     where: {
@@ -123,15 +150,38 @@ controller.findbycategory = async (req, res) => {
     },
   })
     .then((data) => {
-      //console.log(data[0].id);
       res.send(data);
     })
     .catch((err) => res.status(500).send(err));
 };
 
-// find product by product id: GET /api/product/:productID
+/**
+ * Get all existing categories of products
+ * API: GET http://localhost:8080/api/product/category
+ * Response: [category]
+ */
+controller.getCategories = (req, res) => {
+  Product.findAll({
+    attributes: [
+      [sequelize.fn("DISTINCT", sequelize.col("category")), "category"],
+    ],
+  })
+    .then((data) => {
+      resultlist = [];
+      data.forEach((element) => {
+        resultlist.push(element.dataValues.category);
+      });
+      res.status(200).json(resultlist);
+    })
+    .catch((err) => res.status(500).json(err));
+};
+
+/**
+ * Find product by id
+ * API: GET http://localhost:8080/api/product/:productID
+ * Response: {productId, name, category, description, price, discount, stock, product_images:[{path}]}
+ */
 controller.findbyid = (req, res) => {
-  //console.log(req.params.productID);
   Product.findOne({
     where: {
       id: req.params.productID,
@@ -147,7 +197,11 @@ controller.findbyid = (req, res) => {
     .catch((err) => res.status(500).json({ error: err.message }));
 };
 
-//find product by name
+/** 
+ * Find product by name
+ * API: GET http://localhost:8080/api/product/name/:productname
+ * Response: {productId, name, category, description, price, discount, stock, product_images:[{path}]}
+ */
 controller.findbyname = (req, res) => {
   Product.findOne({
     where: {
@@ -160,32 +214,43 @@ controller.findbyname = (req, res) => {
     .catch((err) => res.status(500).send(err));
 };
 
-// update product
+/**
+ * Update product information of a product by id
+ * API: PUT http://localhost:8080/api/product/update
+ * Request: {id, name, category, description, price, discount, stock}
+ * Response: {productId, name, category, description, price, discount, stock}
+ */
 controller.update = (req, res) => {
   const { id, name, category, description, price, discount, stock } = req.body;
-  Product.update({
-    name: name,
-    category: category,
-    description: description,
-    price: price,
-    discount: discount,
-    stock: stock,
-  },{
-    where: {
-      id: id,
+  Product.update(
+    {
+      name: name,
+      category: category,
+      description: description,
+      price: price,
+      discount: discount,
+      stock: stock,
     },
-  }).then((data) => {
-      Product.findOne({where: { id: id }})
-      .then((data) => {
+    {
+      where: {
+        id: id,
+      },
+    }
+  )
+    .then((data) => {
+      Product.findOne({ where: { id: id } }).then((data) => {
         console.log("update successful!");
-        res.send(data)
-      })
-
+        res.send(data);
+      });
     })
     .catch((err) => res.status(500).send(err));
 };
 
-// delete a product: DELETE /api/product/:productID
+/** 
+ * Delete a product by id
+ * API: DELETE http://localhost:8080/api/product/:productID
+ * Response: {message}
+*/
 controller.delete = (req, res) => {
   console.log("[LOG] Updating product with id =", req.params.productID);
   const id = req.params.productID;
@@ -217,29 +282,5 @@ controller.delete = (req, res) => {
       });
     });
 };
-
-// get all product categories: GET /api/product/category
-controller.getCategories = (req, res) => {
-  Product.findAll({
-    attributes: [
-      [sequelize.fn("DISTINCT", sequelize.col("category")), "category"],
-    ],
-  })
-    .then((data) => {
-      resultlist = [];
-      data.forEach(element => {
-        resultlist.push(element.dataValues.category)
-      })
-      res.status(200).json(resultlist);
-    })
-    .catch((err) => res.status(500).json(err));
-};
-
-/*delete all product(not for use?)
-controller.deleteAll = (req, res) => {
-    Product.destroyAll().then(() => {
-        console.log('All data deleted!');
-      }).catch((err) => res.status(500).send(err))
-};*/
 
 module.exports = controller;

@@ -26,6 +26,8 @@ At the root directory (csci3100-project)
 - `npm run start_client` to start the client
 - `npm run start_server` to start the server
 
+The client will be running at `http://localhost:3000` and the server will be running at `http://localhost:8080` (It may not work if you are using a different port).
+
 ### (Optional) Import Sample Data
 With the server running, you can import sample data to the database by running the following command:
 ```bash

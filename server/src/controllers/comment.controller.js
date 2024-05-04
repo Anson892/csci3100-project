@@ -7,10 +7,16 @@ const OrderItem = db.OrderItem;
 const Op = db.Sequelize.Op;
 const controller = {};
 
-// check comment by user id + product id + order id
+/** 
+ * Check whether user can comment
+ * API: POST http://localhost:8080/api/comment/checkcomment
+ * Request body: { userId, productId, orderId }
+ * Response: { exist, rating, content }
+*/
 controller.checkcomment = async (req, res) => {
   const { userId, productId, orderId } = req.body;
   try {
+    // Try to find a comment made by the user on an order item
     const comment = await Comment.findOne({
       where: { userId: userId, productId: productId, orderId: orderId },
     });
@@ -28,15 +34,20 @@ controller.checkcomment = async (req, res) => {
   }
 };
 
-//add comment and rating
+/** 
+ * Add a new comment and rating
+ * API: POST http://localhost:8080/api/comment/add
+ * Request body: { userId, rating, content, productId, orderId }
+ * Response: message
+*/
 controller.addcomment = async (req, res) => {
   const { userId, rating, content, productId, orderId } = req.body;
   try {
-    //search whether comment exist
+    // search whether comment exist
     const findcomment = await Comment.findOne({
       where: { userId: userId, orderId: orderId, productId: productId },
     });
-    //check the order item exist
+    // check the order item exist
     const findorder = await OrderItem.findOne({
       attributes: ["orderId", "productId"],
       include: [
@@ -56,7 +67,7 @@ controller.addcomment = async (req, res) => {
         productId: productId,
         orderId: orderId,
       };
-      console.log("go");
+      // create comment in database
       await Comment.create(view)
         .then(() => {
           res.send("Add comment success.");
@@ -74,7 +85,11 @@ controller.addcomment = async (req, res) => {
   }
 };
 
-//comment rating
+/** 
+ * Get rating data of a product (average, number of ratings for each level)
+ * API: GET http://localhost:8080/api/comment/id/:pid
+ * Response: { id, average, five_star, four_star, three_star, two_star, one_star }
+*/
 controller.status = async (req, res) => {
   try {
     const pid = req.params.pid;
@@ -128,7 +143,12 @@ controller.status = async (req, res) => {
   }
 };
 
-//show comment
+/** 
+ * Get comments of a product (3 comments for first page, 1 comment for next pages)
+ * API: POST http://localhost:8080/api/comment/list
+ * Request body: { commentpointer, id }
+ * Response: [{ rating, content, user: { username } }]
+*/
 controller.commentlist = (req, res) => {
   const { commentpointer, id } = req.body;
   var setoffset = 0;

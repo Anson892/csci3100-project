@@ -6,7 +6,11 @@ const ProductImage = db.ProductImage;
 const Op = db.Sequelize.Op;
 const controller = {};
 
-// Create a new cart for user
+/**
+ * Create a new cart for user (or check if cart already exists)
+ * API: POST http://localhost:8080/api/cart/create/:userId
+ * Response: { success, message/error }
+ */
 controller.createCart = async (req, res) => {
   const { userId } = req.params;
   console.log("Creating cart for user: " + userId);
@@ -34,13 +38,18 @@ controller.createCart = async (req, res) => {
     }
   } catch (err) {
     res.status(500).json({
+      success: false,
       error: err.message || "Some error occurred while creating the cart.",
     });
   }
 };
 
-// Get user cart
-controller.getUserCart = (req, res) => {
+/**
+ * Get user cart with cart items
+ * API: GET http://localhost:8080/api/cart/:userId
+ * Response: [{ productId, quantity }]
+ */
+controller.getUserCart = async (req, res) => {
   const userId = req.params.userId;
 
   if (!userId) {
@@ -49,32 +58,34 @@ controller.getUserCart = (req, res) => {
     });
     return;
   }
-
-  // find cart
-  Cart.findOne({ where: { userId: userId } })
-    .then((cart) => {
+  try {
+    // find cart
+    const cart = await Cart.findOne({ where: { userId: userId } });
+    if (cart === null) {
+      res.status(404).json({
+        error: "Cart not found",
+      });
+    } else {
       // Get cart items
-      CartItem.findAll({
+      const cartItems = await CartItem.findAll({
         where: { cartId: cart.id },
         attributes: ["productId", "quantity"],
-      })
-        .then((cartItems) => {
-          res.json(cartItems);
-        })
-        .catch((err) => {
-          res.status(500).json({
-            error:
-              err.message || "Some error occurred while retrieving cart items.",
-          });
-        });
-    })
-    .catch((err) => {
-      res.status(500).json({
-        error: err.message || "Some error occurred while retrieving cart.",
       });
+      res.json(cartItems);
+    }
+  } catch (err) {
+    res.status(500).json({
+      error: err.message || "Some error occurred while retrieving cart.",
     });
+  }
 };
 
+/**
+ * Add product to cart
+ * API: POST http://localhost:8080/api/cart/add
+ * Request body: { userId, productId, quantity }
+ * Response: { success, message/error }
+ */
 controller.addToCart = async (req, res) => {
   const { userId, productId, quantity } = req.body;
 
@@ -93,227 +104,215 @@ controller.addToCart = async (req, res) => {
     return;
   }
 
-  // validate requested quantity and stock
-  const product = await Product.findOne({ where: { id: productId } });
-  console.log(product.stock);
-  if (quantity > product.stock) {
-    res.status(200).json({
-      success: false,
-      message: "Not enough stock available!",
-    });
-    return;
-  }
-
-  // Find user cart
-  Cart.findOne({ where: { userId: userId } }).then((cart) => {
+  try {
+    // validate requested quantity and stock
+    const product = await Product.findOne({ where: { id: productId } });
+    console.log(product.stock);
+    if (quantity > product.stock) {
+      res.status(200).json({
+        success: false,
+        message: "Not enough stock available!",
+      });
+      return;
+    }
+    // Find user cart
+    const cart = await Cart.findOne({ where: { userId: userId } });
     if (cart === null) {
       res.status(404).json({
         error: "Cart not found",
       });
     } else {
       // Check if product is already in cart
-      CartItem.findOne({
+      const cartItem = await CartItem.findOne({
         where: { cartId: cart.id, productId: productId },
-      }).then((cartItem) => {
-        if (cartItem === null) {
-          // Product not in cart
-          // Add product to cart
-          const cartItem = {
-            productId: productId,
-            cartId: cart.id,
-            quantity: quantity,
-          };
-
-          CartItem.create(cartItem)
-            .then((data) => {
-              res
-                .status(200)
-                .json({ success: true, message: "Product added to cart" });
-            })
-            .catch((err) => {
-              res.status(500).json({
-                error:
-                  err.message ||
-                  "Some error occurred while adding product to cart.",
-              });
-            });
-        } else {
-          // Product already in cart
-          // Update quantity
-          cartItem.quantity += quantity;
-          cartItem
-            .save()
-            .then((data) => {
-              res
-                .status(200)
-                .json({ success: true, message: "Product updated in cart" });
-            })
-            .catch((err) => {
-              res.status(500).json({
-                error:
-                  err.message ||
-                  "Some error occurred while updating product in cart.",
-              });
-            });
-        }
       });
+      if (cartItem === null) {
+        // Product not in cart
+        // Add product to cart
+        const cartItem = {
+          productId: productId,
+          cartId: cart.id,
+          quantity: quantity,
+        };
+
+        CartItem.create(cartItem);
+        res
+          .status(200)
+          .json({ success: true, message: "Product added to cart" });
+      } else {
+        // Product already in cart
+        // Update quantity
+        cartItem.quantity += quantity;
+        if (cartItem.quantity > product.stock) {
+          res.status(200).json({
+            success: false,
+            message: "Not enough stock available!",
+          });
+          return;
+        }
+        cartItem.save();
+        res
+          .status(200)
+          .json({ success: true, message: "Product updated in cart" });
+      }
     }
-  });
+  } catch (err) {
+    res.status(500).json({
+      error: err.message || "Some error occurred while adding product to cart.",
+    });
+  }
 };
 
-controller.removeCartItem = (req, res) => {
+/**
+ * Remove a product from cart
+ * API: POST http://localhost:8080/api/cart/remove
+ * Request body: { userId, productId }
+ * Response: message/error
+ */
+controller.removeCartItem = async (req, res) => {
   const { userId, productId } = req.body;
 
+  if (!userId || !productId) {
+    res.status(400).json({
+      error: "userID and productID cannot be empty!",
+    });
+    return;
+  }
+
   // Find user cart
-  Cart.findOne({ where: { userId: userId } }).then((cart) => {
+  try {
+    const cart = await Cart.findOne({ where: { userId: userId } });
     if (cart === null) {
-      // cart not found
+      res.status(404).json({
+        error: "Cart not found",
+      });
+    }
+
+    // Find product in cart
+    const cartItem = await CartItem.findOne({
+      where: { cartId: cart.id, productId: productId },
+    });
+
+    if (cartItem === null) {
+      res.status(404).json({
+        error: "Product not in cart",
+      });
+    }
+    await cartItem.destroy();
+    res.status(200).json({ message: "Product removed from cart" });
+  } catch (err) {
+    res.status(500).json({
+      error:
+        err.message || "Some error occurred while removing product from cart.",
+    });
+  }
+};
+
+/**
+ * Clear cart content of a user
+ * API: DELETE http://localhost:8080/api/cart/clear
+ * Request body: { userId }
+ * Response: message/error
+ */
+controller.clearCart = async (req, res) => {
+  const userId = req.body.userId;
+
+  try {
+    const cart = await Cart.findOne({ where: { userId: userId } });
+    if (cart === null) {
       res.status(404).json({
         error: "Cart not found",
       });
     } else {
-      // Find product in cart
-      CartItem.findOne({
-        where: { cartId: cart.id, productId: productId },
-      }).then((cartItem) => {
-        if (cartItem === null) {
-          // product not in cart
-          res.status(404).json({
-            error: "Product not in cart",
-          });
-        } else {
-          // Remove product from cart
-          cartItem
-            .destroy()
-            .then(() => {
-              res.status(200).json({ message: "Product removed from cart" });
-            })
-            .catch((err) => {
-              res.status(500).json({
-                error:
-                  err.message ||
-                  "Some error occurred while removing product from cart.",
-              });
-            });
-        }
-      });
+      await CartItem.destroy({ where: { cartId: cart.id } });
+      res.status(200).json({ message: "Cart cleared" });
     }
-  });
+  } catch (err) {
+    res.status(500).json({
+      error: err.message || "Some error occurred while clearing cart.",
+    });
+  }
 };
 
-controller.clearCart = (req, res) => {
+/**
+ * Delete cart of a user
+ * API: DELETE http://localhost:8080/api/cart/delete
+ * Request body: { userId }
+ * Response: message/error
+ */
+controller.deleteCart = async (req, res) => {
   const userId = req.body.userId;
 
   // Find user cart
-  Cart.findOne({ where: { userId: userId } })
-    .then((cart) => {
-      if (cart === null) {
-        // cart not found
-        res.status(404).json({
-          message: "Cart not found",
-        });
-      } else {
-        // Clear cart
-        CartItem.destroy({ where: { cartId: cart.id } })
-          .then(() => {
-            res.json({ message: "Cart cleared" });
-          })
-          .catch((err) => {
-            res.status(500).json({
-              message:
-                err.message || "Some error occurred while clearing cart.",
-            });
-          });
-      }
-    })
-    .catch((err) => {
-      res.status(500).json({
-        message: err.message || "Some error occurred while retrieving cart.",
-      });
-    });
-};
-
-controller.deleteCart = (req, res) => {
-  const userId = req.body.userId;
-
-  // Find user cart
-  Cart.findOne({ where: { userId: userId } })
-    .then((cart) => {
-      if (cart === null) {
-        // cart not found
-        res.status(404).json({
-          message: "Cart not found",
-        });
-      } else {
-        // Delete cart content
-        CartItem.destroy({ where: { cartId: cart.id } })
-          .then(() => {
-            // Delete cart
-            Cart.destroy({ where: { userId: userId } })
-              .then(() => {
-                res.json({ message: "Cart deleted" });
-              })
-              .catch((err) => {
-                res.status(500).json({
-                  message:
-                    err.message || "Some error occurred while deleting cart.",
-                });
-              });
-          })
-          .catch((err) => {
-            res.status(500).json({
-              message:
-                err.message || "Some error occurred while deleting cart.",
-            });
-          });
-      }
-    })
-    .catch((err) => {
-      res.status(500).json({
-        message: err.message || "Some error occurred while retrieving cart.",
-      });
-    });
-};
-
-controller.updateCartItem = (req, res) => {
-  const { userId, productId, quantity } = req.body;
-
-  // Find user cart
-  Cart.findOne({ where: { userId: userId } }).then((cart) => {
+  try {
+    const cart = await Cart.findOne({ where: { userId: userId } });
     if (cart === null) {
-      // cart not found
       res.status(404).json({
-        message: "Cart not found",
+        error: "Cart not found",
       });
     } else {
-      // Find product in cart
-      CartItem.findOne({
-        where: { cartId: cart.id, productId: productId },
-      }).then((cartItem) => {
-        if (cartItem === null) {
-          // product not in cart
-          res.status(404).json({
-            message: "Product not in cart",
-          });
-        } else {
-          // Update quantity
-          cartItem.quantity = quantity;
-          cartItem
-            .save()
-            .then((data) => {
-              res.status(200).json({ message: "Product updated in cart" });
-            })
-            .catch((err) => {
-              res.status(500).json({
-                error:
-                  err.message ||
-                  "Some error occurred while updating product in cart.",
-              });
-            });
-        }
-      });
+      await CartItem.destroy({ where: { cartId: cart.id } });
+      await cart.destroy();
+      res.status(200).json({ message: "Cart deleted" });
     }
-  });
+  } catch (err) {
+    res.status(500).json({
+      error: err.message || "Some error occurred while deleting cart.",
+    });
+  }
+};
+
+/**
+ * Update quantity of product in cart
+ * API: PUT http://localhost:8080/api/cart/update
+ * Request body: { userId, productId, quantity }
+ * Response: message/error
+ */
+controller.updateCartItem = async (req, res) => {
+  const { userId, productId, quantity } = req.body;
+  // validate request
+  if (!userId || !productId || !quantity) {
+    res.status(400).json({
+      error: "userID, productID and quantity cannot be empty!",
+    });
+    return;
+  }
+
+  try {
+    // check quantity and stock
+    const product = await Product.findOne({ where: { id: productId } });
+    if (quantity > product.stock) {
+      res.status(200).json({
+        success: false,
+        message: "Not enough stock available!",
+      });
+      return;
+    }
+
+    // find user cart
+    const cart = await Cart.findOne({ where: { userId: userId } });
+    // find product in cart
+    const cartItem = await CartItem.findOne({
+      where: { cartId: cart.id, productId: productId },
+    });
+    if (cartItem === null) {
+      res.status(404).json({
+        error: "Product not in cart",
+      });
+    } else {
+      // update quantity
+      cartItem.quantity = quantity;
+      cartItem.save();
+      res
+        .status(200)
+        .json({ success: true, message: "Product updated in cart" });
+    }
+  } catch (err) {
+    res.status(500).json({
+      error:
+        err.message || "Some error occurred while updating product in cart.",
+    });
+  }
 };
 
 module.exports = controller;

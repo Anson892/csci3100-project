@@ -24,8 +24,8 @@ export const Navbar = () => {
         async function getCartSize() {
             const response = await fetch('http://localhost:8080/api/cart/' + userAuth.id);
             const data = await response.json();
-            console.log(cartSize);
             setCartSize(data.length);
+            console.log(cartSize);
         }
         if (userAuth) {
             getCartSize();

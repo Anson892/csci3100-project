@@ -24,13 +24,15 @@ export const CartItem = ({ id, quantity }) => {
     setStock(+data.data.stock);
     setCount(+quantity);
     if (data.data.product_images[0] != undefined) {
-      setPhoto("http://localhost:8080/images/" + data.data.product_images[0].path);
+      setPhoto(
+        "http://localhost:8080/images/" + data.data.product_images[0].path
+      );
     }
   };
 
   const updateCart = async (userId, productId, quantity) => {
-    const url = `http://localhost:8080/api/cart/update/`;
-    const res = await fetch(url, {
+    const updateCartItemQuantityUrl = `http://localhost:8080/api/cart/update/`;
+    const res = await fetch(updateCartItemQuantityUrl, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId, productId, quantity }),
@@ -38,26 +40,32 @@ export const CartItem = ({ id, quantity }) => {
     const data = await res.json();
 
     if (res.ok) {
-      console.log(data.message);
-      console.log(quantity);
+      if (data.success) {
+        console.log(data.message);
+        setCount(quantity);
+      } else {
+        alert(data.message);
+      }
       return;
     } else {
-      console.log(data.message);
+      console.log(data.error);
       return;
     }
   };
   const decrement = async () => {
     if (count > 1) {
+      updateCart(userId, id, count-1);
       setCount(count - 1);
     }
   };
   const increment = async () => {
-    setCount(count + 1);
+    await updateCart(userId, id, count+1);
+    
   };
 
   const handleRemoveCartItem = async () => {
-    const url = `http://localhost:8080/api/cart/remove/`;
-    const res = await fetch(url, {
+    const removeCartItemUrl = `http://localhost:8080/api/cart/remove/`;
+    const res = await fetch(removeCartItemUrl, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ userId, productId: id }),
@@ -69,30 +77,25 @@ export const CartItem = ({ id, quantity }) => {
       window.location.reload();
       return;
     } else {
-      console.log(data.message);
+      console.log(data.error);
       return;
     }
   };
-
-
 
   useEffect(() => {
     loadCartItem();
   }, []);
 
-  useEffect(() => {
-    updateCart(userId, id, count);
-  }, [count]);
-
   return (
     <div class="cart-item">
-      <Link to={'/product/' + id} onClick={()=>{window.scrollTo({top: (0, 0), behavior: 'instant'})}}>
+      <Link
+        to={"/product/" + id}
+        onClick={() => {
+          window.scrollTo({ top: (0, 0), behavior: "instant" });
+        }}
+      >
         <div class="cart-product-box">
-          <img
-            class="cart-product-img"
-            src={photo}
-            alt="product img"
-          ></img>
+          <img class="cart-product-img" src={photo} alt="product img"></img>
           <div class="cart-product-description">
             <div class="cart-product-status">
               {stock == 0 ? (

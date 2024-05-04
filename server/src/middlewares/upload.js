@@ -4,11 +4,10 @@ const path = require("path");
 const fileFilter = (req, file, cb) => {
   if (file.mimetype.startsWith("image")) {
     cb(null, true);
-  }
-  else {
+  } else {
     cb("Uploaded file is not an image", false);
   }
-}
+};
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -19,11 +18,10 @@ const storage = multer.diskStorage({
   },
 });
 
-const uploadFiles = multer({ 
+const uploadFiles = multer({
   storage: storage,
   limit: { fileSize: 5 * 1024 * 1024 }, // 5MB
-  fileFilter: fileFilter
+  fileFilter: fileFilter,
 });
-
 
 module.exports = uploadFiles;

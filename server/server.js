@@ -12,8 +12,6 @@ global.__imageDir = path.join(__dirname, '..', 'client/src/Assets/Images');
 app.use(cors(corsOptions));
 app.use(bodyParser.json({limit: '100mb'}));
 app.use(bodyParser.urlencoded({limit: '100mb', extended: true}));
-app.use(express.json());
-app.use(express.urlencoded({extended: true}));
 
 // static
 app.use('/images', express.static(__imageDir));

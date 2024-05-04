@@ -40,14 +40,6 @@ const Recommendation = () => {
       });
   }, []);
 
-  // useEffect (()=>{
-  //     console.log(recommend0_id);
-  //     console.log(recommend1_id);
-  //     console.log(recommend2_id);
-  //     console.log(recommend3_id);
-  //     console.log(recommend4_id);
-  // },[ recommend0_id ])
-
   return (
     <div className="RecommendationContainer">
       <div className="RecommendationText">Recommendation</div>
@@ -58,22 +50,6 @@ const Recommendation = () => {
         <ProductCard id={recommend3_id} />
         <ProductCard id={recommend4_id} />
       </div>
-    </div>
-  );
-};
-
-const StarFilled = () => {
-  return (
-    <div>
-      <img src={star_filled} alt=""></img>
-    </div>
-  );
-};
-
-const StarEmpty = () => {
-  return (
-    <div>
-      <img src={star_empty} alt=""></img>
     </div>
   );
 };
@@ -147,7 +123,7 @@ const CommentBox = ({ username, star, content, index }) => {
 
 const CommentContainer = ({ id }) => {
   const { productId } = useParams();
-  const url2 = "http://localhost:8080/api/comment/id/" + productId;
+  const commentStatusUrl = "http://localhost:8080/api/comment/id/" + productId;
   const [Count1, setCount1] = useState(0);
   const [Count2, setCount2] = useState(0);
   const [Count3, setCount3] = useState(0);
@@ -155,7 +131,7 @@ const CommentContainer = ({ id }) => {
   const [Count5, setCount5] = useState(0);
   const [rating, setRating] = useState(0);
 
-  fetch(url2, { method: "GET" })
+  fetch(commentStatusUrl, { method: "GET" })
     .then((res) => {
       return res.json();
     })
@@ -185,8 +161,8 @@ const CommentContainer = ({ id }) => {
   const [pointer, setpointer] = useState(0);
 
   useEffect(() => {
-    const url3 = "http://localhost:8080/api/comment/list";
-    fetch(url3, {
+    const commentsUrl = "http://localhost:8080/api/comment/list";
+    fetch(commentsUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -210,8 +186,8 @@ const CommentContainer = ({ id }) => {
 
   const fetchMoreData = () => {
     setTimeout(() => {
-      const url3 = "http://localhost:8080/api/comment/list";
-      fetch(url3, {
+      const commentsUrl = "http://localhost:8080/api/comment/list";
+      fetch(commentsUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -235,22 +211,20 @@ const CommentContainer = ({ id }) => {
   };
 
   const total = Count1 + Count2 + Count3 + Count4 + Count5;
-  let StarNum = (
-    0 +
-    (Count5 + Count4 * 2 + Count3 * 3 + Count2 * 4 + Count1 * 5) / total
-  );
+  let StarNum =
+    0 + (Count5 + Count4 * 2 + Count3 * 3 + Count2 * 4 + Count1 * 5) / total;
   if (total == 0) StarNum = 0;
   return (
     <div className="CommentContainer">
       <div className="StarRatingSummary">
         <div className="StarText">{StarNum.toFixed(1)}</div>
-          <div className="Stars">
-            <Star progress={rating} />
-            <Star progress={rating - 1} />
-            <Star progress={rating - 2} />
-            <Star progress={rating - 3} />
-            <Star progress={rating - 4} />
-          </div>
+        <div className="Stars">
+          <Star progress={rating} />
+          <Star progress={rating - 1} />
+          <Star progress={rating - 2} />
+          <Star progress={rating - 3} />
+          <Star progress={rating - 4} />
+        </div>
       </div>
       <div className="CommentSummaryContainer">
         <StarProgressBar
@@ -306,9 +280,8 @@ const CommentContainer = ({ id }) => {
 
 const InfoContainer = ({ name, price, discount, stock, description, id }) => {
   const [UserAuth, SetAuth] = useState([]);
-  const [redirect, setRedirect] = useState(false);
   const [error, setError] = useState("");
-  const {addToCart} = useContext(CartContext);
+  const { addToCart } = useContext(CartContext);
   const navigate = useNavigate();
   useEffect(() => {
     const UserAuth = JSON.parse(localStorage.getItem("userAuth"));
@@ -318,16 +291,12 @@ const InfoContainer = ({ name, price, discount, stock, description, id }) => {
   }, []);
   const userid = UserAuth.id;
   const handleAddToCart = async () => {
-    if (stock == 0) {
-      alert("Out of Stock");
-      return;
-    }
     if (userid == undefined) {
       navigate("/login");
       return;
     }
-    await addToCart({userid, id, count});
-  }
+   addToCart({ userid, id, count });
+  };
   const [count, setCount] = useState(1);
   const decrement = () => {
     if (count > 1) setCount(count - 1);
@@ -393,8 +362,7 @@ const InfoContainer = ({ name, price, discount, stock, description, id }) => {
         <button onClick={handleAddToCart} className="AddToCartButton">
           <p> Add To Cart </p>
         </button>
-    {error ? <p className="add-to-cart-error">*{error}</p> : null}
-        {/* {redirect && <Navigate to="/shopping-cart" />} */}
+        {error ? <p className="add-to-cart-error">*{error}</p> : null}
       </div>
     </div>
   );
@@ -430,12 +398,11 @@ const Product = ({ name, price, discount, stock, description, id }) => {
     setProductImageSelected(photo4);
   };
 
-  let k;
   const { productId } = useParams();
   const [ProductImageSelected, setProductImageSelected] = useState(photo0);
   useEffect(() => {
-    const url1 = "http://localhost:8080/api/product/" + productId;
-    k = fetch(url1, { method: "GET" })
+    const productInfoUrl = "http://localhost:8080/api/product/" + productId;
+    fetch(productInfoUrl, { method: "GET" })
       .then((res) => {
         return res.json();
       })
@@ -548,9 +515,9 @@ export const ProductInfo = () => {
   const [FetchedProductdescription, SetFetchedProductdescription] = useState(
     []
   );
-  const url1 = "http://localhost:8080/api/product/" + productId;
+  const productInfoUrl = "http://localhost:8080/api/product/" + productId;
 
-  fetch(url1, { method: "GET" })
+  fetch(productInfoUrl, { method: "GET" })
     .then((res) => {
       return res.json();
     })
@@ -561,12 +528,6 @@ export const ProductInfo = () => {
       SetFetchedProductstock(response.data.stock);
       SetFetchedProductdescription(response.data.description);
     });
-
-  // console.log(FetchedProductName);
-  // console.log(FetchedProductPrice);
-  // console.log(FetchedProductDiscount);
-  // console.log(FetchedProductstock);
-  // console.log(FetchedProductdescription);
 
   return (
     <div>

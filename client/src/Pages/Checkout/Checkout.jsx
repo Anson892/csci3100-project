@@ -13,12 +13,12 @@ export const Checkout = () => {
   const [Address, setAddress] = useState("");
   const [Receiver, setReceiver] = useState("");
   const [CardNum, setCardNum] = useState("");
-  const [isCardNumLength, setIsCardNumLength] = useState(false);
   const [ExpireDate, setExpireDate] = useState("");
   const [CVC, setCVC] = useState("");
   const [PostalCode, setPostalCode] = useState("");
-  const [orderId, setorderId] = useState(localStorage.getItem("orderId")); // !!!!!! To be set by global or useparams !!!!!!
+  const [orderId, setorderId] = useState(localStorage.getItem("orderId"));
 
+  const [isCardNumLength, setIsCardNumLength] = useState(false);
   const [isAddressEmpty, setIsAddressEmpty] = useState(false);
   const [isReceiverEmpty, setIsReceiverEmpty] = useState(false);
   const [isPostalCodeInvalid, setIsPostalCodeInvalid] = useState(false);
@@ -27,7 +27,7 @@ export const Checkout = () => {
 
   const { userAuth } = useContext(AuthContext);
 
-  //fetch user info
+  // fetch user profile for default address and receiver
   useEffect(() => {
     fetch("http://localhost:8080/api/info/checkout/" + userAuth.id, {
       method: "GET",
@@ -67,14 +67,11 @@ export const Checkout = () => {
   };
 
   const handleChangePostalCode = (e) => {
-    setPostalCode(      
-      e.target.value
-      .replace(/[^\dA-Z]/g, "")
-      .trim()
-    );
+    setPostalCode(e.target.value.replace(/[^\dA-Z]/g, "").trim());
   };
 
   const clearCart = async () => {
+    // submit clear cart request to backend
     const url = "http://localhost:8080/api/cart/clear/";
     fetch(url, {
       method: "DELETE",
@@ -96,29 +93,25 @@ export const Checkout = () => {
   const handleSubmit = () => {
     if (Address == "") {
       setIsAddressEmpty(true);
-    }
-    else {
+    } else {
       setIsAddressEmpty(false);
     }
 
     if (Receiver == "") {
       setIsReceiverEmpty(true);
-    }
-    else {
+    } else {
       setIsReceiverEmpty(false);
     }
 
     if (CardNum.length != 19) {
       setIsCardNumLength(true);
-    }
-    else {
+    } else {
       setIsCardNumLength(false);
     }
 
     if (Number(PostalCode.length) != 5) {
       setIsPostalCodeInvalid(true);
-    }
-    else {
+    } else {
       setIsPostalCodeInvalid(false);
     }
 
@@ -129,8 +122,9 @@ export const Checkout = () => {
       !(CardNum.length != 19) &&
       !(Number(PostalCode.length) != 5)
     ) {
-      const CheckoutUrl = "http://localhost:8080/api/order/placeorder";
-      fetch(CheckoutUrl, {
+      // submit order request to backend
+      const checkoutUrl = "http://localhost:8080/api/order/placeorder";
+      fetch(checkoutUrl, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -156,7 +150,7 @@ export const Checkout = () => {
       localStorage.removeItem("orderId");
       // clear cart
       clearCart();
-
+      // redirect to cart page
       navigate({
         pathname: "/shopping-cart",
       });
@@ -166,8 +160,9 @@ export const Checkout = () => {
   };
 
   const handleCancelorder = () => {
-    const cancelurl = "http://localhost:8080/api/order/delete/" + orderId;
-    fetch(cancelurl, {
+    // subsmit delete order request to backend
+    const cancelUrl = "http://localhost:8080/api/order/delete/" + orderId;
+    fetch(cancelUrl, {
       method: "DELETE",
     })
       .then((res) => {
@@ -195,13 +190,11 @@ export const Checkout = () => {
             defaultText={Address}
             onChange={handelchangeaddress}
           >
-            Deliver Address
+            Delivery Address
           </TextInput>
-          {isAddressEmpty?
-                <p className="alert-text">* Address is empty.</p>
-            :
-                null
-            }
+          {isAddressEmpty ? (
+            <p className="alert-text">* Address is empty.</p>
+          ) : null}
           <TextInput
             type="text"
             defaultText={Receiver}
@@ -209,11 +202,9 @@ export const Checkout = () => {
           >
             Receiver Name
           </TextInput>
-          {isReceiverEmpty?
-                <p className="alert-text">* Receiver Name is empty.</p>
-            :
-                null
-            }
+          {isReceiverEmpty ? (
+            <p className="alert-text">* Receiver Name is empty.</p>
+          ) : null}
           <TextInput
             type="text"
             onChange={handleChangePostalCode}
@@ -222,11 +213,9 @@ export const Checkout = () => {
           >
             Postal Code
           </TextInput>
-          {isPostalCodeInvalid?
-                <p className="alert-text">* Postal code is invalid.</p>
-            :
-                null
-            }
+          {isPostalCodeInvalid ? (
+            <p className="alert-text">* Postal code is invalid.</p>
+          ) : null}
         </div>
       </div>
       <div className="CreditCardContainer">
@@ -239,11 +228,9 @@ export const Checkout = () => {
         >
           Card Number
         </TextInput>
-        {isCardNumLength?
-                <p className="alert-text">* Card Number is invalid.</p>
-            :
-                null
-            }
+        {isCardNumLength ? (
+          <p className="alert-text">* Card Number is invalid.</p>
+        ) : null}
         <div className="text-input">
           <label>Expiration Date</label>
           <div className="text-input-container">
@@ -266,12 +253,14 @@ export const Checkout = () => {
             />
           </div>
         </div>
-          
+
         <SubmitButton
           onClick={handleSubmit}
           children="Place Order"
         ></SubmitButton>
-        {meta.isTouched && meta.error &&  <p className="alert-text">*{meta.error}</p>}
+        {meta.isTouched && meta.error && (
+          <p className="alert-text">*{meta.error}</p>
+        )}
       </div>
     </div>
   );
