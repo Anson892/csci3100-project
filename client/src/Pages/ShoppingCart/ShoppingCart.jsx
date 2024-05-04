@@ -16,7 +16,7 @@ export const ShoppingCart = () => {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/cart/'+userAuth.id, {method:'GET'})
+    fetch(process.env.REACT_APP_BACKEND_URL + '/api/cart/'+userAuth.id, {method:'GET'})
     .then(res => {
       return res.json();
     })
@@ -32,7 +32,7 @@ export const ShoppingCart = () => {
 
   const checkStock = async (productId, quantity) => {
     console.log("Checking stock for product: ", productId, " with quantity: ", quantity)
-    const res = await fetch('http://localhost:8080/api/product/'+productId, {method:'GET'});
+    const res = await fetch(process.env.REACT_APP_BACKEND_URL + '/api/product/'+productId, {method:'GET'});
     const data = await res.json();
 
 
@@ -76,7 +76,7 @@ export const ShoppingCart = () => {
     }
     console.log(checkoutItems)
 
-    fetch('http://localhost:8080/api/order/create', {
+    fetch(process.env.REACT_APP_BACKEND_URL + '/api/order/create', {
       method:'POST',
       headers: {
         'Content-Type': 'application/json'

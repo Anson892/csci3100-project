@@ -22,7 +22,7 @@ export const Navbar = () => {
 
     useEffect(() => {
         async function getCartSize() {
-            const response = await fetch('http://localhost:8080/api/cart/' + userAuth.id);
+            const response = await fetch(process.env.REACT_APP_BACKEND_URL + '/api/cart/' + userAuth.id);
             const data = await response.json();
             setCartSize(data.length);
             console.log(cartSize);

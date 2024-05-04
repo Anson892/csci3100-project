@@ -9,7 +9,7 @@ export const OrderHistory = () => {
   const [orderHistory, setOrderHistory] = useState()
 
   useEffect(() => {
-      fetch('http://localhost:8080/api/order/history/'+userAuth.id, {method:'GET'})
+      fetch(process.env.REACT_APP_BACKEND_URL + '/api/order/history/'+userAuth.id, {method:'GET'})
       .then(res => {
         return res.json();
       })

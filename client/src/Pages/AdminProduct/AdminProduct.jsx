@@ -23,7 +23,7 @@ const ProductInfo = ({ id, handleEditProduct, handleDeleteProduct }) => {
     const [imageScr, setImageScr] = useState(ProductImage);
     
     useEffect(() => {
-        fetch('http://localhost:8080/api/product/'+ id, {
+        fetch(process.env.REACT_APP_BACKEND_URL + '/api/product/'+ id, {
             method: "GET"
         })
         .then((res) => {
@@ -36,7 +36,7 @@ const ProductInfo = ({ id, handleEditProduct, handleDeleteProduct }) => {
             setPrice("$" + String(data.data.price));
             setDiscount(String(data.data.discount * 100) + "%");
             if (data.data.product_images.length > 0) {
-                setImageScr('http://localhost:8080/images/' + data.data.product_images[0].path);
+                setImageScr(process.env.REACT_APP_BACKEND_URL + '/images/' + data.data.product_images[0].path);
             }
         })
     }, [id])

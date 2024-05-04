@@ -17,7 +17,7 @@ export const EditProductForm = ({ productId, reloadFunc }) => {
     const [description, setDescription] = useState();
 
     useEffect(() => {
-        fetch('http://localhost:8080/api/product/'+ id, {
+        fetch(process.env.REACT_APP_BACKEND_URL + '/api/product/'+ id, {
             method: "GET"
         })
         .then((res) => {

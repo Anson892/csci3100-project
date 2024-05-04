@@ -18,7 +18,7 @@ export const Profile = () => {
 
   // fetch user info
   useEffect(() => {
-    fetch('http://localhost:8080/api/info/'+userAuth.id, {method:'GET'})
+    fetch(process.env.REACT_APP_BACKEND_URL + '/api/info/'+userAuth.id, {method:'GET'})
     .then(res => {
       return res.json();
     })
@@ -35,7 +35,7 @@ export const Profile = () => {
   const updateProfile = (e) => {
     e.preventDefault();
     if (edit) {
-      fetch('http://localhost:8080/api/info/'+userAuth.id, {
+      fetch(process.env.REACT_APP_BACKEND_URL + '/api/info/'+userAuth.id, {
         method:'PUT',
         headers:{"Content-type":"application/json"},
         body: JSON.stringify({

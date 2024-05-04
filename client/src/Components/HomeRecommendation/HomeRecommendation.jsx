@@ -49,7 +49,7 @@ const ProductItemLeft = ({id}) => {
 
     useEffect(()=> {
         fetch(
-            'http://localhost:8080/api/product/'+ id,
+            process.env.REACT_APP_BACKEND_URL + '/api/product/'+ id,
             { method: "GET" }
             )
             .then((res) => {
@@ -59,7 +59,7 @@ const ProductItemLeft = ({id}) => {
                 setName(data.data.name);
                 setDescription(data.data.description);
                 if(data.data.product_images[0] != undefined)
-                    setImageScr('http://localhost:8080/images/'+ (data.data.product_images[0].path));
+                    setImageScr(process.env.REACT_APP_BACKEND_URL + '/images/'+ (data.data.product_images[0].path));
                 else
                     setImageScr(product_image_test)
             })
@@ -152,7 +152,7 @@ const ProductItemRight = ({id}) => {
 
     useEffect(()=> {
         fetch(
-            'http://localhost:8080/api/product/'+ id,
+            process.env.REACT_APP_BACKEND_URL + '/api/product/'+ id,
             { method: "GET" }
             )
             .then((res) => {
@@ -162,7 +162,7 @@ const ProductItemRight = ({id}) => {
                 setName(data.data.name);
                 setDescription(data.data.description);
                 if(data.data.product_images[0] != undefined)
-                    setImageScr('http://localhost:8080/images/'+ (data.data.product_images[0].path));
+                    setImageScr(process.env.REACT_APP_BACKEND_URL + '/images/'+ (data.data.product_images[0].path));
                 else
                     setImageScr(product_image_test)
             })
@@ -227,7 +227,7 @@ export const HomeRecommendation = () => {
 
     useEffect(() => {
         fetch(
-            'http://localhost:8080/api/recommend/',
+            process.env.REACT_APP_BACKEND_URL + '/api/recommend/',
             { method: "GET" }
         )
         .then((res) => {

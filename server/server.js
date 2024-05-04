@@ -1,8 +1,11 @@
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
+
+require('dotenv').config({ path: path.join(__dirname, '.env')});
+console.log("[LOG] FRONTEND_URL: " + process.env["FRONTEND_URL"]);
 const corsOptions = {
-  origin: "http://localhost:3000"
+  origin: process.env.FRONTEND_URL,
 };
 
 const bodyParser = require('body-parser');
