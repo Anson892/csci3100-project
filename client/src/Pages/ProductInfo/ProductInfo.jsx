@@ -295,7 +295,7 @@ const InfoContainer = ({ name, price, discount, stock, description, id }) => {
       navigate("/login");
       return;
     }
-   addToCart({ userid, id, count });
+   await addToCart({ userid, id, count });
   };
   const [count, setCount] = useState(1);
   const decrement = () => {

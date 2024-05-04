@@ -135,7 +135,7 @@ controller.addToCart = async (req, res) => {
           quantity: quantity,
         };
 
-        CartItem.create(cartItem);
+        await CartItem.create(cartItem);
         res
           .status(200)
           .json({ success: true, message: "Product added to cart" });
@@ -150,7 +150,7 @@ controller.addToCart = async (req, res) => {
           });
           return;
         }
-        cartItem.save();
+        await cartItem.save();
         res
           .status(200)
           .json({ success: true, message: "Product updated in cart" });

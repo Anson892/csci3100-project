@@ -5,7 +5,7 @@ export const CartContext = createContext();
 export const CartContextProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
-  const addToCart = (item) => {
+  const addToCart = async (item) => {
     const addToCartUrl = process.env.REACT_APP_BACKEND_URL + "/api/cart/add";
     fetch(addToCartUrl, {
       method: "POST",
@@ -25,6 +25,7 @@ export const CartContextProvider = ({ children }) => {
         var text = JSON.stringify(response);
         var array1 = JSON.parse(text);
         if (array1.success == true) {
+          console.log(array1.message);
           if (array1.message == "Product added to cart") {
             // new product in cart
             setCartItems([...cartItems, item]);

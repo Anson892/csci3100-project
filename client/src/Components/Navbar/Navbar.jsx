@@ -24,13 +24,15 @@ export const Navbar = () => {
         async function getCartSize() {
             const response = await fetch(process.env.REACT_APP_BACKEND_URL + '/api/cart/' + userAuth.id);
             const data = await response.json();
+            console.log(data);
             setCartSize(data.length);
-            console.log(cartSize);
+            console.log(data.length);
         }
         if (userAuth) {
             getCartSize();
         } 
     }, [userAuth, cartItems])
+
 
     return (
         <div className="navbar">
